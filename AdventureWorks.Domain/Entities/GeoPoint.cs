@@ -1,6 +1,6 @@
 ﻿namespace AdventureWorks.Domain.Entities;
 
-public struct GeoPoint
+public readonly struct GeoPoint
 {
     public GeoPoint(double latitude, double longitude)
     {

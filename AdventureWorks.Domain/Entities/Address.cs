@@ -2,7 +2,13 @@
 
 public struct Address
 {
-    public Address(string address1, string address2, string city, string state, string country, string zipCode,
+    public Address(
+        string address1, 
+        string address2, 
+        string city, 
+        string state, 
+        string country, 
+        string zipCode,
         GeoPoint? geoLocation)
     {
         Address1 = address1 ?? throw new ArgumentNullException(nameof(address1));

@@ -1,6 +1,6 @@
 ﻿namespace AdventureWorks.Domain.Entities;
 
-public struct PersonName
+public readonly struct PersonName
 {
     public PersonName(string? prefix, string firstName, string? middleName, string lastName, string? suffix)
     {
