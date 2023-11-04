@@ -1,13 +1,13 @@
-﻿namespace AdventureWorks.Domain.Entities;
+﻿namespace AdventureWorks.Domain.Person;
 
 public struct Address
 {
     public Address(
-        string address1, 
-        string address2, 
-        string city, 
-        string state, 
-        string country, 
+        string address1,
+        string address2,
+        string city,
+        string state,
+        string country,
         string zipCode,
         GeoPoint? geoLocation)
     {

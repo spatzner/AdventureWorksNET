@@ -1,4 +1,4 @@
-using AdventureWorks.Domain.Entities;
+using AdventureWorks.Domain.Person;
 using AdventureWorks.SqlRepository;
 
 namespace Tests
@@ -10,9 +10,9 @@ namespace Tests
         public async Task TestMethod1Async()
         {
             PersonRepository repo=
-                new(@"Server=localhost\SQLEXPRESS;Database=AdventureWorks2022;Trusted_Connection=True;");
+                new(Settings.ConnectionString);
 
-            var person = await repo.Get(6);
+            var person = await repo.GetPerson(6);
         }
 
         [TestMethod]

@@ -1,4 +1,4 @@
-﻿namespace AdventureWorks.Domain.Entities;
+﻿namespace AdventureWorks.Domain.Person;
 
 public readonly struct PersonName
 {
@@ -11,9 +11,9 @@ public readonly struct PersonName
         Suffix = suffix;
     }
 
-    public string? Prefix { get;  }
+    public string? Prefix { get; }
     public string FirstName { get; }
-    public string? MiddleName { get;  }
-    public string LastName { get;  }
-    public string? Suffix { get;  }
+    public string? MiddleName { get; }
+    public string LastName { get; }
+    public string? Suffix { get; }
 }

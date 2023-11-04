@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Person\DTOs\" />
+    <Folder Include="Person\Entities\" />
+  </ItemGroup>
+
 </Project>
