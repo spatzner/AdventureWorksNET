@@ -8,100 +8,142 @@ using AdventureWorks.SqlRepository;
 
 namespace Tests;
 
-[TestClass]
 public class PersonRepositoryTests
 {
-    private static PersonRepository? _sut;
-    private static PersonDetail? _testPerson;
 
-    private static readonly string FailedRetrievalMessage = "Failed to retrieve person";
-
-    [ClassInitialize]
-    public static async Task ClassInit(TestContext context)
+    [TestClass]
+    public class GetPersonTests
     {
-        _sut = new PersonRepository(Settings.ConnectionString);
 
-        try
+        private static PersonRepository? _sut;
+        private static PersonDetail? _testPerson;
+        private static Exception? _exception;
+
+        [ClassInitialize]
+        public static async Task ClassInit(TestContext context)
         {
-            _testPerson = await _sut.GetPerson(291);
+            _sut = new PersonRepository(Settings.ConnectionString);
+
+            try
+            {
+                _testPerson = await _sut.Get(291);
+            }
+            catch (Exception ex)
+            {
+                _exception = ex;
+            }
         }
-        catch
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public void GetPerson_WhenExists_ReturnsObject()
         {
-            // ignored
+            Assert.IsNotNull(_testPerson, _exception?.ToString());
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public void GetPerson_WhenExists_ReturnsId()
+        {
+            if(_testPerson == null)
+                Assert.Inconclusive();
+
+            Assert.IsTrue(_testPerson.Id > 0);
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public void GetPerson_WhenExists_ReturnsName()
+        {
+            if (_testPerson == null)
+                Assert.Inconclusive();
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.Title));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.FirstName));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.MiddleName));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.LastName));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.Suffix));
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public void GetPerson_WhenExists_ReturnsPersonType()
+        {
+            if (_testPerson == null)
+                Assert.Inconclusive();
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.PersonType));
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public void GetPerson_WhenExists_ReturnsEmailAddresses()
+        {
+            if (_testPerson == null)
+                Assert.Inconclusive();
+
+            Assert.IsTrue(_testPerson.EmailAddresses.Any());
+            Assert.IsFalse(_testPerson.EmailAddresses.Any(string.IsNullOrWhiteSpace));
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public void GetPerson_WhenExists_ReturnsPhoneNumbers()
+        {
+            if (_testPerson == null) 
+                Assert.Inconclusive();
+
+            Assert.IsTrue(_testPerson.PhoneNumbers.Any());
+            Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Number)));
+            Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Type)));
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public void GetPerson_WhenExists_ReturnsAddresses()
+        {
+            if (_testPerson == null) 
+                Assert.Inconclusive();
+
+            Assert.IsTrue(_testPerson.Addresses.Any());
+            Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Number)));
+            Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Type)));
         }
     }
 
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsId()
+    [TestClass]
+    public class SearchPersonTests
     {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsTrue(_testPerson.Id > 0);
-    }
+        private static PersonRepository? _sut;
 
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsName()
-    {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.Prefix));
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.FirstName));
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.MiddleName));
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.LastName));
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.Suffix));
-    }
+        [ClassInitialize]
+        public static void ClassInit(TestContext context)
+        {
+            _sut = new PersonRepository(Settings.ConnectionString);
+        }
 
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsPersonType()
-    {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.PersonType));
-    }
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        [ExpectedException(typeof(ArgumentException))]
+        public async Task SearchPerson_WhenNoCriteria_Throws()
+        {
+            _ = await _sut!.Search(new PersonSearch());
+        }
 
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsEmailAddresses()
-    {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsTrue(_testPerson.EmailAddresses.Any());
-        Assert.IsFalse(_testPerson.EmailAddresses.Any(string.IsNullOrWhiteSpace));
-    }
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public async Task SearchPerson_WhenEmailAddressSet_ReturnsFilteredResults()
+        {
+            var criteria = new PersonSearch
+            {
+                EmailAddress = "stephen0@adventure-works.com"
+            };
 
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsPhoneNumbers()
-    {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsTrue(_testPerson.PhoneNumbers.Any());
-        Assert.IsFalse(_testPerson.PhoneNumbers.Any(x=> string.IsNullOrWhiteSpace(x.Number)));
-        Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Type)));
-    }
+            var results = await _sut!.Search(criteria);
 
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsAddresses()
-    {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsTrue(_testPerson.Addresses.Any());
-        Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Number)));
-        Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Type)));
-    }
+            Assert.AreEqual(results.Count, 1);
 
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsAdditionalContactInfo()
-    {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsNotNull(_testPerson.AdditionalContactInfo);
-    }
-
-    [TestMethod]
-    [TestCategory(Constants.Integration)]
-    public void GetPerson_WhenExists_ReturnsDemographics()
-    {
-        Assert.IsNotNull(_testPerson, FailedRetrievalMessage);
-        Assert.IsNotNull(_testPerson.Demographics);
+        }
     }
 }
 

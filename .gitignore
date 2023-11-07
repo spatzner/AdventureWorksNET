@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/_Database/AdventureWorks-oltp-install-script
+/_Database/AdventureWorksDW-data-warehouse-install-script

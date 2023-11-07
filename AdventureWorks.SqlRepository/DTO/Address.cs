@@ -1,6 +1,4 @@
-﻿using Microsoft.SqlServer.Types;
-
-namespace AdventureWorks.SqlRepository.Entities;
+﻿namespace AdventureWorks.SqlRepository.DTO;
 
 public class Address
 {

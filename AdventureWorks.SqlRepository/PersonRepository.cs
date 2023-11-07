@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person;
-using AdventureWorks.Domain.Person.Services;
+using AdventureWorks.Domain.Person.Repositories;
 using Dapper;
 using Microsoft.SqlServer.Types;
 using Address = AdventureWorks.Domain.Person.Address;
@@ -43,7 +43,7 @@ namespace AdventureWorks.SqlRepository
         {
         }
 
-        public async Task<PersonDetail> GetPerson(int id)
+        public async Task<PersonDetail> Get(int id)
         {
             await using var queries = await Connection.QueryMultipleAsync(
                 """
@@ -72,9 +72,9 @@ namespace AdventureWorks.SqlRepository
                 """,
                 new { Id = id });
 
-            Entities.Person sqlPerson = await queries.ReadFirstAsync<Entities.Person>();
+            DTO.Person sqlPerson = await queries.ReadFirstAsync<DTO.Person>();
 
-            List<Address> addresses = (await queries.ReadAsync<Entities.Address>())
+            List<Address> addresses = (await queries.ReadAsync<DTO.Address>())
                 .Select(addr =>
                     new Address(
                         addr.AddressLine1!,
@@ -91,24 +91,24 @@ namespace AdventureWorks.SqlRepository
 
             List<string> emailAddresses = (await queries.ReadAsync<string>()).ToList();
 
-            PersonName name = new(
-                sqlPerson.Title,
-                sqlPerson.FirstName!,
-                sqlPerson.MiddleName,
-                sqlPerson.LastName!,
-                sqlPerson.Suffix
-            );
+            PersonName name = new()
+            {
+                Title = sqlPerson.Title,
+                FirstName = sqlPerson.FirstName!,
+                MiddleName = sqlPerson.MiddleName,
+                LastName = sqlPerson.LastName!,
+                Suffix = sqlPerson.Suffix
+            };
 
-            PersonDetail personDetail = new(
-                sqlPerson.BusinessEntityId,
-                name,
-                sqlPerson.PersonType!,
-                emailAddresses,
-                phoneNumbers,
-                addresses,
-                sqlPerson.AdditionalContactInfo,
-                sqlPerson.Demographics
-            );
+            PersonDetail personDetail = new()
+            {
+                Id = sqlPerson.BusinessEntityId,
+                Name = name,
+                PersonType = sqlPerson.PersonType!,
+                EmailAddresses = emailAddresses,
+                PhoneNumbers = phoneNumbers,
+                Addresses = addresses
+            };
 
             return personDetail;
         }
@@ -144,16 +144,19 @@ namespace AdventureWorks.SqlRepository
                 filters.Add(
                     "BusinessEntityID IN (SELECT BusinessEntityID FROM Person.PersonPhone WHERE PhoneNumber = @PhoneNumber)");
 
-            string filter = filters.Any() ? $"WHERE {string.Join(" AND ", filters)}" : string.Empty;
+            if (!filters.Any())
+                throw new ArgumentException("at least one property must be specified");
 
             string sql =
                 $"""
                  SELECT BusinessEntityID as Id, PersonType, NameStyle, Title, FirstName, MiddleName, LastName, Suffix
                  FROM Person.Person
-                 {filter}
+                 WHERE {string.Join(" AND ", filters)}
                  """;
 
-            return (await Connection.QueryAsync<Person>(sql, parameters)).ToList();
+            return (await Connection.QueryAsync<DTO.Person>(sql, parameters))
+                .Select(p => p.ToEntity())
+                .ToList();
         }
 
         public async Task AddPerson(Person person)

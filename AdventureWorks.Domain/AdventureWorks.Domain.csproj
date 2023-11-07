@@ -9,6 +9,12 @@
   <ItemGroup>
     <Folder Include="Person\DTOs\" />
     <Folder Include="Person\Entities\" />
+    <Folder Include="Person\Repositories\" />
+    <Folder Include="Person\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
 </Project>

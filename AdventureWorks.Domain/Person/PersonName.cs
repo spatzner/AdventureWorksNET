@@ -1,19 +1,10 @@
 ﻿namespace AdventureWorks.Domain.Person;
 
-public readonly struct PersonName
+public class PersonName
 {
-    public PersonName(string? prefix, string firstName, string? middleName, string lastName, string? suffix)
-    {
-        Prefix = prefix;
-        FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
-        MiddleName = middleName;
-        LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
-        Suffix = suffix;
-    }
-
-    public string? Prefix { get; }
-    public string FirstName { get; }
-    public string? MiddleName { get; }
-    public string LastName { get; }
-    public string? Suffix { get; }
+    public string? Title { get; set; }
+    public required string FirstName { get; set; }
+    public string? MiddleName { get; set; }
+    public required string LastName { get; set; }
+    public string? Suffix { get; set; }
 }

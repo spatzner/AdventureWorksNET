@@ -2,15 +2,15 @@
 
 public class PersonSearch
 {
-    public string? FirstName { get; }
+    public string? FirstName { get; set; }
 
-    public string? MiddleName { get; }
+    public string? MiddleName { get; set; }
 
-    public string? LastName { get; }
+    public string? LastName { get; set; }
 
-    public string? PersonType { get; }
+    public string? PersonType { get; set; }
 
-    public string? EmailAddress { get; }
+    public string? EmailAddress { get; set; }
 
-    public string? PhoneNumber { get; }
+    public string? PhoneNumber { get; set; }
 }
