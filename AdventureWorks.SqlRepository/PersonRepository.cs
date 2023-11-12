@@ -5,12 +5,14 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AdventureWorks.Domain.Person;
+using AdventureWorks.Domain;
+using AdventureWorks.Domain.Person.DTOs;
+using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
 using Dapper;
-using Microsoft.SqlServer.Types;
-using Address = AdventureWorks.Domain.Person.Address;
-using Person = AdventureWorks.Domain.Person.Person;
+using Address = AdventureWorks.Domain.Person.Entities.Address;
+using Person = AdventureWorks.Domain.Person.Entities.Person;
+using PhoneNumber = AdventureWorks.Domain.Person.Entities.PhoneNumber;
 
 namespace AdventureWorks.SqlRepository
 {
@@ -72,31 +74,34 @@ namespace AdventureWorks.SqlRepository
                 """,
                 new { Id = id });
 
-            DTO.Person sqlPerson = await queries.ReadFirstAsync<DTO.Person>();
+            DTO.Person sqlPerson = await queries.ReadFirstOrDefaultAsync<DTO.Person>() ??
+                                   throw new ArgumentException($"Person with Id {id} does not exist");
 
             List<Address> addresses = (await queries.ReadAsync<DTO.Address>())
                 .Select(addr =>
-                    new Address(
-                        addr.AddressLine1!,
-                        addr.AddressLine2!,
-                        addr.City!,
-                        addr.State!,
-                        addr.Country!,
-                        addr.PostalCode!,
-                        new GeoPoint(addr.Latitude, addr.Longitude)
-                    )
+                    new Address
+                    {
+                        Address1 = addr.AddressLine1 ?? string.Empty,
+                        Address2 = addr.AddressLine2 ?? string.Empty,
+                        City = addr.City ?? string.Empty,
+                        State = addr.State ?? string.Empty,
+                        Country = addr.Country ?? string.Empty,
+                        ZipCode = addr.PostalCode ?? string.Empty,
+                        GeoLocation = new GeoPoint(addr.Latitude, addr.Longitude)
+                    }
                 ).ToList();
 
-            List<PhoneNumber> phoneNumbers = (await queries.ReadAsync<PhoneNumber>()).ToList();
+            List<PhoneNumber> phoneNumbers = (await queries.ReadAsync<DTO.PhoneNumber>())
+                .Select(p => new PhoneNumber(p.Number ?? string.Empty, p.Type ?? string.Empty)).ToList();
 
             List<string> emailAddresses = (await queries.ReadAsync<string>()).ToList();
 
             PersonName name = new()
             {
                 Title = sqlPerson.Title,
-                FirstName = sqlPerson.FirstName!,
+                FirstName = sqlPerson.FirstName ?? string.Empty,
                 MiddleName = sqlPerson.MiddleName,
-                LastName = sqlPerson.LastName!,
+                LastName = sqlPerson.LastName ?? string.Empty,
                 Suffix = sqlPerson.Suffix
             };
 
@@ -104,7 +109,7 @@ namespace AdventureWorks.SqlRepository
             {
                 Id = sqlPerson.BusinessEntityId,
                 Name = name,
-                PersonType = sqlPerson.PersonType!,
+                PersonType = sqlPerson.PersonType ?? string.Empty,
                 EmailAddresses = emailAddresses,
                 PhoneNumbers = phoneNumbers,
                 Addresses = addresses

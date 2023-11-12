@@ -1,5 +1,5 @@
 ﻿using System.Xml.Linq;
-using AdventureWorks.Domain.Person;
+using AdventureWorks.Domain.Person.Entities;
 
 namespace AdventureWorks.SqlRepository.DTO
 {
@@ -11,7 +11,7 @@ namespace AdventureWorks.SqlRepository.DTO
     }
 
 
-    public class Person : IMappable<Person, Domain.Person.Person>
+    public class Person : IMappable<Person, Domain.Person.Entities.Person>
     {
 
         public int? BusinessEntityId { get; set; }
@@ -33,7 +33,7 @@ namespace AdventureWorks.SqlRepository.DTO
         public DateTime ModifiedDate { get; set; }
 
 
-        public static Person FromEntity(Domain.Person.Person entity)
+        public static Person FromEntity(Domain.Person.Entities.Person entity)
         {
             return new Person
             {
@@ -43,9 +43,9 @@ namespace AdventureWorks.SqlRepository.DTO
 
         }
 
-        public Domain.Person.Person ToEntity()
+        public Domain.Person.Entities.Person ToEntity()
         {
-            return new Domain.Person.Person
+            return new Domain.Person.Entities.Person
             {
                 Id = BusinessEntityId,
                 Name = new PersonName

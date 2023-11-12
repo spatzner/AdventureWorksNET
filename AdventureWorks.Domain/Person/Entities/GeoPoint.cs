@@ -1,4 +1,4 @@
-﻿namespace AdventureWorks.Domain.Person;
+﻿namespace AdventureWorks.Domain.Person.Entities;
 
 public readonly struct GeoPoint
 {

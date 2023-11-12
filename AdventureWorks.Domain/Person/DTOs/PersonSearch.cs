@@ -1,4 +1,4 @@
-﻿namespace AdventureWorks.Domain.Person;
+﻿namespace AdventureWorks.Domain.Person.DTOs;
 
 public class PersonSearch
 {

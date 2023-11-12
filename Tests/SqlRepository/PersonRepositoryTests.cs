@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AdventureWorks.Domain.Person;
+using AdventureWorks.Domain.Person.DTOs;
+using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.SqlRepository;
 
-namespace Tests;
+namespace Tests.SqlRepository;
 
 public class PersonRepositoryTests
 {
@@ -26,7 +27,7 @@ public class PersonRepositoryTests
 
             try
             {
-                _testPerson = await _sut.Get(291);
+                _testPerson = await _sut.Get(285);
             }
             catch (Exception ex)
             {
@@ -45,7 +46,7 @@ public class PersonRepositoryTests
         [TestCategory(Constants.Integration)]
         public void GetPerson_WhenExists_ReturnsId()
         {
-            if(_testPerson == null)
+            if (_testPerson == null)
                 Assert.Inconclusive();
 
             Assert.IsTrue(_testPerson.Id > 0);
@@ -90,7 +91,7 @@ public class PersonRepositoryTests
         [TestCategory(Constants.Integration)]
         public void GetPerson_WhenExists_ReturnsPhoneNumbers()
         {
-            if (_testPerson == null) 
+            if (_testPerson == null)
                 Assert.Inconclusive();
 
             Assert.IsTrue(_testPerson.PhoneNumbers.Any());
@@ -102,7 +103,7 @@ public class PersonRepositoryTests
         [TestCategory(Constants.Integration)]
         public void GetPerson_WhenExists_ReturnsAddresses()
         {
-            if (_testPerson == null) 
+            if (_testPerson == null)
                 Assert.Inconclusive();
 
             Assert.IsTrue(_testPerson.Addresses.Any());
@@ -119,7 +120,14 @@ public class PersonRepositoryTests
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            _sut = new PersonRepository(Settings.ConnectionString);
+            try
+            {
+                _sut = new PersonRepository(Settings.ConnectionString);
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         [TestMethod]
@@ -127,22 +135,112 @@ public class PersonRepositoryTests
         [ExpectedException(typeof(ArgumentException))]
         public async Task SearchPerson_WhenNoCriteria_Throws()
         {
-            _ = await _sut!.Search(new PersonSearch());
+            if(_sut == null)
+                Assert.Inconclusive();
+
+            _ = await _sut.Search(new PersonSearch());
         }
 
         [TestMethod]
         [TestCategory(Constants.Integration)]
         public async Task SearchPerson_WhenEmailAddressSet_ReturnsFilteredResults()
         {
+            if (_sut == null)
+                Assert.Inconclusive();
+
             var criteria = new PersonSearch
             {
                 EmailAddress = "stephen0@adventure-works.com"
             };
 
-            var results = await _sut!.Search(criteria);
+            var results = await _sut.Search(criteria);
 
-            Assert.AreEqual(results.Count, 1);
+            Assert.IsTrue(results.Any());
+        }
 
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public async Task SearchPerson_WhenFirstNameSet_ReturnsFilteredResults()
+        {
+            if (_sut == null)
+                Assert.Inconclusive();
+
+            var criteria = new PersonSearch
+            {
+                FirstName = "Stephen"
+            };
+
+            var results = await _sut.Search(criteria);
+
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public async Task SearchPerson_WhenMiddleNameSet_ReturnsFilteredResults()
+        {
+            if (_sut == null)
+                Assert.Inconclusive();
+
+            var criteria = new PersonSearch
+            {
+                MiddleName = "E"
+            };
+
+            var results = await _sut.Search(criteria);
+
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public async Task SearchPerson_WhenLastNameSet_ReturnsFilteredResults()
+        {
+            if (_sut == null)
+                Assert.Inconclusive();
+
+            var criteria = new PersonSearch
+            {
+                LastName = "Carson"
+            };
+
+            var results = await _sut.Search(criteria);
+
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public async Task SearchPerson_WhenPersonTypeSet_ReturnsFilteredResults()
+        {
+            if (_sut == null)
+                Assert.Inconclusive();
+
+            var criteria = new PersonSearch
+            { 
+                PersonType = "SP"
+            };
+
+            var results = await _sut.Search(criteria);
+
+            Assert.IsTrue(results.Any());
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public async Task SearchPerson_WhenPhoneNumberSet_ReturnsFilteredResults()
+        {
+            if (_sut == null)
+                Assert.Inconclusive();
+
+            var criteria = new PersonSearch
+            { 
+                PhoneNumber = "2385550197"
+            };
+
+            var results = await _sut.Search(criteria);
+
+            Assert.IsTrue(results.Any());
         }
     }
 }

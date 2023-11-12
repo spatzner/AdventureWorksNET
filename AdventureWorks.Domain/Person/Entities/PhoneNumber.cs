@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace AdventureWorks.Domain.Person;
+﻿namespace AdventureWorks.Domain.Person.Entities;
 
 public readonly struct PhoneNumber
 {
@@ -9,11 +7,11 @@ public readonly struct PhoneNumber
 
     public PhoneNumber(string phoneNumber, string type)
     {
-        if(!TryParse(phoneNumber, out string result))
+        if (!TryParse(phoneNumber, out string formattedNumber))
             throw new ArgumentException("Invalid length. Must be 10 or 13 digits in any format",
                 nameof(phoneNumber));
-        
-        Number = result;
+
+        Number = formattedNumber;
         Type = type;
     }
 
@@ -30,10 +28,10 @@ public readonly struct PhoneNumber
         switch (numericOnly.Length)
         {
             case 10:
-                result = CompiledRegex.NationalPhoneGroupingFormat().Replace(numericOnly, "$1-$2-$3");
+                result = CompiledRegex.NationalPhoneFormatGrouping().Replace(numericOnly, "$1-$2-$3");
                 return true;
             case 13:
-                result = CompiledRegex.InternationalPhoneGroupingFormat().Replace(numericOnly, "$1 ($2) $3 $4-$5");
+                result = CompiledRegex.InternationalPhoneFormatGrouping().Replace(numericOnly, "$1 ($2) $3 $4-$5");
                 return true;
             default:
                 result = string.Empty;
@@ -41,16 +39,4 @@ public readonly struct PhoneNumber
         }
     }
 
-}
-
-internal static partial class CompiledRegex
-{
-    [GeneratedRegex(@"(\d{1})(\d{2})(\d{3})(\d{3})(\d{4})")]
-    public static partial Regex InternationalPhoneGroupingFormat();
-
-    [GeneratedRegex(@"(\d{3})(\d{3})(\d{4})")]
-    public static partial Regex NationalPhoneGroupingFormat();
-
-    [GeneratedRegex(@"\D")]
-    public static partial Regex NonDigit();
 }

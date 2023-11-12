@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace AdventureWorks.Domain.Person
+namespace AdventureWorks.Domain.Person.Entities
 {
-    public class PersonDetail : Person 
+    public class PersonDetail : Person
     {
         public List<string> EmailAddresses { get; init; } = new();
 
