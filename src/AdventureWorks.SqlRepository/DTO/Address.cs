@@ -16,3 +16,4 @@ namespace AdventureWorks.SqlRepository.DTO
         public double Longitude { get; set; }
 
     }
+}
