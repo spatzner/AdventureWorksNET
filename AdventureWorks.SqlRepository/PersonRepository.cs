@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using AdventureWorks.Domain;
@@ -16,36 +17,15 @@ using PhoneNumber = AdventureWorks.Domain.Person.Entities.PhoneNumber;
 
 namespace AdventureWorks.SqlRepository
 {
-    public abstract class Repository : IDisposable, IAsyncDisposable
-    {
-        protected readonly SqlConnection Connection;
-
-        protected Repository(string connectionString)
-        {
-            Connection = new SqlConnection(connectionString);
-        }
-
-        public void Dispose()
-        {
-            Connection.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await Connection.DisposeAsync();
-            GC.SuppressFinalize(this);
-        }
-    }
-
-
     public class PersonRepository : Repository, IPersonRepository
     {
+
         public PersonRepository(string connectionString) : base(connectionString)
         {
+
         }
 
-        public async Task<PersonDetail> Get(int id)
+        public async Task<PersonDetail> GetPerson(int id)
         {
             await using var queries = await Connection.QueryMultipleAsync(
                 """
@@ -56,7 +36,7 @@ namespace AdventureWorks.SqlRepository
                 
                                     SELECT a.AddressID, a.AddressLine1, a.AddressLine2, a.City, sp.StateProvinceCode as State,
                 	                      sp.CountryRegionCode as Country, a.PostalCode, a.SpatialLocation.Lat as Lat,
-                	                      a.SpatialLocation.Long as Long, at.Name
+                	                      a.SpatialLocation.Long as Long, at.Name as AddressType
                                     FROM Person.BusinessEntityAddress bea
                                     JOIN Person.Address a ON bea.AddressID = a.AddressID
                                     JOIN Person.AddressType at ON bea.AddressTypeID = at.AddressTypeID
@@ -81,12 +61,14 @@ namespace AdventureWorks.SqlRepository
                 .Select(addr =>
                     new Address
                     {
+                        Id = addr.Id,
+                        Type = addr.AddressType ?? string.Empty,
                         Address1 = addr.AddressLine1 ?? string.Empty,
                         Address2 = addr.AddressLine2 ?? string.Empty,
                         City = addr.City ?? string.Empty,
                         State = addr.State ?? string.Empty,
                         Country = addr.Country ?? string.Empty,
-                        ZipCode = addr.PostalCode ?? string.Empty,
+                        PostalCode = addr.PostalCode ?? string.Empty,
                         GeoLocation = new GeoPoint(addr.Latitude, addr.Longitude)
                     }
                 ).ToList();
@@ -94,7 +76,12 @@ namespace AdventureWorks.SqlRepository
             List<PhoneNumber> phoneNumbers = (await queries.ReadAsync<DTO.PhoneNumber>())
                 .Select(p => new PhoneNumber(p.Number ?? string.Empty, p.Type ?? string.Empty)).ToList();
 
-            List<string> emailAddresses = (await queries.ReadAsync<string>()).ToList();
+            List<EmailAddress> emailAddresses = (await queries.ReadAsync<DTO.EmailAddress>())
+                .Select(addr => new EmailAddress
+                {
+                    Id = addr.Id,
+                    Address = addr.Address ?? string.Empty,
+                }).ToList();
 
             PersonName name = new()
             {
@@ -118,7 +105,7 @@ namespace AdventureWorks.SqlRepository
             return personDetail;
         }
 
-        public async Task<List<Person>> Search(PersonSearch criteria)
+        public async Task<SearchResult<Person>> SearchPersons(PersonSearch criteria, int maxResults)
         {
             _ = PhoneNumber.TryParse(criteria.PhoneNumber, out string phoneNumber);
 
@@ -154,29 +141,92 @@ namespace AdventureWorks.SqlRepository
 
             string sql =
                 $"""
-                 SELECT BusinessEntityID as Id, PersonType, NameStyle, Title, FirstName, MiddleName, LastName, Suffix
+                 SELECT  BusinessEntityID as Id, PersonType, NameStyle, Title, FirstName, MiddleName, LastName, Suffix
+                 INTO #PersonResults
                  FROM Person.Person
                  WHERE {string.Join(" AND ", filters)}
+                 
+                 SELECT TOP {maxResults} * FROM #PersonResults
+                 SELECT COUNT(*) FROM #PersonResults
                  """;
 
-            return (await Connection.QueryAsync<DTO.Person>(sql, parameters))
+            await using var queries = await Connection.QueryMultipleAsync(sql, parameters);
+
+            var persons = (await queries.ReadAsync<DTO.Person>())
                 .Select(p => p.ToEntity())
                 .ToList();
+
+            var totalCount = await queries.ReadSingleAsync<int>();
+
+            var result = new SearchResult<Person>
+            {
+                Results = persons,
+                Total = totalCount
+            };
+
+            return result;
         }
 
-        public async Task AddPerson(Person person)
+        public async Task<int> AddPerson(Person person)
         {
-            throw new NotImplementedException();
+            if (person.Id != null)
+                throw new ArgumentException("Cannot insert person with existing Id");
+
+            string sql = """
+                         INSERT INTO Person.BusinessEntity
+                         OUTPUT Inserted.BusinessEntityID
+                         DEFAULT VALUES
+                         """;
+
+            int businessEntityId = await Connection.ExecuteScalarAsync<int>(sql);
+
+            var parameters = new
+            {
+                BusinessEntityId = businessEntityId,
+                person.PersonType,
+                person.Name.Title,
+                person.Name.FirstName,
+                person.Name.MiddleName,
+                person.Name.LastName,
+                person.Name.Suffix,
+            };
+
+            sql = """
+                  INSERT INTO Person.Person
+                  (BusinessEntityID, PersonType, Title, FirstName, MiddleName, LastName, Suffix)
+                  VALUES
+                  (@BusinessEntityID, @PersonType, @Title, @FirstName, @MiddleName, @LastName, @Suffix)
+                  """;
+
+            await Connection.ExecuteAsync(sql, parameters);
+
+            return businessEntityId;
         }
 
-        public async Task UpdatePerson(Person person)
+        public async Task<int> UpdatePerson(Person person)
         {
-            throw new NotImplementedException();
-        }
+            if (person.Id != null)
+                throw new ArgumentException("Cannot update person without existing Id");
 
-        public async Task DeletePerson(int id)
-        {
-            throw new NotImplementedException();
+            var parameters = new
+            {
+                BusinessEntityId = person.Id,
+                person.PersonType,
+                person.Name.Title,
+                person.Name.FirstName,
+                person.Name.MiddleName,
+                person.Name.LastName,
+                person.Name.Suffix,
+            };
+
+            var sql = """
+                    UPDATE Person.Person
+                    SET PersonType = @PersonType, Title = @Title, FirstName = @FirstName, 
+                    MiddleName = @MiddleName, LastName = @LastName, Suffix = @Suffix
+                    WHERE BusinessEntityID = @BusinessEntityID
+                  """;
+
+            return await Connection.ExecuteAsync(sql, parameters);
         }
     }
 }

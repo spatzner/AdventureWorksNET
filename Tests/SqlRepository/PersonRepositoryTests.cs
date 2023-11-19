@@ -27,7 +27,7 @@ public class PersonRepositoryTests
 
             try
             {
-                _testPerson = await _sut.Get(285);
+                _testPerson = await _sut.GetPerson(285);
             }
             catch (Exception ex)
             {
@@ -84,7 +84,8 @@ public class PersonRepositoryTests
                 Assert.Inconclusive();
 
             Assert.IsTrue(_testPerson.EmailAddresses.Any());
-            Assert.IsFalse(_testPerson.EmailAddresses.Any(string.IsNullOrWhiteSpace));
+            Assert.IsFalse(_testPerson.EmailAddresses.Any(addr => addr.Id == null));
+            Assert.IsFalse(_testPerson.EmailAddresses.Any(addr => string.IsNullOrWhiteSpace(addr.Address)));
         }
 
         [TestMethod]
@@ -124,9 +125,9 @@ public class PersonRepositoryTests
             {
                 _sut = new PersonRepository(Settings.ConnectionString);
             }
-            catch (Exception e)
+            catch
             {
-
+                _sut = null;
             }
         }
 
@@ -138,7 +139,7 @@ public class PersonRepositoryTests
             if(_sut == null)
                 Assert.Inconclusive();
 
-            _ = await _sut.Search(new PersonSearch());
+            _ = await _sut.SearchPersons(new PersonSearch(), 1);
         }
 
         [TestMethod]
@@ -153,9 +154,9 @@ public class PersonRepositoryTests
                 EmailAddress = "stephen0@adventure-works.com"
             };
 
-            var results = await _sut.Search(criteria);
+            var results = await _sut.SearchPersons(criteria, 1);
 
-            Assert.IsTrue(results.Any());
+            Assert.IsTrue(results.Results.Any());
         }
 
         [TestMethod]
@@ -170,9 +171,9 @@ public class PersonRepositoryTests
                 FirstName = "Stephen"
             };
 
-            var results = await _sut.Search(criteria);
+            var results = await _sut.SearchPersons(criteria, 1);
 
-            Assert.IsTrue(results.Any());
+            Assert.IsTrue(results.Results.Any());
         }
 
         [TestMethod]
@@ -187,9 +188,9 @@ public class PersonRepositoryTests
                 MiddleName = "E"
             };
 
-            var results = await _sut.Search(criteria);
+            var results = await _sut.SearchPersons(criteria, 1);
 
-            Assert.IsTrue(results.Any());
+            Assert.IsTrue(results.Results.Any());
         }
 
         [TestMethod]
@@ -204,9 +205,9 @@ public class PersonRepositoryTests
                 LastName = "Carson"
             };
 
-            var results = await _sut.Search(criteria);
+            var results = await _sut.SearchPersons(criteria, 1);
 
-            Assert.IsTrue(results.Any());
+            Assert.IsTrue(results.Results.Any());
         }
 
         [TestMethod]
@@ -221,9 +222,9 @@ public class PersonRepositoryTests
                 PersonType = "SP"
             };
 
-            var results = await _sut.Search(criteria);
+            var results = await _sut.SearchPersons(criteria, 1);
 
-            Assert.IsTrue(results.Any());
+            Assert.IsTrue(results.Results.Any());
         }
 
         [TestMethod]
@@ -238,9 +239,29 @@ public class PersonRepositoryTests
                 PhoneNumber = "2385550197"
             };
 
-            var results = await _sut.Search(criteria);
+            var results = await _sut.SearchPersons(criteria, 1);
 
-            Assert.IsTrue(results.Any());
+            Assert.IsTrue(results.Results.Any());
+        }
+
+        [TestMethod]
+        [TestCategory(Constants.Integration)]
+        public async Task SearchPerson_WhenSearched_ReturnsTotal()
+        {
+            if (_sut == null)
+                Assert.Inconclusive();
+
+            var criteria = new PersonSearch
+            {
+                FirstName = "Stephen"
+            };
+
+            var results = await _sut.SearchPersons(criteria, 1);
+
+            if(!results.Results.Any())
+                Assert.Inconclusive();
+
+            Assert.IsTrue(results.Total > 0);
         }
     }
 }

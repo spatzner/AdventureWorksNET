@@ -9,7 +9,7 @@ namespace AdventureWorks.Domain.Person.Entities
 {
     public class PersonDetail : Person
     {
-        public List<string> EmailAddresses { get; init; } = new();
+        public List<EmailAddress> EmailAddresses { get; init; } = new();
 
         public List<PhoneNumber> PhoneNumbers { get; init; } = new();
 
