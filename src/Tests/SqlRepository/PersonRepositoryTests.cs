@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
+using AdventureWorks.Domain.Person.Repositories;
 using AdventureWorks.SqlRepository;
 
 namespace Tests.SqlRepository;
@@ -16,14 +17,14 @@ public class PersonRepositoryTests
     public class GetPersonTests
     {
 
-        private static PersonRepository? _sut;
+        private static IPersonRepository? _sut;
         private static PersonDetail? _testPerson;
         private static Exception? _exception;
 
         [ClassInitialize]
         public static async Task ClassInit(TestContext context)
         {
-            _sut = new PersonRepository(Settings.ConnectionString);
+            _sut = ServiceProvider.GetService<IPersonRepository>();
 
             try
             {
@@ -116,14 +117,14 @@ public class PersonRepositoryTests
     [TestClass]
     public class SearchPersonTests
     {
-        private static PersonRepository? _sut;
+        private static IPersonRepository? _sut;
 
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
             try
             {
-                _sut = new PersonRepository(Settings.ConnectionString);
+                _sut = ServiceProvider.GetService<IPersonRepository>();
             }
             catch
             {

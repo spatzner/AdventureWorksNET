@@ -14,17 +14,11 @@ namespace Tests
         [AssemblyInitialize]
         public static void Initialize(TestContext testContext)
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddEnvironmentVariables()
-                .Build();
-            AppSettings settings = new();
+            ServiceProvider.InitializeProvider();
 
-            config.GetSection("TestSettings").Bind(settings);
 
-            Settings.SetInstance(settings);
 
-            
+
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     internal class EmailAddress
     {
-        public int? Id { get; set; }
+        public int? EmailAddressId { get; set; }
         public string? Address { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace AdventureWorks.SqlRepository
 {
     public class PhoneRepository: Repository, IPhoneRepository
     {
-        public PhoneRepository(string connectionString) : base(connectionString)
+        public PhoneRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
         {
         }
 
@@ -19,7 +19,7 @@ namespace AdventureWorks.SqlRepository
         {
             var sql = """
                       INSERT INTO Person.PersonPhone (BusinessEntityId, PhoneNumber, PhoneNumberTypeId)
-                      SELECT @PersonId, @Number, PhoneNumberTypeId
+                      SELECT @PersonId, @PhoneNumber, PhoneNumberTypeId
                       FROM Person.PhoneNumberType
                       WHERE Name like @Type
                       """;

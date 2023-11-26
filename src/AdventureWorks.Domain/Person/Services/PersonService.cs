@@ -12,7 +12,7 @@ using AdventureWorks.Domain.Person.Repositories;
 
 namespace AdventureWorks.Domain.Person.Services
 {
-    public class PersonService
+    public class PersonService : IPersonService
     {
         private readonly IPersonRepository _personRepository;
         private readonly IAddressRepository _addressRepository;
@@ -29,7 +29,9 @@ namespace AdventureWorks.Domain.Person.Services
 
         public async Task<SearchResult<Entities.Person>> SearchPerson(PersonSearch criteria)
         {
-            return  await _personRepository.SearchPersons(criteria, 100);
+            //TODO: validate input
+
+            return await _personRepository.SearchPersons(criteria, 100);
         }
 
         public async Task<PersonDetail> GetPerson(int id)
@@ -40,23 +42,27 @@ namespace AdventureWorks.Domain.Person.Services
             return await _personRepository.GetPerson(id);
         }
 
-        public async Task AddPerson(PersonDetail person)
+        public async Task<int> AddPerson(PersonDetail person)
         {
             //TODO: validate input
 
-            using TransactionScope scope = new();
+            using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
 
             int id = await _personRepository.AddPerson(person);
 
-            List<Task> tasks = new();
+            foreach (var address in person.Addresses)
+                await _addressRepository.Add(id, address);
+            
+            foreach (var phoneNumber in person.PhoneNumbers)
+                await _phoneRepository.Add(id, phoneNumber);
 
-            tasks.AddRange(person.Addresses.Select(address => _addressRepository.Add(id, address)));
-            tasks.AddRange(person.PhoneNumbers.Select(phoneNumber => _phoneRepository.Add(id, phoneNumber)));
-            tasks.AddRange(person.EmailAddresses.Select(email => _emailRepository.Add(id, email)));
-
-            await Task.WhenAll(tasks);
+            foreach (var email in person.EmailAddresses)
+                await _emailRepository.Add(id, email);
+            
 
             scope.Complete();
+
+            return id;
         }
     }
 }

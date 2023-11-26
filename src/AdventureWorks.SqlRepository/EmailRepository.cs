@@ -11,7 +11,7 @@ namespace AdventureWorks.SqlRepository
 {
     public class EmailRepository : Repository, IEmailRepository
     {
-        public EmailRepository(string connectionString) : base(connectionString)
+        public EmailRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
         {
         }
 
@@ -19,13 +19,13 @@ namespace AdventureWorks.SqlRepository
         {
             string sql = """
                          INSERT INTO Person.EmailAddress (BusinessEntityId, EmailAddress)
-                         (@PersonId, @EmailAddress)
+                         VALUES (@PersonId, @EmailAddress)
                          """;
 
             var parameters = new
             {
                 PersonId = personId,
-                EmailAddress = emailAddress
+                EmailAddress = emailAddress.Address
             };
 
             await Connection.ExecuteAsync(sql, parameters);

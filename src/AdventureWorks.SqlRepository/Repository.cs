@@ -6,9 +6,9 @@ namespace AdventureWorks.SqlRepository
     {
         protected readonly SqlConnection Connection;
 
-        protected Repository(string connectionString)
+        protected Repository(IConnectionProvider connectionProvider)
         {
-            Connection = new SqlConnection(connectionString);
+            Connection = connectionProvider.CreateAdventureWorksConnection();
         }
 
         public void Dispose()

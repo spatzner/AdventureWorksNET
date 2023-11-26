@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace AdventureWorks.SqlRepository
 {
     public class AddressRepository : Repository, IAddressRepository
     {
-        public AddressRepository(string connectionString) : base(connectionString)
+        public AddressRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
         {
         }
 
@@ -20,13 +21,16 @@ namespace AdventureWorks.SqlRepository
 
 
             string sql = """
+                         DECLARE @AddressIdTable table(AddressId int);
                          DECLARE @AddressId int;
                          
                          INSERT INTO Person.Address (AddressLine1, AddressLine2, City, StateProvinceId, PostalCode, SpatialLocation)
-                         OUTPUT inserted.AddressID INTO @AddressId
-                         SELECT @AddressLine1, @AddressLine2, @City, StateProvinceID, @PostalCode, geography::Point(@Latitude, @Longitude , 4326)
+                         OUTPUT inserted.AddressID INTO @AddressIdTable
+                         SELECT @Address1, @Address2, @City, StateProvinceID, @PostalCode, geography::Point(@Latitude, @Longitude , 4326)
                          FROM Person.StateProvince 
                          WHERE Name = @State AND CountryRegionCode = @Country
+                         
+                         SELECT TOP 1 @AddressId = AddressId FROM @AddressIdTable;
                          
                          INSERT INTO Person.BusinessEntityAddress (BusinessEntityId, AddressId, AddressTypeId)
                          SELECT @PersonId, @AddressId, AddressTypeId 
@@ -35,6 +39,7 @@ namespace AdventureWorks.SqlRepository
 
             var parameters = new
             {
+                PersonId = personId,
                 address.Address1,
                 address.Address2,
                 address.City,

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AdventureWorks.Domain.Person;
+namespace AdventureWorks.Domain;
 
 internal static partial class CompiledRegex
 {

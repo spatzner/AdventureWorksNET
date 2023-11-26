@@ -20,7 +20,7 @@ namespace AdventureWorks.SqlRepository
     public class PersonRepository : Repository, IPersonRepository
     {
 
-        public PersonRepository(string connectionString) : base(connectionString)
+        public PersonRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
         {
 
         }
@@ -48,7 +48,7 @@ namespace AdventureWorks.SqlRepository
                                     JOIN Person.PhoneNumberType pnt on pp.PhoneNumberTypeID = pnt.PhoneNumberTypeID
                                     WHERE BusinessEntityID = @Id
                 
-                                    SELECT EmailAddress
+                                    SELECT EmailAddressId, EmailAddress as Address
                                     FROM Person.EmailAddress
                                     WHERE BusinessEntityID = @Id
                 """,
@@ -61,7 +61,7 @@ namespace AdventureWorks.SqlRepository
                 .Select(addr =>
                     new Address
                     {
-                        Id = addr.Id,
+                        Id = addr.AddressId,
                         Type = addr.AddressType ?? string.Empty,
                         Address1 = addr.AddressLine1 ?? string.Empty,
                         Address2 = addr.AddressLine2 ?? string.Empty,
@@ -79,7 +79,7 @@ namespace AdventureWorks.SqlRepository
             List<EmailAddress> emailAddresses = (await queries.ReadAsync<DTO.EmailAddress>())
                 .Select(addr => new EmailAddress
                 {
-                    Id = addr.Id,
+                    Id = addr.EmailAddressId,
                     Address = addr.Address ?? string.Empty,
                 }).ToList();
 
@@ -172,17 +172,8 @@ namespace AdventureWorks.SqlRepository
             if (person.Id != null)
                 throw new ArgumentException("Cannot insert person with existing Id");
 
-            string sql = """
-                         INSERT INTO Person.BusinessEntity
-                         OUTPUT Inserted.BusinessEntityID
-                         DEFAULT VALUES
-                         """;
-
-            int businessEntityId = await Connection.ExecuteScalarAsync<int>(sql);
-
             var parameters = new
             {
-                BusinessEntityId = businessEntityId,
                 person.PersonType,
                 person.Name.Title,
                 person.Name.FirstName,
@@ -191,16 +182,26 @@ namespace AdventureWorks.SqlRepository
                 person.Name.Suffix,
             };
 
-            sql = """
+            var sql = """
+                  DECLARE @BusinessEntityTable table (BusinessEntityID int);
+                  DECLARE @BusinessEntityId int;
+                  
+                  INSERT INTO Person.BusinessEntity
+                  OUTPUT Inserted.BusinessEntityID INTO @BusinessEntityTable
+                  DEFAULT VALUES;
+                  
+                  
+                  SELECT TOP 1 @BusinessEntityId = BusinessEntityID FROM @BusinessEntityTable ;
+                  
                   INSERT INTO Person.Person
                   (BusinessEntityID, PersonType, Title, FirstName, MiddleName, LastName, Suffix)
                   VALUES
-                  (@BusinessEntityID, @PersonType, @Title, @FirstName, @MiddleName, @LastName, @Suffix)
+                  (@BusinessEntityID, @PersonType, @Title, @FirstName, @MiddleName, @LastName, @Suffix);
+                  
+                  SELECT @BusinessEntityId;
                   """;
 
-            await Connection.ExecuteAsync(sql, parameters);
-
-            return businessEntityId;
+            return await Connection.ExecuteScalarAsync<int>(sql, parameters);
         }
 
         public async Task<int> UpdatePerson(Person person)
