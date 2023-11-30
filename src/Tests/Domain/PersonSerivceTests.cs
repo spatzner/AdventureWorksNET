@@ -13,7 +13,8 @@ namespace Tests.Domain
     public class PersonServiceTests
     {
         [TestMethod]
-        public async Task Test()
+        [TestCategory(Constants.Integration)]
+        public async Task AddPerson_WhenExcutedWithAllData_CreatesRecords()
         {
             var sut = ServiceProvider.GetService<IPersonService>();
 
@@ -59,7 +60,7 @@ namespace Tests.Domain
 
             int id = await sut.AddPerson(person);
 
-            Assert.IsTrue(id < 0);
+            Assert.IsTrue(id > 0);
         }
     }
 }

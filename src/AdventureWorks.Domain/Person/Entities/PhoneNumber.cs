@@ -1,17 +1,30 @@
-﻿namespace AdventureWorks.Domain.Person.Entities;
+﻿using AdventureWorks.Domain.Validation;
 
-public readonly struct PhoneNumber
+namespace AdventureWorks.Domain.Person.Entities;
+
+public class PhoneNumber
 {
-    public string Number { get; }
+    private string _number = null!;
+
+    public string Number
+    {
+        get => _number;
+        set
+        {
+            if (!TryParse(value, out string formattedNumber))
+                throw new ArgumentException("Invalid length. Must be 10 or 13 digits in any format",
+                    nameof(Number));
+            _number = formattedNumber;
+        }
+    }
+
+    [ValidationKey]
     public string Type { get; }
 
     public PhoneNumber(string phoneNumber, string type)
     {
-        if (!TryParse(phoneNumber, out string formattedNumber))
-            throw new ArgumentException("Invalid length. Must be 10 or 13 digits in any format",
-                nameof(phoneNumber));
-
-        Number = formattedNumber;
+        
+        Number = phoneNumber;
         Type = type;
     }
 

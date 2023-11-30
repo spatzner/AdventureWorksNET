@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdventureWorks.Domain
+﻿namespace AdventureWorks.SqlRepository
 {
     public class ConnectionStrings
     {
-        public string AdventureWorks { get; set; }
+        public string? AdventureWorks { get; set; }
     }
 }

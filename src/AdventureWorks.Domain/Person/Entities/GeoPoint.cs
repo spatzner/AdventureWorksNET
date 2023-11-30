@@ -4,10 +4,10 @@ public readonly struct GeoPoint
 {
     public GeoPoint(double latitude, double longitude)
     {
-        if (latitude < -90 || latitude > 90)
-            throw new ArgumentException("Invalid Latitude", nameof(latitude));
-        if (longitude < -180 || longitude > 180)
-            throw new ArgumentException("Invalid Longitude", nameof(longitude));
+        if (latitude is < -90 or > 90)
+            throw new ArgumentException("Must be [-90,90]", nameof(latitude));
+        if (longitude is < -180 or > 180)
+            throw new ArgumentException("Must be [-180 ,180]", nameof(longitude));
 
         Latitude = latitude;
         Longitude = longitude;
