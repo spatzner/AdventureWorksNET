@@ -5,11 +5,11 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class UniqueOnKeyAttribute: PropertyValidationAttribute
+    internal class UniqueOnKeyAttribute: PropertyValidationAttribute
     {
         private List<PropertyInfo> _keyProperties = null!;
         private Type _itemType = null!;
-        public override bool IsValid(string propertyName, object? value)
+        internal override bool IsValid(string propertyName, object? value)
         {
             if (value == null)
                 return true;
@@ -52,7 +52,7 @@ namespace AdventureWorks.Domain.Validation
             return true;
         }
 
-        public override ValidationError GetErrorMessage(string propertyName, object? value)
+        internal override ValidationError GetErrorMessage(string propertyName, object? value)
         {
 
             return new ValidationError

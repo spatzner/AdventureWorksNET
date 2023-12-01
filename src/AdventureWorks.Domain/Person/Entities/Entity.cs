@@ -22,46 +22,55 @@ namespace AdventureWorks.Domain.Person.Entities
 
             foreach (PropertyInfo propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                var propName = propertyInfo.Name;
-
-                foreach (Attribute customAttribute in propertyInfo.GetCustomAttributes(typeof(PropertyValidationAttribute)))
-                {
-                    var valAttr = (PropertyValidationAttribute)customAttribute;
-                    var value = propertyInfo.GetValue(this);
-
-                    if (valAttr.IsValid(propName, value))
-                        continue;
-
-                    result.Errors.Add(valAttr.GetErrorMessage(propertyInfo.Name, value));
-
-                }
-
-                if (propertyInfo.PropertyType != typeof(Entity))
-                    continue;
-                    
-                object? val = propertyInfo.GetValue(this);
-
-                if (val == null)
-                    continue;
-
-                result.Errors.AddRange(((Entity)val).Validate().Errors.Select(err =>
-                {
-                    err.PropertyStack.Push(propName);
-                    return err;
-                }));
+                ValidateProperty(propertyInfo, result);
             }
 
             foreach (Attribute customAttribute in type.GetCustomAttributes(typeof(EntityValidationAttribute)))
             {
-                var valAttr = (EntityValidationAttribute)customAttribute;
-
-                if (valAttr.IsValid(this))
-                    continue;
-
-                result.Errors.Add(valAttr.GetErrorMessage());
+                ValidateEntity(customAttribute, result);
             }
 
             return result;
+        }
+
+        private void ValidateProperty(PropertyInfo propertyInfo, ValidationResult result)
+        {
+            var propName = propertyInfo.Name;
+
+            foreach (Attribute customAttribute in propertyInfo.GetCustomAttributes(typeof(PropertyValidationAttribute)))
+            {
+                var valAttr = (PropertyValidationAttribute)customAttribute;
+                var value = propertyInfo.GetValue(this);
+
+                if (valAttr.IsValid(propName, value))
+                    continue;
+
+                result.Errors.Add(valAttr.GetErrorMessage(propertyInfo.Name, value));
+            }
+
+            if (propertyInfo.PropertyType != typeof(Entity))
+                return;
+
+            object? subEntity = propertyInfo.GetValue(this);
+
+            if (subEntity == null)
+                return;
+
+            result.Errors.AddRange(((Entity)subEntity).Validate().Errors.Select(err =>
+            {
+                err.PropertyStack.Push(propName);
+                return err;
+            }));
+        }
+
+        private void ValidateEntity(Attribute customAttribute, ValidationResult result)
+        {
+            var valAttr = (EntityValidationAttribute)customAttribute;
+
+            if (valAttr.IsValid(this))
+                return;
+
+            result.Errors.Add(valAttr.GetErrorMessage());
         }
     }
 

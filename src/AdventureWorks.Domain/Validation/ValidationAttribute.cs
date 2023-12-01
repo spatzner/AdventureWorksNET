@@ -4,7 +4,7 @@ using System.Windows.Markup;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public abstract class ValidationAttribute : Attribute
+    internal abstract class ValidationAttribute : Attribute
     {
 
     }

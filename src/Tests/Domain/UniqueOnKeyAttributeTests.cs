@@ -43,7 +43,7 @@ namespace Tests.Domain
     public class KeyClass
     {
         [ValidationKey]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [ValidationKey]
         public int Type { get; set; }
@@ -51,7 +51,6 @@ namespace Tests.Domain
 
     public class ContainerClass : Entity
     {
-        [UniqueOnKey]
-        public List<KeyClass> KeyClasses { get; set; }
+        [UniqueOnKey] public List<KeyClass> KeyClasses { get; set; } = new();
     }
 }

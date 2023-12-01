@@ -4,30 +4,29 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    internal class MinLengthAttribute : PropertyValidationAttribute
+    internal class MaxLengthAttribute : PropertyValidationAttribute
     {
-        public int MinLength { get; }
+        internal int MaxLength { get; }
 
-        internal MinLengthAttribute(int minLength)
+        internal MaxLengthAttribute(int maxLength)
         {
-            MinLength = minLength;
+            MaxLength = maxLength;
         }
-
 
         internal override bool IsValid(string propertyName, object? value)
         {
             switch (value)
             {
                 case null:
-                    return false;
+                    return true;
                 case string s:
-                    return s.Length >= MinLength;
+                    return s.Length <= MaxLength;
                 case IEnumerable e:
                     int count = e.Cast<object?>().Count();
-                    return count >= MinLength;
+                    return count <= MaxLength;
                 default:
                     throw new ArgumentException(
-                        $"{nameof(MinLengthAttribute)} is not valid for type {value.GetType()}. Attribute on property {propertyName}");
+                        $"{nameof(MaxLengthAttribute)} is not valid for type {value.GetType()}. Attribute on property {propertyName}");
             }
         }
 
@@ -37,8 +36,8 @@ namespace AdventureWorks.Domain.Validation
             {
                 Field = propertyName,
                 Value = value,
-                Type = ValidationType.MinLength,
-                Requirements = $"Min Length: {MinLength}"
+                Type = ValidationType.MaxLength,
+                Requirements = $"Max Length: {MaxLength}"
             };
         }
     }

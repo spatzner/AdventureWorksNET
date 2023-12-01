@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventureWorks.Domain.Person
+namespace AdventureWorks.Domain.Validation
 {
-    public enum ValidationType
+    internal class RequiredAttribute
     {
-        MinLength,
-        MaxLength,
-        UniqueList
     }
 }

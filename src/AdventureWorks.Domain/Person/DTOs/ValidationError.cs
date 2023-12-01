@@ -13,7 +13,7 @@ namespace AdventureWorks.Domain.Person.DTOs
         public required string Field { get; set; }
         public object? Value { get; set; }
         public required string Requirements { get; set; }
-        internal Stack<string> PropertyStack { get; set; } = new();
+        internal Stack<string> PropertyStack { get; } = new();
         public string PropertyHierarchy => string.Join(".", PropertyStack);
     }
 }

@@ -3,9 +3,9 @@
 namespace AdventureWorks.Domain.Validation
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public abstract class PropertyValidationAttribute : ValidationAttribute
+    internal abstract class PropertyValidationAttribute : ValidationAttribute
     {
-        public abstract bool IsValid(string propertyName, object? value);
-        public abstract ValidationError GetErrorMessage(string propertyName, object? value);
+        internal abstract bool IsValid(string propertyName, object? value);
+        internal abstract ValidationError GetErrorMessage(string propertyName, object? value);
     }
 }
