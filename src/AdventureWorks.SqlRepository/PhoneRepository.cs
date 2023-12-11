@@ -21,7 +21,7 @@ namespace AdventureWorks.SqlRepository
                       INSERT INTO Person.PersonPhone (BusinessEntityId, PhoneNumber, PhoneNumberTypeId)
                       SELECT @PersonId, @PhoneNumber, PhoneNumberTypeId
                       FROM Person.PhoneNumberType
-                      WHERE Name like @Type
+                      WHERE Name like @ValidationType
                       """;
 
             var parameters = new

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdventureWorks.Domain.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,5 @@ namespace AdventureWorks.Domain.Person.Entities
         public List<PhoneNumber> PhoneNumbers { get; init; } = new();
 
         public List<Address> Addresses { get; init; } = new();
-
     }
 }

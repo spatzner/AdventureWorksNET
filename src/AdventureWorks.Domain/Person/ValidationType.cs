@@ -10,6 +10,7 @@ namespace AdventureWorks.Domain.Person
     {
         MinLength,
         MaxLength,
-        UniqueList
+        UniqueList,
+        Range
     }
 }

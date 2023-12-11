@@ -10,7 +10,7 @@ namespace AdventureWorks.Domain.Person.Entities
     public class EmailAddress
     {
         public int? Id { get; set; }
-        [MaxLength(50)]
-        public required string Address { get; set; }
+
+        public virtual string? Address { get; set; }
     }
 }

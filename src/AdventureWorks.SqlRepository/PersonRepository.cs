@@ -175,7 +175,7 @@ namespace AdventureWorks.SqlRepository
             var parameters = new
             {
                 person.PersonType,
-                person.Name.Title,
+                person.Name!.Title,
                 person.Name.FirstName,
                 person.Name.MiddleName,
                 person.Name.LastName,
@@ -213,7 +213,7 @@ namespace AdventureWorks.SqlRepository
             {
                 BusinessEntityId = person.Id,
                 person.PersonType,
-                person.Name.Title,
+                person.Name!.Title,
                 person.Name.FirstName,
                 person.Name.MiddleName,
                 person.Name.LastName,

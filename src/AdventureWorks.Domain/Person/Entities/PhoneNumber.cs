@@ -1,6 +1,4 @@
-﻿using AdventureWorks.Domain.Validation;
-
-namespace AdventureWorks.Domain.Person.Entities;
+﻿namespace AdventureWorks.Domain.Person.Entities;
 
 public class PhoneNumber
 {
@@ -18,7 +16,6 @@ public class PhoneNumber
         }
     }
 
-    [ValidationKey]
     public string Type { get; }
 
     public PhoneNumber(string phoneNumber, string type)

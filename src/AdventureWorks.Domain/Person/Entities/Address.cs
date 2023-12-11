@@ -1,24 +1,14 @@
-﻿using AdventureWorks.Domain.Validation;
-
-namespace AdventureWorks.Domain.Person.Entities;
+﻿namespace AdventureWorks.Domain.Person.Entities;
 
 public class Address
 {
-    public int? Id { get; set; }
-
-    public required string Type { get; set; }
-    [MaxLength(60)]
-    public required string Address1 { get; set; }
-    [MaxLength(60)]
-    public string? Address2 { get; set; }
-
-    [MaxLength(30)]
-    public required string City { get; set; }
-    [MaxLength(50)]
-    public required string State { get; set; }
-    [MaxLength(50)]
-    public required string Country { get; set; }
-    [MaxLength(15)]
-    public required string PostalCode { get; set; }
-    public GeoPoint GeoLocation { get; set; }
+    public virtual int? Id { get; set; }
+    public virtual string? Type { get; set; }
+    public virtual string? Address1 { get; set; }
+    public virtual string? Address2 { get; set; }
+    public virtual string? City { get; set; }
+    public virtual string? State { get; set; }
+    public virtual string? Country { get; set; }
+    public virtual string? PostalCode { get; set; }
+    public virtual GeoPoint? GeoLocation { get; set; }
 }

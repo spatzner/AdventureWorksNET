@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -34,7 +35,7 @@ namespace AdventureWorks.SqlRepository
                          
                          INSERT INTO Person.BusinessEntityAddress (BusinessEntityId, AddressId, AddressTypeId)
                          SELECT @PersonId, @AddressId, AddressTypeId 
-                         FROM Person.AddressType where Name like @Type
+                         FROM Person.AddressType where Name like @ValidationType
                          """;
 
             var parameters = new
@@ -46,8 +47,8 @@ namespace AdventureWorks.SqlRepository
                 address.State,
                 address.Country,
                 address.PostalCode,
-                address.GeoLocation.Latitude,
-                address.GeoLocation.Longitude,
+                address.GeoLocation?.Latitude,
+                address.GeoLocation?.Longitude,
                 address.Type
             };
 
