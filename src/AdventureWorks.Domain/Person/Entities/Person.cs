@@ -2,7 +2,7 @@
 
 namespace AdventureWorks.Domain.Person.Entities;
 
-public class Person
+public class Person : IValidatable
 {
     public int? Id { get; set; }
     public PersonName? Name { get; set; }

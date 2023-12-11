@@ -44,8 +44,6 @@ namespace AdventureWorks.Domain.Validation
 
         public bool Validate(string propertyName, object? obj, out ValidationError? result)
         {
-            bool? isValid = null;
-
             if (obj == null)
             {
                 result = null;
@@ -75,11 +73,11 @@ namespace AdventureWorks.Domain.Validation
             for (int i = 0; i < keyValues.Count - 1; i++)
             for (int j = i + 1; j < keyValues.Count; j++)
             {
-                if (!keyValues[i].Except(keyValues[j]).Any())
-                {
-                    result = GetErrorMessage(propertyName, obj);
-                    return false;
-                }
+                if (keyValues[i].Except(keyValues[j]).Any())
+                    continue;
+                
+                result = GetErrorMessage(propertyName, obj);
+                return false;
             }
 
             result = null;

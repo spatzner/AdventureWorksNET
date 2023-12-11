@@ -1,6 +1,6 @@
 ﻿namespace AdventureWorks.Domain.Person.Entities;
 
-public class Address
+public class Address : IValidatable
 {
     public virtual int? Id { get; set; }
     public virtual string? Type { get; set; }

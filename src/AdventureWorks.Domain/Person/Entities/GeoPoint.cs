@@ -2,7 +2,7 @@
 
 namespace AdventureWorks.Domain.Person.Entities;
 
-public class GeoPoint : IEquatable<GeoPoint>
+public class GeoPoint : IEquatable<GeoPoint>, IValidatable
 {
     public double Latitude { get; }
     public double Longitude { get; }

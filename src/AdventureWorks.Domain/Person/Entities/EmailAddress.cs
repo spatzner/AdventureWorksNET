@@ -7,7 +7,7 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Domain.Person.Entities
 {
-    public class EmailAddress
+    public class EmailAddress :IValidatable
     {
         public int? Id { get; set; }
 

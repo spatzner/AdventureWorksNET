@@ -6,9 +6,12 @@ namespace AdventureWorks.Domain.Person.Validation
 {
     public class AddressValidator : IValidator<Address>
     {
-        public virtual ValidationResult Validate(Address entity)
+        public virtual ValidationResult Validate(Address? entity)
         {
             ValidationResult result = new();
+
+            if (entity == null)
+                return result;
 
             var requiredRule = new RequiredRule();
 

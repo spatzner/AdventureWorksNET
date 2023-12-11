@@ -12,7 +12,7 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Domain.Person.Entities
 {
-    public abstract class Entity
+    public interface IValidatable
     {
     }
 }

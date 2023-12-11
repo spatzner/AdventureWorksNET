@@ -19,7 +19,10 @@ namespace AdventureWorks.Domain.Person.Services
         private readonly IPhoneRepository _phoneRepository;
         private readonly IEmailRepository _emailRepository;
 
-        public PersonService(IPersonRepository personRepository, IAddressRepository addressRepository, IPhoneRepository phoneRepository, IEmailRepository emailRepository)
+        public PersonService(IPersonRepository personRepository,
+            IAddressRepository addressRepository, 
+            IPhoneRepository phoneRepository, 
+            IEmailRepository emailRepository)
         {
             _personRepository = personRepository;
             _addressRepository = addressRepository;
