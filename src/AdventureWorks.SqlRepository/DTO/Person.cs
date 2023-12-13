@@ -3,7 +3,7 @@ using AdventureWorks.Domain.Person.Entities;
 
 namespace AdventureWorks.SqlRepository.DTO
 {
-    public interface IMappable<Dto, Entity>
+    internal interface IMappable<Dto, Entity>
     {
         static abstract Dto FromEntity(Entity entity);
         Entity ToEntity();
@@ -11,7 +11,7 @@ namespace AdventureWorks.SqlRepository.DTO
     }
 
 
-    public class Person : IMappable<Person, Domain.Person.Entities.Person>
+    internal class Person : IMappable<Person, Domain.Person.Entities.Person>
     {
 
         public int? BusinessEntityId { get; set; }

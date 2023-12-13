@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace AdventureWorks.Domain.Person.DTOs
 {
-    public class OperationResult
+    public class OperationResult : ValidationResult
     {
         public bool Success { get; set; }
-        public List<ValidationError> ValidationErrors { get; set; } = new();
-        public bool IsValid => !ValidationErrors.Any();
         
     }
 }

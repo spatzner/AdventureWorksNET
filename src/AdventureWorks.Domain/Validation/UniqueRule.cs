@@ -42,17 +42,17 @@ namespace AdventureWorks.Domain.Validation
             _keyProperties = typeof(T).GetProperties().Where(x => members.Contains(x.Name));
         }
 
-        public bool Validate(string propertyName, object? obj, out ValidationError? result)
+        public bool Validate(string propertyName, object? value, out ValidationError? result)
         {
-            if (obj == null)
+            if (value == null)
             {
                 result = null;
                 return true;
             }
 
-            if (obj is not IEnumerable<T> list)
+            if (value is not IEnumerable<T> list)
             {
-                result = GetErrorMessage(propertyName, obj);
+                result = GetErrorMessage(propertyName, value);
                 return false;
             }
 
@@ -76,7 +76,7 @@ namespace AdventureWorks.Domain.Validation
                 if (keyValues[i].Except(keyValues[j]).Any())
                     continue;
                 
-                result = GetErrorMessage(propertyName, obj);
+                result = GetErrorMessage(propertyName, value);
                 return false;
             }
 

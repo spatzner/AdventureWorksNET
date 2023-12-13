@@ -1,17 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Domain.Person.Repositories;
-using System.Data.Common;
-using System.Data;
-using System.Data.SqlClient;
-using AdventureWorks.Domain;
-using AdventureWorks.SqlRepository;
+﻿using AdventureWorks.Domain.Person.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace AdventureWorks.SqlRepository
 {
     public static class DependencyInjection
     {

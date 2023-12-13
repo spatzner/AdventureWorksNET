@@ -23,21 +23,21 @@ namespace AdventureWorks.Domain.Validation
             MaxInclusive = maxInclusive;
         }
         
-        public bool Validate(string propertyName, object? obj, out ValidationError? result)
+        public bool Validate(string propertyName, object? value, out ValidationError? result)
         {
-            if (obj == null)
+            if (value == null)
             {
-                result = GetErrorMessage(propertyName, obj);
+                result = GetErrorMessage(propertyName, value);
                 return false;
             }
 
-            var dbl = Convert.ToDouble(obj);
+            var dbl = Convert.ToDouble(value);
 
             switch (MinInclusive)
             {
                 case true when dbl < Min:
                 case false when dbl <= Min:
-                    result = GetErrorMessage(propertyName, obj);
+                    result = GetErrorMessage(propertyName, value);
                     return false;
             }
 
@@ -45,7 +45,7 @@ namespace AdventureWorks.Domain.Validation
             {
                 case true when dbl > Max:
                 case false when dbl >= Max:
-                    result = GetErrorMessage(propertyName, obj);
+                    result = GetErrorMessage(propertyName, value);
                     return false;
             }
 

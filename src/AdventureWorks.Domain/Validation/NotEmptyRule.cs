@@ -1,41 +1,40 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class MinLengthRule : IValidationRule
+    internal class NotEmptyRule : IValidationRule
     {
-        public int MinLength { get; }
-
-        public MinLengthRule(int minLength)
-        {
-            MinLength = minLength;
-        }
 
 
         public bool Validate(string propertyName, object? value, out ValidationError? result)
         {
             bool isValid;
-
             switch (value)
             {
                 case null:
                     isValid = false;
                     break;
                 case string s:
-                    isValid = s.Length >= MinLength;
+                    isValid = !string.IsNullOrEmpty(s);
                     break;
-                case IEnumerable e:
-                    int count = e.Cast<object?>().Count();
-                    isValid = count >= MinLength;
+                case IEnumerable<object> ie:
+                    isValid = ie.Any();
                     break;
                 default:
-                    throw new ArgumentException(
-                        $"{nameof(MinLengthRule)} is not valid for type {value.GetType()}. Attribute on property {propertyName}");
+                    isValid = value.GetType()
+                        .GetProperties(BindingFlags.Public)
+                        .Any(prop => prop.GetValue(value) != default);
+                    break;
             }
 
-            result = !isValid ? GetErrorMessage(propertyName, value) : null;
+            result = isValid ? null : GetErrorMessage(propertyName, value);
             return isValid;
         }
 
@@ -45,8 +44,8 @@ namespace AdventureWorks.Domain.Validation
             {
                 Field = propertyName,
                 Value = value,
-                ValidationType = ValidationType.MinLength,
-                Requirements = $"Min Length: {MinLength}"
+                ValidationType = ValidationType.IsNotEmpty,
+                Requirements = string.Empty
             };
         }
     }

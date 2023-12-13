@@ -2,29 +2,29 @@
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class OneOfRule<T> : IValidationRule
+    public class DiscreetValueRule<T> : IValidationRule
     {
         public List<T> Values { get; }
         public bool AllowNull { get; set; }
 
-        public OneOfRule(params T[] values)
+        public DiscreetValueRule(params T[] values)
         {
             Values = values.ToList();
         }
-        public bool Validate(string propertyName, object? obj, out ValidationError? result)
+        public bool Validate(string propertyName, object? value, out ValidationError? result)
         {
-            if (obj == null)
+            if (value == null)
             {
-                result = !AllowNull ? GetErrorMessage(propertyName, obj): null;
+                result = !AllowNull ? GetErrorMessage(propertyName, value): null;
                 return AllowNull;
             }
 
-            Type valType = obj.GetType();
+            Type valType = value.GetType();
 
             if (valType is T val)
             {
                 var isValid = Values.Contains(val);
-                result = isValid ? GetErrorMessage(propertyName, obj) : null;
+                result = isValid ? GetErrorMessage(propertyName, value) : null;
                 return isValid;
             };
 

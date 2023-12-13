@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Domain.Person.DTOs;
+﻿using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
-using AdventureWorks.SqlRepository;
 
-namespace Tests.SqlRepository;
+namespace Tests.SqlRepository.SqlRepository;
 
 public class PersonRepositoryTests
 {

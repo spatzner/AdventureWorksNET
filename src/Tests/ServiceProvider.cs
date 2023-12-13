@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Domain;
+﻿using AdventureWorks.Domain;
 using AdventureWorks.SqlRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Tests
+namespace Tests.SqlRepository
 {
     internal class ServiceProvider
     {

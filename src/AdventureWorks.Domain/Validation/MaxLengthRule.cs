@@ -13,11 +13,11 @@ namespace AdventureWorks.Domain.Validation
             MaxLength = maxLength;
         }
 
-        public bool Validate(string propertyName, object? obj, out ValidationError? result)
+        public bool Validate(string propertyName, object? value, out ValidationError? result)
         {
             bool isValid;
 
-            switch (obj)
+            switch (value)
             {
                 case null:
                     isValid = true;
@@ -31,10 +31,10 @@ namespace AdventureWorks.Domain.Validation
                     break;
                 default:
                     throw new ArgumentException(
-                        $"{nameof(MaxLengthRule)} is not valid for type {obj.GetType()}.");
+                        $"{nameof(MaxLengthRule)} is not valid for type {value.GetType()}.");
             }
 
-            result = !isValid ? GetErrorMessage(propertyName, obj) : null;
+            result = !isValid ? GetErrorMessage(propertyName, value) : null;
             return isValid;
         }
 

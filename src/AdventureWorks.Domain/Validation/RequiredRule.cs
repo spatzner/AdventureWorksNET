@@ -10,13 +10,13 @@ namespace AdventureWorks.Domain.Validation
 {
     public class RequiredRule :  IValidationRule
     {
-        public bool Validate(string propertyName, object? obj, out ValidationError? result)
+        public bool Validate(string propertyName, object? value, out ValidationError? result)
         {
-            var valid = obj != null;
+            var valid = value != null;
 
-            result = valid ? default : GetErrorMessage(propertyName, obj);
+            result = valid ? default : GetErrorMessage(propertyName, value);
             
-            return obj != null;
+            return value != null;
         }
 
 

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
+﻿using System.Transactions;
 using AdventureWorks.Domain.Person.Entities;
-using AdventureWorks.Domain.Person.Services;
 
-namespace Tests.Domain
+namespace Tests.SqlRepository.Domain
 {
     [TestClass]
     public class PersonServiceTests
@@ -58,7 +52,7 @@ namespace Tests.Domain
 
             using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
 
-            int id = await sut.AddPerson(person);
+            int id = await sut.Add(person);
 
             Assert.IsTrue(id > 0);
         }

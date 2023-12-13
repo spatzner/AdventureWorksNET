@@ -1,11 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Validation;
-using AdventureWorks.SqlRepository;
 
-namespace Tests.Domain
+namespace Tests.SqlRepository.Domain
 {
     [TestClass]
     public class PhoneNumberTests

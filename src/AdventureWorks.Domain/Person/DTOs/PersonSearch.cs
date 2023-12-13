@@ -1,6 +1,8 @@
-﻿namespace AdventureWorks.Domain.Person.DTOs;
+﻿using AdventureWorks.Domain.Person.Entities;
 
-public class PersonSearch
+namespace AdventureWorks.Domain.Person.DTOs;
+
+public class PersonSearch : IValidatable
 {
     public string? FirstName { get; set; }
 

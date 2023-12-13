@@ -9,7 +9,7 @@ namespace AdventureWorks.Domain.Validation
 {
     public interface IValidationRule
     {
-        bool Validate(string propertyName, object? obj, out ValidationError? result);
+        bool Validate(string propertyName, object? value, out ValidationError? result);
         ValidationError GetErrorMessage(string propertyName, object? value);
     }
 }
