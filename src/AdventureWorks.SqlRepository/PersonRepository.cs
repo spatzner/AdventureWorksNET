@@ -167,7 +167,7 @@ namespace AdventureWorks.SqlRepository
             return result;
         }
 
-        public async Task<int> AddPerson(Person person)
+        public async Task<AddResult> AddPerson(Person person)
         {
             if (person.Id != null)
                 throw new ArgumentException("Cannot insert person with existing Id");
@@ -201,7 +201,13 @@ namespace AdventureWorks.SqlRepository
                   SELECT @BusinessEntityId;
                   """;
 
-            return await Connection.ExecuteScalarAsync<int>(sql, parameters);
+            int id = await Connection.ExecuteScalarAsync<int>(sql, parameters);
+
+            return new AddResult
+            {
+                Success = true,
+                Id = id
+            };
         }
 
         public async Task<int> UpdatePerson(Person person)

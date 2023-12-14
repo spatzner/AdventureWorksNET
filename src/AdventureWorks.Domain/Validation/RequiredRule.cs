@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class RequiredRule :  IValidationRule
+    public class RequiredRule : ValidationRule
     {
-        public bool Validate(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             var valid = value != null;
 
@@ -20,9 +22,15 @@ namespace AdventureWorks.Domain.Validation
         }
 
 
-        public ValidationError GetErrorMessage(string propertyName, object? value)
+        protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
-            throw new NotImplementedException();
+            return new ValidationError
+            {
+                Field = propertyName,
+                Value = value,
+                ValidationType = ValidationType.Required,
+                Requirements = "Property is required"
+            };
         }
     }
 }

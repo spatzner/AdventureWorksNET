@@ -34,7 +34,7 @@ namespace AdventureWorks.Application
                 if (propObj == null)
                     continue;
                 
-                ValidationResult innerResult = _entityValidators[prop.PropertyType].Validate((IValidatable)propObj!);
+                ValidationResult innerResult = _entityValidators[prop.PropertyType].Validate((IValidatable)propObj);
 
                 result.Errors.AddRange(innerResult.Errors.Select(x =>
                 {

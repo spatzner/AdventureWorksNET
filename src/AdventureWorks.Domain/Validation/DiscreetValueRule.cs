@@ -1,8 +1,9 @@
 ﻿using AdventureWorks.Domain.Person.DTOs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class DiscreetValueRule<T> : IValidationRule
+    public class DiscreetValueRule<T> : ValidationRule
     {
         public List<T> Values { get; }
         public bool AllowNull { get; set; }
@@ -11,7 +12,7 @@ namespace AdventureWorks.Domain.Validation
         {
             Values = values.ToList();
         }
-        public bool Validate(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             if (value == null)
             {
@@ -28,11 +29,11 @@ namespace AdventureWorks.Domain.Validation
                 return isValid;
             };
 
-            result = null;
+            result = GetErrorMessage(propertyName, value);
             return false;
         }
 
-        public ValidationError GetErrorMessage(string propertyName, object? value)
+        protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
             throw new NotImplementedException();
         }

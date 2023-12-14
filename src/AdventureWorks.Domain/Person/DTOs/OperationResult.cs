@@ -9,6 +9,12 @@ namespace AdventureWorks.Domain.Person.DTOs
     public class OperationResult : ValidationResult
     {
         public bool Success { get; set; }
-        
+
     }
+
+    public class AddResult : OperationResult
+    {
+        public int Id { get; set; }
+    }
+
 }

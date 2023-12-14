@@ -25,13 +25,18 @@ namespace AdventureWorks.Application
             return await personRepository.GetPerson(id);
         }
 
-        public async Task<int> Add(PersonDetail person)
+        public async Task<AddResult> Add(PersonDetail person)
         {
             //TODO: validate input
 
             using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
 
-            int id = await personRepository.AddPerson(person);
+            AddResult personResult = await personRepository.AddPerson(person);
+
+            if (!personResult.Success)
+                return personResult;
+
+            int id = personResult.Id;
 
             foreach (var address in person.Addresses)
                 await addressRepository.Add(id, address);
@@ -45,7 +50,7 @@ namespace AdventureWorks.Application
 
             scope.Complete();
 
-            return id;
+            return personResult;
         }
     }
 }

@@ -54,6 +54,7 @@ public class PersonRepositoryTests
             if (_testPerson == null)
                 Assert.Inconclusive();
 
+            Assert.IsNotNull(_testPerson.Name);
             Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.Title));
             Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.FirstName));
             Assert.IsFalse(string.IsNullOrWhiteSpace(_testPerson.Name.MiddleName));
@@ -151,7 +152,8 @@ public class PersonRepositoryTests
 
             var results = await _sut.SearchPersons(criteria, 1);
 
-            Assert.IsTrue(results.Results.Any());
+            Assert.IsNotNull(results.Results);
+            Assert.IsTrue(results.Results.Count != 0);
         }
 
         [TestMethod]
@@ -168,6 +170,7 @@ public class PersonRepositoryTests
 
             var results = await _sut.SearchPersons(criteria, 1);
 
+            Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Any());
         }
 
@@ -185,6 +188,7 @@ public class PersonRepositoryTests
 
             var results = await _sut.SearchPersons(criteria, 1);
 
+            Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Any());
         }
 
@@ -202,6 +206,7 @@ public class PersonRepositoryTests
 
             var results = await _sut.SearchPersons(criteria, 1);
 
+            Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Any());
         }
 
@@ -219,6 +224,7 @@ public class PersonRepositoryTests
 
             var results = await _sut.SearchPersons(criteria, 1);
 
+            Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Any());
         }
 
@@ -236,6 +242,7 @@ public class PersonRepositoryTests
 
             var results = await _sut.SearchPersons(criteria, 1);
 
+            Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Any());
         }
 
@@ -253,7 +260,7 @@ public class PersonRepositoryTests
 
             var results = await _sut.SearchPersons(criteria, 1);
 
-            if(!results.Results.Any())
+            if(results.Results == null || results.Results.Count == 0)
                 Assert.Inconclusive();
 
             Assert.IsTrue(results.Total > 0);

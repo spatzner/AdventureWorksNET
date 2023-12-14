@@ -10,8 +10,8 @@ namespace AdventureWorks.Domain.Person.Validation
         {
             ValidationResult result = new();
 
-            if (!new RequiredRule().Validate(nameof(entity.Address), entity.Address, out ValidationError? result1))
-                result.Errors.Add(result1!);
+            if (new RequiredRule().IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
+                result.Errors.Add(result1);
 
             return result;
         }

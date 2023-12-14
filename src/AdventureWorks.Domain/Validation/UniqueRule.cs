@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -11,11 +12,11 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class UniqueRule<T> : IValidationRule
+    public class UniqueRule<T> : ValidationRule
     {
         private readonly IEnumerable<PropertyInfo> _keyProperties;
 
-        public UniqueRule(Expression<Func<T, object>> keys)
+        public UniqueRule(Expression<Func<T, object?>> keys)
         {
             if (keys.Body.Type == typeof(MemberExpression) || keys.Body.Type == typeof(NewExpression))
                 throw new ArgumentException($"Must provide a member expression", nameof(keys));
@@ -42,7 +43,7 @@ namespace AdventureWorks.Domain.Validation
             _keyProperties = typeof(T).GetProperties().Where(x => members.Contains(x.Name));
         }
 
-        public bool Validate(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             if (value == null)
             {
@@ -85,7 +86,7 @@ namespace AdventureWorks.Domain.Validation
 
         }
 
-        public ValidationError GetErrorMessage(string propertyName, object? value)
+        protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
             return new ValidationError
             {

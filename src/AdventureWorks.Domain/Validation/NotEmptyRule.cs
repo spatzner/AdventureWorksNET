@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -9,11 +10,11 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    internal class NotEmptyRule : IValidationRule
+    public class NotEmptyRule : ValidationRule
     {
 
 
-        public bool Validate(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             bool isValid;
             switch (value)
@@ -38,7 +39,7 @@ namespace AdventureWorks.Domain.Validation
             return isValid;
         }
 
-        public ValidationError GetErrorMessage(string propertyName, object? value)
+        protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
             return new ValidationError
             {

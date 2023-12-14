@@ -8,8 +8,8 @@ namespace AdventureWorks.Domain.Person.DTOs
 {
     public class SearchResult<T> : ValidationResult
     {
-        public required List<T> Results { get; set; }
-        public required int Total { get; set; }
+        public List<T>? Results { get; set; }
+        public int? Total { get; set; }
 
         public SearchResult()
         {

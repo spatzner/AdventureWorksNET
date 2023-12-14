@@ -1,4 +1,6 @@
 ﻿using System.Transactions;
+using AdventureWorks.Application;
+using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 
 namespace Tests.SqlRepository.Domain
@@ -12,7 +14,7 @@ namespace Tests.SqlRepository.Domain
         {
             var sut = ServiceProvider.GetService<IPersonService>();
 
-            PersonDetail person = new PersonDetail
+            PersonDetail person = new()
             {
                 Name = new PersonName
                 {
@@ -52,9 +54,9 @@ namespace Tests.SqlRepository.Domain
 
             using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
 
-            int id = await sut.Add(person);
+            OperationResult result = await sut.Add(person);
 
-            Assert.IsTrue(id > 0);
+            Assert.IsTrue(result.Success);
         }
     }
 }

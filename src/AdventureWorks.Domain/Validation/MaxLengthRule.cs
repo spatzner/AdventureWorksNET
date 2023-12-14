@@ -1,10 +1,11 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class MaxLengthRule : IValidationRule
+    public class MaxLengthRule : ValidationRule
     {
         public int MaxLength { get; }
 
@@ -13,7 +14,7 @@ namespace AdventureWorks.Domain.Validation
             MaxLength = maxLength;
         }
 
-        public bool Validate(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             bool isValid;
 
@@ -31,14 +32,14 @@ namespace AdventureWorks.Domain.Validation
                     break;
                 default:
                     throw new ArgumentException(
-                        $"{nameof(MaxLengthRule)} is not valid for type {value.GetType()}.");
+                        $"Type {value.GetType()} is not supported.");
             }
 
             result = !isValid ? GetErrorMessage(propertyName, value) : null;
             return isValid;
         }
 
-        public ValidationError GetErrorMessage(string propertyName, object? value)
+        protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
             return new ValidationError
             {

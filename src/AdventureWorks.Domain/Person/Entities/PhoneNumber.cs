@@ -1,6 +1,6 @@
 ﻿namespace AdventureWorks.Domain.Person.Entities;
 
-public class PhoneNumber
+public class PhoneNumber : IValidatable
 {
     private string _number = null!;
 

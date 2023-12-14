@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class RangeRule : IValidationRule
+    public class RangeRule : ValidationRule
     {
         public double Min { get; }
         public double Max { get; }
@@ -23,7 +24,7 @@ namespace AdventureWorks.Domain.Validation
             MaxInclusive = maxInclusive;
         }
         
-        public bool Validate(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             if (value == null)
             {
@@ -53,7 +54,7 @@ namespace AdventureWorks.Domain.Validation
             return true;
         }
 
-        public  ValidationError GetErrorMessage(string propertyName, object? value)
+        protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
             return new ValidationError
             {

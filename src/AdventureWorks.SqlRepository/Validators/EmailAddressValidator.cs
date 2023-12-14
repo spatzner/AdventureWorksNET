@@ -16,10 +16,8 @@ namespace AdventureWorks.SqlRepository.Validators
         {
             ValidationResult result =  base.Validate(entity);
 
-            if(new MaxLengthRule(50).Validate(nameof(entity.Address), entity.Address, out ValidationError? result1))
-                result.Errors.Add(result1!);
-
-
+            if(new MaxLengthRule(50).IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
+                result.Errors.Add(result1);
 
             return result;
         }

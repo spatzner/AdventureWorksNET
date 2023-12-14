@@ -2,13 +2,13 @@
 
 public class Address : IValidatable
 {
-    public virtual int? Id { get; set; }
-    public virtual string? Type { get; set; }
-    public virtual string? Address1 { get; set; }
-    public virtual string? Address2 { get; set; }
-    public virtual string? City { get; set; }
-    public virtual string? State { get; set; }
-    public virtual string? Country { get; set; }
-    public virtual string? PostalCode { get; set; }
-    public virtual GeoPoint? GeoLocation { get; set; }
+    public int? Id { get; set; }
+    public string? Type { get; set; }
+    public string? Address1 { get; set; }
+    public string? Address2 { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+    public string? Country { get; set; }
+    public string? PostalCode { get; set; }
+    public GeoPoint? GeoLocation { get; set; }
 }

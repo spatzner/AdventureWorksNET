@@ -14,6 +14,7 @@
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AdventureWorks.Application\AdventureWorks.Application.csproj" />
     <ProjectReference Include="..\AdventureWorks.Domain\AdventureWorks.Domain.csproj" />
     <ProjectReference Include="..\AdventureWorks.SqlRepository\AdventureWorks.SqlRepository.csproj" />
   </ItemGroup>

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class MinLengthRule : IValidationRule
+    public class MinLengthRule : ValidationRule
     {
         public int MinLength { get; }
 
@@ -14,7 +15,7 @@ namespace AdventureWorks.Domain.Validation
         }
 
 
-        public bool Validate(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             bool isValid;
 
@@ -39,7 +40,7 @@ namespace AdventureWorks.Domain.Validation
             return isValid;
         }
 
-        public ValidationError GetErrorMessage(string propertyName, object? value)
+        protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
             return new ValidationError
             {

@@ -6,33 +6,44 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Application
 {
-    public class PersonService : IPersonService
+    public class PersonService(
+            IPersonRepository repository,
+            IValidator<PersonDetail> personDetailValidator,
+            IValidator<PersonSearch> personSearchValidator)
+        : IPersonService
     {
-        private readonly IPersonRepository _repository;
-        private readonly IValidator<PersonDetail> _personDetailValidator;
-        private readonly IValidator<PersonSearch> _personSearchValidator;
-
-        public PersonService(IPersonRepository repository, IValidator<PersonDetail> personDetailValidator, IValidator<PersonSearch> personSearchValidator)
+        public async Task<SearchResult<Person>> Search(PersonSearch criteria)
         {
-            _repository = repository;
-            _personDetailValidator = personDetailValidator;
-            _personSearchValidator = personSearchValidator;
+            var validationResult = personSearchValidator.Validate(criteria);
+
+            if (!validationResult.IsValidRequest)
+                return new SearchResult<Person>(validationResult);
+
+            return await repository.SearchPersons(criteria, 100);
         }
 
-
-        public Task<SearchResult<Person>> Search(PersonSearch criteria)
+        public async Task<QueryResult<PersonDetail>> Get(int id)
         {
-            _personSearchValidator.Validate(criteria);
+            if (new MinRule<int>(0).IsInvalid(nameof(id), id, out ValidationError? error))
+                return new QueryResult<PersonDetail>
+                {
+                    Errors = { error }
+                };
+
+            var result = await repository.GetPerson(id);
+
+            return new QueryResult<PersonDetail>(result);
         }
 
-        public Task<QueryResult<PersonDetail>> Get(int id)
+        public ValidationResult Validate(PersonDetail person)
         {
-            throw new NotImplementedException();
+            return personDetailValidator.Validate(person);
         }
 
-        public Task<OperationResult> Add(PersonDetail person)
+        public async Task<OperationResult> Add(PersonDetail person)
         {
-            throw new NotImplementedException();
+
+           return await repository.AddPerson(person);
         }
     }
 }
