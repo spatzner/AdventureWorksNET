@@ -8,7 +8,7 @@ using AdventureWorks.Domain;
 
 namespace AdventureWorks.SqlRepository
 {
-    public class ConnectionProvider : IConnectionProvider
+    internal class ConnectionProvider : IConnectionProvider
     {
         private readonly ConnectionStrings _connectionStrings;
 

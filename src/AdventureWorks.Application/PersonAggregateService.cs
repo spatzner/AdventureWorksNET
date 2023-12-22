@@ -2,13 +2,15 @@
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
+using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Application
 {
     public class PersonAggregateService(IPersonRepository personRepository,
             IAddressRepository addressRepository,
             IPhoneRepository phoneRepository,
-            IEmailRepository emailRepository)
+            IEmailRepository emailRepository,
+            IValidationService validationService)
     {
         public async Task<SearchResult<Domain.Person.Entities.Person>> Search(PersonSearch criteria)
         {
@@ -17,17 +19,14 @@ namespace AdventureWorks.Application
             return await personRepository.SearchPersons(criteria, 100);
         }
 
-        public async Task<PersonDetail> Get(int id)
+        public async Task<QueryResult<PersonDetail>> Get(int id)
         {
-            if (id <= 0)
-                throw new ArgumentException($"{nameof(id)} must be a positive integer");
-
             return await personRepository.GetPerson(id);
         }
 
         public async Task<AddResult> Add(PersonDetail person)
         {
-            //TODO: validate input
+            validationService.Validate(person);
 
             using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
 

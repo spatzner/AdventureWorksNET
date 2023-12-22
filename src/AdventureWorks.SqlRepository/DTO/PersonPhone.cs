@@ -1,6 +1,6 @@
 ﻿namespace AdventureWorks.SqlRepository.DTO
 {
-    public class PersonPhone
+    internal class PersonPhone
     {
         public int BusinessEntityId { get; set; }
         public string? PhoneNumber { get; set; }

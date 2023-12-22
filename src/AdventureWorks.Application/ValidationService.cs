@@ -10,7 +10,7 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Application
 {
-    internal class ValidationService
+    public class ValidationService : IValidationService
     {
         private readonly Dictionary<Type, IValidator<IValidatable>> _entityValidators;
         public ValidationService(IEnumerable<IValidator<IValidatable>> entityValidators)

@@ -2,7 +2,7 @@
 
 namespace AdventureWorks.SqlRepository.DTO
 {
-    public class Address
+    internal class Address
     {
         public int AddressId { get; set; }
         public string? AddressType { get; set; }

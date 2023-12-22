@@ -1,12 +1,13 @@
 ﻿using AdventureWorks.Domain.Person.DTOs;
 using System.Diagnostics.CodeAnalysis;
+using AdventureWorks.Domain.Person;
 
 namespace AdventureWorks.Domain.Validation
 {
     public class DiscreetValueRule<T> : ValidationRule
     {
         public List<T> Values { get; }
-        public bool AllowNull { get; set; }
+        public bool AllowNull { get; init; }
 
         public DiscreetValueRule(params T[] values)
         {
@@ -16,16 +17,14 @@ namespace AdventureWorks.Domain.Validation
         {
             if (value == null)
             {
-                result = !AllowNull ? GetErrorMessage(propertyName, value): null;
+                result = AllowNull ? null : GetErrorMessage(propertyName, value);
                 return AllowNull;
             }
 
-            Type valType = value.GetType();
-
-            if (valType is T val)
+            if (value is T val)
             {
                 var isValid = Values.Contains(val);
-                result = isValid ? GetErrorMessage(propertyName, value) : null;
+                result = isValid ? null : GetErrorMessage(propertyName, value) ;
                 return isValid;
             };
 
@@ -35,7 +34,13 @@ namespace AdventureWorks.Domain.Validation
 
         protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
-            throw new NotImplementedException();
+            return new ValidationError
+            {
+                Field = propertyName,
+                Value = value,
+                ValidationType = ValidationType.DiscreetValue,
+                Requirements = $"Accepted values: {string.Join(", ", Values.Select(x => $"'{x}'"))}"
+            };
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class ValidationResult
     {
-        public List<ValidationError> Errors { get; } = new();
+        public  List<ValidationError> Errors { get; } = new();
         public bool IsValidRequest => !Errors.Any();
 
         public ValidationResult()

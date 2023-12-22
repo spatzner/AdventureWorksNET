@@ -24,25 +24,11 @@ namespace AdventureWorks.Application
 
         public async Task<QueryResult<PersonDetail>> Get(int id)
         {
-            if (new MinRule<int>(0).IsInvalid(nameof(id), id, out ValidationError? error))
-                return new QueryResult<PersonDetail>
-                {
-                    Errors = { error }
-                };
-
-            var result = await repository.GetPerson(id);
-
-            return new QueryResult<PersonDetail>(result);
-        }
-
-        public ValidationResult Validate(PersonDetail person)
-        {
-            return personDetailValidator.Validate(person);
+            return await repository.GetPerson(id);
         }
 
         public async Task<OperationResult> Add(PersonDetail person)
         {
-
            return await repository.AddPerson(person);
         }
     }

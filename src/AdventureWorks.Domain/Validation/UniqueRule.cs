@@ -57,7 +57,7 @@ namespace AdventureWorks.Domain.Validation
                 return false;
             }
 
-            List< Dictionary<string, object?>> keyValues = new();
+            List<Dictionary<string, object?>> keyValues = new();
 
             foreach (T item in list)
             {

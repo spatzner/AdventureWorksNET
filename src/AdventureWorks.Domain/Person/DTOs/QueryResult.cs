@@ -1,6 +1,6 @@
 ﻿namespace AdventureWorks.Domain.Person.DTOs
 {
-    public class QueryResult<T> : ValidationResult
+    public class QueryResult<T> : OperationResult
     {
         public QueryResult()
         {

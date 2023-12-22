@@ -13,6 +13,7 @@ namespace AdventureWorks.Domain.Person
         UniqueList,
         IsNotEmpty,
         Min,
-        Required
+        Required,
+        DiscreetValue
     }
 }

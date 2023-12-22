@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Domain;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
@@ -25,7 +20,7 @@ namespace AdventureWorks.SqlRepository
 
         }
 
-        public async Task<PersonDetail> GetPerson(int id)
+        public async Task<QueryResult<PersonDetail>> GetPerson(int id)
         {
             await using var queries = await Connection.QueryMultipleAsync(
                 """
@@ -54,8 +49,13 @@ namespace AdventureWorks.SqlRepository
                 """,
                 new { Id = id });
 
-            DTO.Person sqlPerson = await queries.ReadFirstOrDefaultAsync<DTO.Person>() ??
-                                   throw new ArgumentException($"Person with Id {id} does not exist");
+            DTO.Person? sqlPerson = await queries.ReadFirstOrDefaultAsync<DTO.Person>();
+
+            if(sqlPerson == null )
+                return new QueryResult<PersonDetail>
+                {
+                    Success = false
+                };
 
             List<Address> addresses = (await queries.ReadAsync<DTO.Address>())
                 .Select(addr =>
@@ -102,7 +102,10 @@ namespace AdventureWorks.SqlRepository
                 Addresses = addresses
             };
 
-            return personDetail;
+            return new QueryResult<PersonDetail>(personDetail)
+            {
+                Success = true
+            };
         }
 
         public async Task<SearchResult<Person>> SearchPersons(PersonSearch criteria, int maxResults)
@@ -136,7 +139,7 @@ namespace AdventureWorks.SqlRepository
                 filters.Add(
                     "BusinessEntityID IN (SELECT BusinessEntityID FROM Person.PersonPhone WHERE PhoneNumber = @PhoneNumber)");
 
-            if (!filters.Any())
+            if (filters.Count == 0)
                 throw new ArgumentException("at least one property must be specified");
 
             string sql =
@@ -150,7 +153,7 @@ namespace AdventureWorks.SqlRepository
                  SELECT COUNT(*) FROM #PersonResults
                  """;
 
-            await using var queries = await Connection.QueryMultipleAsync(sql, parameters);
+            await using SqlMapper.GridReader queries = await Connection.QueryMultipleAsync(sql, parameters);
 
             var persons = (await queries.ReadAsync<DTO.Person>())
                 .Select(p => p.ToEntity())
