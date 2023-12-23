@@ -15,13 +15,10 @@ namespace Tests.Domain.Validation
     {
         [TestMethod]
         [TestCategory(Constants.Unit)]
-        public void DiscreetValueRule_WhenNullAndAllowNull_IsValid()
+        public void DiscreetValueRule_WhenNull_IsValid()
         {
             object? inputValue = null;
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = true
-            };
+            var sut = new DiscreetValueRule<int>(1, 2);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -30,28 +27,10 @@ namespace Tests.Domain.Validation
 
         [TestMethod]
         [TestCategory(Constants.Unit)]
-        public void DiscreetValueRule_WhenNullAndNotAllowNull_IsNotValid()
-        {
-            object? inputValue = null;
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = false
-            };
-
-            bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
-
-            Assert.IsFalse(isValid);
-        }
-
-        [TestMethod]
-        [TestCategory(Constants.Unit)]
         public void DiscreetValueRule_WhenValueIsWrongType_IsNotValid()
         {
             object? inputValue = "1";
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = false
-            };
+            var sut = new DiscreetValueRule<int>(1, 2);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -63,10 +42,7 @@ namespace Tests.Domain.Validation
         public void DiscreetValueRule_WhenValueIsNotInList_IsNotValid()
         {
             object? inputValue = 3;
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = false
-            };
+            var sut = new DiscreetValueRule<int>(1, 2);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -78,10 +54,7 @@ namespace Tests.Domain.Validation
         public void DiscreetValueRule_WhenValueIsInList_IsValid()
         {
             object? inputValue = 1;
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = false
-            };
+            var sut = new DiscreetValueRule<int>(1, 2);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -93,10 +66,7 @@ namespace Tests.Domain.Validation
         public void DiscreetValueRule_WhenIsValid_ValidationErrorIsNull()
         {
             object? inputValue = 1;
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = false
-            };
+            var sut = new DiscreetValueRule<int>(1, 2);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -105,29 +75,11 @@ namespace Tests.Domain.Validation
 
         [TestMethod]
         [TestCategory(Constants.Unit)]
-        public void DiscreetValueRule_WhenIsNotValid_ValidationErrorIsInstance()
-        {
-            object? inputValue = 3;
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = false
-            };
-
-            bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
-
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
-        [TestCategory(Constants.Unit)]
         public void DiscreetValueRule_WhenIsNotValid_ValidationErrorIsCorrect()
         {
             object? inputValue = 3;
             string propertyName = "Name";
-            var sut = new DiscreetValueRule<int>(1, 2)
-            {
-                AllowNull = false
-            };
+            var sut = new DiscreetValueRule<int>(1, 2);
 
             bool isValid = sut.IsValid(propertyName, inputValue, out ValidationError? result);
 

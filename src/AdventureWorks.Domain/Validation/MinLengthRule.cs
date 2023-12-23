@@ -22,7 +22,7 @@ namespace AdventureWorks.Domain.Validation
             switch (value)
             {
                 case null:
-                    isValid = false;
+                    isValid = true; //even though it doesn't meet min length, RequiredRule is meant to catch nulls
                     break;
                 case string s:
                     isValid = s.Length >= MinLength;
@@ -33,10 +33,10 @@ namespace AdventureWorks.Domain.Validation
                     break;
                 default:
                     throw new ArgumentException(
-                        $"{nameof(MinLengthRule)} is not valid for type {value.GetType()}. Attribute on property {propertyName}");
+                        $"Type {value.GetType()} is not supported.");
             }
 
-            result = !isValid ? GetErrorMessage(propertyName, value) : null;
+            result = isValid ? null : GetErrorMessage(propertyName, value);
             return isValid;
         }
 

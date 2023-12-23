@@ -6,30 +6,27 @@ namespace AdventureWorks.Domain.Validation
 {
     public class DiscreetValueRule<T> : ValidationRule
     {
-        public List<T> Values { get; }
-        public bool AllowNull { get; init; }
+        public HashSet<T> Values { get; }
 
         public DiscreetValueRule(params T[] values)
         {
-            Values = values.ToList();
+            Values = values.ToHashSet();
         }
         public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
-            if (value == null)
+            switch (value)
             {
-                result = AllowNull ? null : GetErrorMessage(propertyName, value);
-                return AllowNull;
+                case null:
+                    result = null;
+                    return true;
+                case T val:
+                    var isValid = Values.Contains(val);
+                    result = isValid ? null : GetErrorMessage(propertyName, value) ;
+                    return isValid;
+                default:
+                    result = GetErrorMessage(propertyName, value);
+                    return false;
             }
-
-            if (value is T val)
-            {
-                var isValid = Values.Contains(val);
-                result = isValid ? null : GetErrorMessage(propertyName, value) ;
-                return isValid;
-            };
-
-            result = GetErrorMessage(propertyName, value);
-            return false;
         }
 
         protected override ValidationError GetErrorMessage(string propertyName, object? value)

@@ -35,7 +35,7 @@ namespace AdventureWorks.Domain.Validation
                         $"Type {value.GetType()} is not supported.");
             }
 
-            result = !isValid ? GetErrorMessage(propertyName, value) : null;
+            result = isValid ? null : GetErrorMessage(propertyName, value);
             return isValid;
         }
 
