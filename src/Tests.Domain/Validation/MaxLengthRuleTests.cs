@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person;
 
@@ -125,7 +126,8 @@ namespace Tests.Domain.Validation
         {
             string propertyName = "Name";
             object? inputValue = "abc";
-            var sut = new MaxLengthRule(2);
+            int maxLength = 2;
+            var sut = new MaxLengthRule(maxLength);
 
             bool isValid = sut.IsValid(propertyName, inputValue, out ValidationError? result);
 
@@ -135,7 +137,7 @@ namespace Tests.Domain.Validation
             Assert.AreEqual(result.Field, propertyName);
             Assert.AreEqual(result.Value, inputValue);
             Assert.AreEqual(result.ValidationType, ValidationType.MaxLength);
-            Assert.IsTrue(result.Requirements.Contains('2'));
+            Assert.IsTrue(Regex.IsMatch(result.Requirements, $@"(?<!\d){maxLength}(?!=\d)"));
         }
 
         

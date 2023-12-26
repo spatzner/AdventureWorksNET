@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person;
+using System.Text.RegularExpressions;
 
 namespace Tests.Domain.Validation
 {
@@ -131,7 +132,8 @@ namespace Tests.Domain.Validation
         {
             string propertyName = "Name";
             object? inputValue = "a";
-            var sut = new MinLengthRule(2);
+            int minLength = 2;
+            var sut = new MinLengthRule(minLength);
 
             bool isValid = sut.IsValid(propertyName, inputValue, out ValidationError? result);
 
@@ -141,7 +143,7 @@ namespace Tests.Domain.Validation
             Assert.AreEqual(result.Field, propertyName);
             Assert.AreEqual(result.Value, inputValue);
             Assert.AreEqual(result.ValidationType, ValidationType.MinLength);
-            Assert.IsTrue(result.Requirements.Contains('2'));
+            Assert.IsTrue(Regex.IsMatch(result.Requirements, $@"(?<!\d){minLength}(?!=\d)", RegexOptions.None));
         }
     }
 }

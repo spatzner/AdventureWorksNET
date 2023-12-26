@@ -12,7 +12,7 @@ namespace AdventureWorks.Domain.Person
         MaxLength,
         UniqueList,
         IsNotEmpty,
-        Min,
+        MinValue,
         Required,
         DiscreetValue
     }

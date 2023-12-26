@@ -14,7 +14,7 @@ namespace AdventureWorks.Domain.Person.Validation
         {
             ValidationResult result = new();
 
-            if(new NotEmptyRule().IsInvalid(nameof(PersonSearch), entity, out ValidationError? result1))
+            if(new NotNullOrEmptyRule().IsInvalid(nameof(PersonSearch), entity, out ValidationError? result1))
                 result.Errors.Add(result1);
 
             return result;

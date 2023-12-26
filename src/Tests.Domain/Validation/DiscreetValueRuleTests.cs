@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
@@ -79,7 +80,8 @@ namespace Tests.Domain.Validation
         {
             object? inputValue = 3;
             string propertyName = "Name";
-            var sut = new DiscreetValueRule<int>(1, 2);
+            int[] discreetValues = { 1, 2 };
+            var sut = new DiscreetValueRule<int>(discreetValues);
 
             bool isValid = sut.IsValid(propertyName, inputValue, out ValidationError? result);
 
@@ -87,8 +89,8 @@ namespace Tests.Domain.Validation
             Assert.AreEqual(result.Field, propertyName);
             Assert.AreEqual(result.Value, inputValue);
             Assert.AreEqual(result.ValidationType, ValidationType.DiscreetValue);
-            Assert.IsTrue(result.Requirements.Contains("'1'") && result.Requirements.Contains("'2'"));
-
+            foreach (var discreetValue in discreetValues)
+                Assert.IsTrue(Regex.IsMatch(result.Requirements, $@"(?<!\d){discreetValue}(?!=\d)"));
         }
     }
 }

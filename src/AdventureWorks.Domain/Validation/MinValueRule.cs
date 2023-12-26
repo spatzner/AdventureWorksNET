@@ -9,16 +9,19 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation
 {
-    public class MinRule<T> : ValidationRule
+    public class MinValueRule<T> : ValidationRule
     {
         public T Min { get; }
-        public MinRule(T min)
+        public bool MinIncluded{ get; init; }
+        public MinValueRule(T min)
         {
             Min = min;
-
-            if(min is not decimal or int or double or float)
+            
+            if(min is not decimal 
+               and not int 
+               and not double 
+               and not float)
                 throw new ArgumentException($" Type {typeof(T)} is not supported");
-
         }
         public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
@@ -26,8 +29,8 @@ namespace AdventureWorks.Domain.Validation
 
             if (value is null)
             {
-                result = GetErrorMessage(propertyName, value);
-                return false;
+                result = null;
+                return true;
             }
 
             if (typeof(T) != value.GetType())
@@ -35,20 +38,13 @@ namespace AdventureWorks.Domain.Validation
 
             switch (value)
             {
-                case null:
-                    isValid = false;
-                    break;
                 case int i:
-                    isValid = i >= Convert.ToInt32(Min);
-                    break;
-                case double d: 
-                    isValid = d >= Convert.ToDouble(Min); 
+                    var @int = Convert.ToInt32(Min);
+                    isValid = i > @int || (MinIncluded && i == @int);
                     break;
                 case decimal d:
-                    isValid = d >= Convert.ToDecimal(Min);
-                    break;
-                case float d:
-                    isValid = d >= Convert.ToSingle(Min);
+                    var @decimal = Convert.ToDecimal(Min);
+                    isValid = d > @decimal || (MinIncluded && d == @decimal);
                     break;
                 default:
                     throw new ArgumentException($" Type {value.GetType()} is not supported");
@@ -62,10 +58,10 @@ namespace AdventureWorks.Domain.Validation
         {
             return new ValidationError
             {
-                Requirements = $"value must be at least {Min}",
                 Field = propertyName,
-                ValidationType = ValidationType.Min,
-                Value = value
+                Value = value,
+                ValidationType = ValidationType.MinValue,
+                Requirements = $"Min value: {Min}"
             };
         }
     }
