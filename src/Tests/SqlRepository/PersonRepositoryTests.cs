@@ -22,7 +22,7 @@ public class PersonRepositoryTests
 
             try
             {
-                _testPerson = await _sut.GetPerson(285);
+                _testPerson = (await _sut.GetPerson(285)).Result;
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ public class PersonRepositoryTests
             if (_testPerson == null)
                 Assert.Inconclusive();
 
-            Assert.IsTrue(_testPerson.EmailAddresses.Any());
+            Assert.IsTrue(_testPerson.EmailAddresses.Count != 0);
             Assert.IsFalse(_testPerson.EmailAddresses.Any(addr => addr.Id == null));
             Assert.IsFalse(_testPerson.EmailAddresses.Any(addr => string.IsNullOrWhiteSpace(addr.Address)));
         }
@@ -91,7 +91,7 @@ public class PersonRepositoryTests
             if (_testPerson == null)
                 Assert.Inconclusive();
 
-            Assert.IsTrue(_testPerson.PhoneNumbers.Any());
+            Assert.IsTrue(_testPerson.PhoneNumbers.Count != 0);
             Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Number)));
             Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Type)));
         }
@@ -103,7 +103,7 @@ public class PersonRepositoryTests
             if (_testPerson == null)
                 Assert.Inconclusive();
 
-            Assert.IsTrue(_testPerson.Addresses.Any());
+            Assert.IsTrue(_testPerson.Addresses.Count != 0);
             Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Number)));
             Assert.IsFalse(_testPerson.PhoneNumbers.Any(x => string.IsNullOrWhiteSpace(x.Type)));
         }
@@ -136,6 +136,8 @@ public class PersonRepositoryTests
                 Assert.Inconclusive();
 
             _ = await _sut.SearchPersons(new PersonSearch(), 1);
+
+            Assert.Fail();
         }
 
         [TestMethod]
@@ -171,7 +173,7 @@ public class PersonRepositoryTests
             var results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
-            Assert.IsTrue(results.Results.Any());
+            Assert.IsTrue(results.Results.Count != 0);
         }
 
         [TestMethod]
@@ -189,7 +191,7 @@ public class PersonRepositoryTests
             var results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
-            Assert.IsTrue(results.Results.Any());
+            Assert.IsTrue(results.Results.Count != 0);
         }
 
         [TestMethod]
@@ -207,7 +209,7 @@ public class PersonRepositoryTests
             var results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
-            Assert.IsTrue(results.Results.Any());
+            Assert.IsTrue(results.Results.Count != 0);
         }
 
         [TestMethod]
@@ -225,7 +227,7 @@ public class PersonRepositoryTests
             var results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
-            Assert.IsTrue(results.Results.Any());
+            Assert.IsTrue(results.Results.Count != 0);
         }
 
         [TestMethod]
@@ -243,7 +245,7 @@ public class PersonRepositoryTests
             var results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
-            Assert.IsTrue(results.Results.Any());
+            Assert.IsTrue(results.Results.Count != 0);
         }
 
         [TestMethod]

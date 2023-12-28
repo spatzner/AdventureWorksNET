@@ -2,8 +2,8 @@
 {
     public class ValidationResult
     {
-        public  List<ValidationError> Errors { get; } = new();
-        public bool IsValidRequest => !Errors.Any();
+        public  List<ValidationError> Errors { get; } = [];
+        public bool IsValidRequest => Errors.Count == 0;
 
         public ValidationResult()
         {

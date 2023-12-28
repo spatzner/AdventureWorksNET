@@ -2,3 +2,6 @@ Unit test
 Logging
 Rest API
 APM
+Polly
+Swagger
+CI / CD

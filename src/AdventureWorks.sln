@@ -15,9 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.SqlRepository", "Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureWorks.Application", "AdventureWorks.Application\AdventureWorks.Application.csproj", "{A095E792-4B74-465C-9DD2-50A2D2173EEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Domain", "Tests.Domain\Tests.Domain.csproj", "{A737502B-84E7-4F3C-8870-42E9C4281DB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Domain", "Tests.Domain\Tests.Domain.csproj", "{A737502B-84E7-4F3C-8870-42E9C4281DB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Application", "Tests.Application\Tests.Application.csproj", "{4D02E2FE-4E34-4912-88C9-7D9C6440F0E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Application", "Tests.Application\Tests.Application.csproj", "{4D02E2FE-4E34-4912-88C9-7D9C6440F0E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Common", "AdventureWorks.Common\AdventureWorks.Common.csproj", "{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{4D02E2FE-4E34-4912-88C9-7D9C6440F0E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D02E2FE-4E34-4912-88C9-7D9C6440F0E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D02E2FE-4E34-4912-88C9-7D9C6440F0E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

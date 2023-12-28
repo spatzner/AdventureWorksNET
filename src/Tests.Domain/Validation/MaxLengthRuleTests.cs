@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person;
+// ReSharper disable UnusedVariable
+#pragma warning disable IDE0059
 
 namespace Tests.Domain.Validation
 {
@@ -106,6 +108,8 @@ namespace Tests.Domain.Validation
             var sut = new MaxLengthRule(2);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
+
+            Assert.Fail();
         }
 
         [TestMethod]

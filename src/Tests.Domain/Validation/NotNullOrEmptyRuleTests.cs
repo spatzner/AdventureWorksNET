@@ -8,6 +8,8 @@ using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Validation;
+// ReSharper disable UnusedVariable
+#pragma warning disable IDE0059
 
 namespace Tests.Domain.Validation
 {
@@ -87,6 +89,8 @@ namespace Tests.Domain.Validation
             string propName = "name";
 
             var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+
+            Assert.Fail();
         }
 
         [TestMethod]
@@ -202,7 +206,7 @@ namespace Tests.Domain.Validation
 
         private class ValuesClass
         {
-            public string RefType { get; set; }
+            public string RefType { get; set; } = null!;
             public string? NullRefType { get; set; }
             public int ValueType{ get; set; }
             public int? NullValueType { get; set; }

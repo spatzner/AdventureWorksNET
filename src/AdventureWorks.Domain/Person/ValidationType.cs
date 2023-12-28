@@ -14,6 +14,7 @@ namespace AdventureWorks.Domain.Person
         IsNotEmpty,
         MinValue,
         Required,
-        DiscreetValue
+        DiscreetValue,
+        Range
     }
 }

@@ -31,14 +31,16 @@ namespace Tests.SqlRepository.Domain
         public void PhoneNumber_WhenNotTenOrThirteenNumbers_Throws()
         {
             _ = new PhoneNumber("123456789", "Cell");
+
+            Assert.Fail();
         }
 
         [TestMethod]
         [TestCategory(Constants.Unit)]
         public void MemberExpressionTest()
         {
-            new UniqueRule<Address>(address => new{ address.City });
-            new UniqueRule<Address>(address => address.City );
+            _ = new UniqueRule<Address>(address => new{ address.City });
+            _ = new UniqueRule<Address>(address => address.City );
 
             Expression<Func<Address, object>> exp = address => new
             {

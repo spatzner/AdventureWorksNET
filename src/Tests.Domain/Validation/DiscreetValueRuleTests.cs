@@ -8,6 +8,8 @@ using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Validation;
 using Microsoft.VisualBasic;
+// ReSharper disable UnusedVariable
+#pragma warning disable IDE0059
 
 namespace Tests.Domain.Validation
 {
@@ -80,7 +82,7 @@ namespace Tests.Domain.Validation
         {
             object? inputValue = 3;
             string propertyName = "Name";
-            int[] discreetValues = { 1, 2 };
+            int[] discreetValues = [1, 2];
             var sut = new DiscreetValueRule<int>(discreetValues);
 
             bool isValid = sut.IsValid(propertyName, inputValue, out ValidationError? result);

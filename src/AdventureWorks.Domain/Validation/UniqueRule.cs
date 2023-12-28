@@ -21,7 +21,7 @@ namespace AdventureWorks.Domain.Validation
             if (keys.Body.Type == typeof(MemberExpression) || keys.Body.Type == typeof(NewExpression))
                 throw new ArgumentException($"Must provide a member expression", nameof(keys));
 
-            List<string> members = new();
+            List<string> members = [];
 
             switch (keys.Body)
             {
@@ -37,7 +37,7 @@ namespace AdventureWorks.Domain.Validation
                     break;
             }
 
-            if (!members.Any())
+            if (members.Count == 0)
                 throw new ArgumentException("Must provide at least one property");
 
             _keyProperties = typeof(T).GetProperties().Where(x => members.Contains(x.Name));
@@ -57,11 +57,11 @@ namespace AdventureWorks.Domain.Validation
                 return false;
             }
 
-            List<Dictionary<string, object?>> keyValues = new();
+            List<Dictionary<string, object?>> keyValues = [];
 
             foreach (T item in list)
             {
-                Dictionary<string, object?> keys = new();
+                Dictionary<string, object?> keys = [];
 
                 foreach (PropertyInfo keyProperty in _keyProperties)
                 {

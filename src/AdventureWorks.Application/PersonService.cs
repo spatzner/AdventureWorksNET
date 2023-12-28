@@ -29,7 +29,11 @@ namespace AdventureWorks.Application
 
         public async Task<OperationResult> Add(PersonDetail person)
         {
-           return await repository.AddPerson(person);
+            var validationResult = personDetailValidator.Validate(person);
+            if (!validationResult.IsValidRequest)
+                return new OperationResult(validationResult);
+
+            return await repository.AddPerson(person);
         }
     }
 }
