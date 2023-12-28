@@ -14,11 +14,11 @@ namespace AdventureWorks.Domain.Validation
     {
         public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
-            var valid = value != null;
+            var isValid = value != null;
 
-            result = valid ? default : GetErrorMessage(propertyName, value);
+            result = isValid ? default : GetErrorMessage(propertyName, value);
             
-            return value != null;
+            return isValid;
         }
 
 
@@ -29,7 +29,7 @@ namespace AdventureWorks.Domain.Validation
                 Field = propertyName,
                 Value = value,
                 ValidationType = ValidationType.Required,
-                Requirements = "Property is required"
+                Requirements = string.Empty
             };
         }
     }
