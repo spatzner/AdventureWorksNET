@@ -2,21 +2,22 @@
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Validation;
 
-namespace AdventureWorks.Domain.Person.Validation
+namespace AdventureWorks.Domain.Person.Validation;
+
+public class GeoPointValidator : IValidator<GeoPoint>
 {
-    public class GeoPointValidator : IValidator<GeoPoint>
+    public ValidationResult Validate(GeoPoint entity)
     {
-        public ValidationResult Validate(GeoPoint entity)
-        {
-            ValidationResult result = new();
+        ValidationResult result = new();
 
-            if (new RangeRule(-90, 90).IsInvalid(nameof(entity.Latitude), entity.Latitude, out ValidationError? result1))
-                result.Errors.Add(result1);
+        if (new RangeRule(-90, 90).IsInvalid(nameof(entity.Latitude), entity.Latitude, out ValidationError? result1))
+            result.Errors.Add(result1);
 
-            if (new RangeRule(-180, 180).IsInvalid(nameof(entity.Longitude), entity.Longitude, out ValidationError? result2))
-                result.Errors.Add(result2);
+        if (new RangeRule(-180, 180).IsInvalid(nameof(entity.Longitude),
+                                               entity.Longitude,
+                                               out ValidationError? result2))
+            result.Errors.Add(result2);
 
-            return result;
-        }
+        return result;
     }
 }

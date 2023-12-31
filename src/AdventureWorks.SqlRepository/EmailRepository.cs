@@ -9,12 +9,9 @@ using Dapper;
 
 namespace AdventureWorks.SqlRepository
 {
-    public class EmailRepository : Repository, IEmailRepository
+    public class EmailRepository(IConnectionProvider connectionProvider)
+        : Repository(connectionProvider), IEmailRepository
     {
-        public EmailRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
-        {
-        }
-
         public async Task Add(int personId, EmailAddress emailAddress)
         {
             string sql = """

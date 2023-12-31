@@ -1,17 +1,9 @@
-﻿using AdventureWorks.Domain.Validation;
+﻿namespace AdventureWorks.Domain.Person.Entities;
 
-namespace AdventureWorks.Domain.Person.Entities;
-
-public class GeoPoint : IEquatable<GeoPoint>, IValidatable
+public class GeoPoint(double latitude, double longitude) : IEquatable<GeoPoint>, IValidatable
 {
-    public double Latitude { get; }
-    public double Longitude { get; }
-
-    public GeoPoint(double latitude, double longitude)
-    {
-        Latitude = latitude;
-        Longitude = longitude;
-    }
+    public double Latitude { get; } = latitude;
+    public double Longitude { get; } = longitude;
 
     public bool Equals(GeoPoint? other)
     {

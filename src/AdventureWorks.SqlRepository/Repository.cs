@@ -2,14 +2,9 @@
 
 namespace AdventureWorks.SqlRepository
 {
-    public abstract class Repository : IDisposable, IAsyncDisposable
+    public abstract class Repository(IConnectionProvider connectionProvider) : IDisposable, IAsyncDisposable
     {
-        protected readonly SqlConnection Connection;
-
-        protected Repository(IConnectionProvider connectionProvider)
-        {
-            Connection = connectionProvider.CreateAdventureWorksConnection();
-        }
+        protected readonly SqlConnection Connection = connectionProvider.CreateAdventureWorksConnection();
 
         public void Dispose()
         {

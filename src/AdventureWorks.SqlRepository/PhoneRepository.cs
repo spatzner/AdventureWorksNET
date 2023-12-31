@@ -9,12 +9,9 @@ using Dapper;
 
 namespace AdventureWorks.SqlRepository
 {
-    public class PhoneRepository: Repository, IPhoneRepository
+    public class PhoneRepository(IConnectionProvider connectionProvider)
+        : Repository(connectionProvider), IPhoneRepository
     {
-        public PhoneRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
-        {
-        }
-
         public async Task Add(int personId, PhoneNumber phoneNumber)
         {
             var sql = """

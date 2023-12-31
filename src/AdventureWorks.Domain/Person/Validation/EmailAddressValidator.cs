@@ -2,18 +2,17 @@
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Validation;
 
-namespace AdventureWorks.Domain.Person.Validation
+namespace AdventureWorks.Domain.Person.Validation;
+
+public class EmailAddressValidator : IValidator<EmailAddress>
 {
-    public class EmailAddressValidator : IValidator<EmailAddress>
+    public virtual ValidationResult Validate(EmailAddress entity)
     {
-        public virtual ValidationResult Validate(EmailAddress entity)
-        {
-            ValidationResult result = new();
+        ValidationResult result = new();
 
-            if (new RequiredRule().IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
-                result.Errors.Add(result1);
+        if (new RequiredRule().IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
+            result.Errors.Add(result1);
 
-            return result;
-        }
+        return result;
     }
 }

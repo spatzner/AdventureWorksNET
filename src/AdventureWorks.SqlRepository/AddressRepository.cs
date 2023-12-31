@@ -11,12 +11,9 @@ using Dapper;
 
 namespace AdventureWorks.SqlRepository
 {
-    public class AddressRepository : Repository, IAddressRepository
+    public class AddressRepository(IConnectionProvider connectionProvider)
+        : Repository(connectionProvider), IAddressRepository
     {
-        public AddressRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
-        {
-        }
-
         public async Task Add(int personId, Address address)
         {
 

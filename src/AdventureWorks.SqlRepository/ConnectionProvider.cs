@@ -8,18 +8,11 @@ using AdventureWorks.Domain;
 
 namespace AdventureWorks.SqlRepository
 {
-    internal class ConnectionProvider : IConnectionProvider
+    internal class ConnectionProvider(ConnectionStrings connectionStrings) : IConnectionProvider
     {
-        private readonly ConnectionStrings _connectionStrings;
-
-        public ConnectionProvider(ConnectionStrings connectionStrings)
-        {
-            _connectionStrings = connectionStrings;
-        }
-
         public SqlConnection CreateAdventureWorksConnection()
         {
-            return new SqlConnection(_connectionStrings.AdventureWorks);
+            return new SqlConnection(connectionStrings.AdventureWorks);
         }
     }
 }

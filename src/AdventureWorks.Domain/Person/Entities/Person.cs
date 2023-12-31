@@ -1,6 +1,4 @@
-﻿using AdventureWorks.Domain.Validation;
-
-namespace AdventureWorks.Domain.Person.Entities;
+﻿namespace AdventureWorks.Domain.Person.Entities;
 
 public class Person : IValidatable
 {
@@ -8,5 +6,4 @@ public class Person : IValidatable
     public PersonName? Name { get; set; }
     public string? PersonType { get; set; }
     public DateTime? LastModified { get; set; }
-
 }

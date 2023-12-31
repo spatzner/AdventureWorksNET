@@ -2,25 +2,23 @@
 
 public class PhoneNumber : IValidatable
 {
-    private string _number = null!;
-
     public string Number
     {
         get => _number;
         set
         {
             if (!TryParse(value, out string formattedNumber))
-                throw new ArgumentException("Invalid length. Must be 10 or 13 digits in any format",
-                    nameof(Number));
+                throw new ArgumentException("Invalid length. Must be 10 or 13 digits in any format", nameof(Number));
+
             _number = formattedNumber;
         }
     }
 
     public string Type { get; }
+    private string _number = null!;
 
     public PhoneNumber(string phoneNumber, string type)
     {
-        
         Number = phoneNumber;
         Type = type;
     }
@@ -33,7 +31,7 @@ public class PhoneNumber : IValidatable
             return false;
         }
 
-        var numericOnly = CompiledRegex.NonDigit().Replace(phoneNumber, string.Empty);
+        string numericOnly = CompiledRegex.NonDigit().Replace(phoneNumber, string.Empty);
 
         switch (numericOnly.Length)
         {
@@ -48,5 +46,4 @@ public class PhoneNumber : IValidatable
                 return false;
         }
     }
-
 }

@@ -12,14 +12,9 @@ using PhoneNumber = AdventureWorks.Domain.Person.Entities.PhoneNumber;
 
 namespace AdventureWorks.SqlRepository
 {
-    public class PersonRepository : Repository, IPersonRepository
+    public class PersonRepository(IConnectionProvider connectionProvider)
+        : Repository(connectionProvider), IPersonRepository
     {
-
-        public PersonRepository(IConnectionProvider connectionProvider) : base(connectionProvider)
-        {
-
-        }
-
         public async Task<QueryResult<PersonDetail>> GetPerson(int id)
         {
             await using var queries = await Connection.QueryMultipleAsync(

@@ -1,16 +1,13 @@
-﻿namespace AdventureWorks.Domain.Person.DTOs
+﻿namespace AdventureWorks.Domain.Person.DTOs;
+
+public class QueryResult<T> : OperationResult
 {
-    public class QueryResult<T> : OperationResult
+    public T? Result { get; set; }
+
+    public QueryResult() { }
+
+    public QueryResult(T result)
     {
-        public QueryResult()
-        {
-        }
-
-        public QueryResult(T result)
-        {
-            Result = result;
-        }
-
-        public T? Result { get; set; }
+        Result = result;
     }
 }

@@ -7,9 +7,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureWorks.SqlRepository", "AdventureWorks.SqlRepository\AdventureWorks.SqlRepository.csproj", "{A900B3C1-5663-4E61-A2E0-6AD6708DA8E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BEA96446-C0B3-4763-9892-23DD1B6522DE}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.SqlRepository", "Tests\Tests.SqlRepository.csproj", "{2BE4D4F0-CB21-42F6-A05F-0A674ACBDFC4}"
 EndProject
@@ -19,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Domain", "Tests.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Application", "Tests.Application\Tests.Application.csproj", "{4D02E2FE-4E34-4912-88C9-7D9C6440F0E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureWorks.Common", "AdventureWorks.Common\AdventureWorks.Common.csproj", "{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureWorks.Common", "AdventureWorks.Common\AdventureWorks.Common.csproj", "{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
