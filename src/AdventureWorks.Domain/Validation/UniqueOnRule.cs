@@ -1,16 +1,18 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
+using AdventureWorks.Domain.Person.Entities;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class UniqueRule<T> : ValidationRule
+public class UniqueOnRule<T> : ValidationRule
 {
     private readonly IEnumerable<PropertyInfo> _keyProperties;
 
-    public UniqueRule(Expression<Func<T, object?>> keys)
+    public UniqueOnRule(Expression<Func<T, object?>> keys)
     {
         if (keys.Body.Type == typeof(MemberExpression) || keys.Body.Type == typeof(NewExpression))
             throw new ArgumentException("Must provide a member expression", nameof(keys));
@@ -47,27 +49,23 @@ public class UniqueRule<T> : ValidationRule
         }
 
         if (value is not IEnumerable<T> list)
-        {
-            result = GetErrorMessage(propertyName, value);
-            return false;
-        }
+            throw new ArgumentException($"Must be IEnumerable of type {typeof(T).FullName}");
 
-        List<Dictionary<string, object?>> keyValues = [];
+        HashSet<int> hashes = [];
+        int listLength = 0;
 
         foreach (T item in list)
         {
-            Dictionary<string, object?> keys = [];
+            listLength++;
 
+            var hashCode = new HashCode();
+            
             foreach (PropertyInfo keyProperty in _keyProperties)
-                keys[keyProperty.Name] = keyProperty.GetValue(item);
+                hashCode.Add(keyProperty.GetValue(item));
 
-            keyValues.Add(keys);
-        }
+            hashes.Add(hashCode.ToHashCode());
 
-        for (int i = 0; i < keyValues.Count - 1; i++)
-        for (int j = i + 1; j < keyValues.Count; j++)
-        {
-            if (keyValues[i].Except(keyValues[j]).Any())
+            if (listLength == hashes.Count)
                 continue;
 
             result = GetErrorMessage(propertyName, value);

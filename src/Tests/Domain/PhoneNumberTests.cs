@@ -35,21 +35,5 @@ namespace Tests.SqlRepository.Domain
             Assert.Fail();
         }
 
-        [TestMethod]
-        [TestCategory(Constants.Unit)]
-        public void MemberExpressionTest()
-        {
-            _ = new UniqueRule<Address>(address => new{ address.City });
-            _ = new UniqueRule<Address>(address => address.City );
-
-            Expression<Func<Address, object>> exp = address => new
-            {
-                address.Type,
-                address.City
-            };
-
-            int x = 0;
-        }
-
     }
 }
