@@ -2,6 +2,7 @@
 using AdventureWorks.Application;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
+using AdventureWorks.Domain.Person.Repositories;
 
 namespace Tests.SqlRepository.Domain
 {
@@ -10,9 +11,9 @@ namespace Tests.SqlRepository.Domain
     {
         [TestMethod]
         [TestCategory(Constants.Integration)]
-        public async Task AddPerson_WhenExcutedWithAllData_CreatesRecords()
+        public async Task AddPerson_WhenExecutedWithAllData_CreatesRecords()
         {
-            var sut = ServiceProvider.GetService<IPersonService>();
+            var sut = ServiceProvider.GetService<IPersonRepository>();
 
             PersonDetail person = new()
             {
@@ -25,8 +26,8 @@ namespace Tests.SqlRepository.Domain
                     Suffix = "Sr"
                 },
                 PersonType = "EM",
-                Addresses = new List<Address>
-                {
+                Addresses =
+                [
                     new Address
                     {
                         Address1 = "123 Main St",
@@ -38,23 +39,17 @@ namespace Tests.SqlRepository.Domain
                         Type = "Home",
                         GeoLocation = new GeoPoint(1, 1)
                     }
-                },
-                EmailAddresses = new List<EmailAddress>
-                {
-                    new EmailAddress
-                    {
-                        Address = "JimAJam@advnetureworks.com"
-                    }
-                },
-                PhoneNumbers = new List<PhoneNumber>()
-                {
-                    new("1234567890", "Home")
-                }
+                ],
+                EmailAddresses =
+                [
+                    new EmailAddress { Address = "JimAJam@advnetureworks.com" }
+                ],
+                PhoneNumbers = [new PhoneNumber("1234567890", "Home")]
             };
 
             using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
 
-            OperationResult result = await sut.Add(person);
+            OperationResult result = await sut.AddPerson(person);
 
             Assert.IsTrue(result.Success);
         }

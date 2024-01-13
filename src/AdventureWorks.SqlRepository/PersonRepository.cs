@@ -17,66 +17,63 @@ namespace AdventureWorks.SqlRepository
     {
         public async Task<QueryResult<PersonDetail>> GetPerson(int id)
         {
-            await using var queries = await Connection.QueryMultipleAsync(
-                """
+            string sql = """
                   SELECT BusinessEntityId, PersonType, NameStyle, Title, FirstName, MiddleName, LastName, Suffix,
-                                           EmailPromotion, AdditionalContactInfo, Demographics, ModifiedDate
-                                    FROM Person.Person
-                                    WHERE BusinessEntityID = @Id;
+                           EmailPromotion, AdditionalContactInfo, Demographics, ModifiedDate
+                    FROM Person.Person
+                    WHERE BusinessEntityID = @Id;
                 
-                                    SELECT a.AddressID, a.AddressLine1, a.AddressLine2, a.City, sp.StateProvinceCode as State,
-                	                      sp.CountryRegionCode as Country, a.PostalCode, a.SpatialLocation.Lat as Lat,
-                	                      a.SpatialLocation.Long as Long, at.Name as AddressType
-                                    FROM Person.BusinessEntityAddress bea
-                                    JOIN Person.Address a ON bea.AddressID = a.AddressID
-                                    JOIN Person.AddressType at ON bea.AddressTypeID = at.AddressTypeID
-                                    JOIN Person.StateProvince sp ON a.StateProvinceID = sp.StateProvinceID
-                                    WHERE BusinessEntityID = @Id;
+                    SELECT a.AddressID, a.AddressLine1, a.AddressLine2, a.City, sp.StateProvinceCode as State,
+                	      sp.CountryRegionCode as Country, a.PostalCode, a.SpatialLocation.Lat as Lat,
+                	      a.SpatialLocation.Long as Long, at.Name as AddressType
+                    FROM Person.BusinessEntityAddress bea
+                    JOIN Person.Address a ON bea.AddressID = a.AddressID
+                    JOIN Person.AddressType at ON bea.AddressTypeID = at.AddressTypeID
+                    JOIN Person.StateProvince sp ON a.StateProvinceID = sp.StateProvinceID
+                    WHERE BusinessEntityID = @Id;
                 
-                                    SELECT phoneNumber as number ,pnt.Name as type
-                                    FROM Person.PersonPhone pp
-                                    JOIN Person.PhoneNumberType pnt on pp.PhoneNumberTypeID = pnt.PhoneNumberTypeID
-                                    WHERE BusinessEntityID = @Id
+                    SELECT phoneNumber as number ,pnt.Name as type
+                    FROM Person.PersonPhone pp
+                    JOIN Person.PhoneNumberType pnt on pp.PhoneNumberTypeID = pnt.PhoneNumberTypeID
+                    WHERE BusinessEntityID = @Id
                 
-                                    SELECT EmailAddressId, EmailAddress as Address
-                                    FROM Person.EmailAddress
-                                    WHERE BusinessEntityID = @Id
-                """,
-                new { Id = id });
+                    SELECT EmailAddressId, EmailAddress as Address
+                    FROM Person.EmailAddress
+                    WHERE BusinessEntityID = @Id
+                """;
+
+            await using var queries = await Connection.QueryMultipleAsync(sql, new { Id = id });
 
             DTO.Person? sqlPerson = await queries.ReadFirstOrDefaultAsync<DTO.Person>();
 
-            if(sqlPerson == null )
-                return new QueryResult<PersonDetail>
-                {
-                    Success = false
-                };
+            if (sqlPerson == null)
+                return new QueryResult<PersonDetail> { Success = false };
 
             List<Address> addresses = (await queries.ReadAsync<DTO.Address>())
-                .Select(addr =>
-                    new Address
-                    {
-                        Id = addr.AddressId,
-                        Type = addr.AddressType ?? string.Empty,
-                        Address1 = addr.AddressLine1 ?? string.Empty,
-                        Address2 = addr.AddressLine2 ?? string.Empty,
-                        City = addr.City ?? string.Empty,
-                        State = addr.State ?? string.Empty,
-                        Country = addr.Country ?? string.Empty,
-                        PostalCode = addr.PostalCode ?? string.Empty,
-                        GeoLocation = new GeoPoint(addr.Latitude, addr.Longitude)
-                    }
-                ).ToList();
+                                      .Select(addr => new Address
+                                       {
+                                           Id = addr.AddressId,
+                                           Type = addr.AddressType ?? string.Empty,
+                                           Address1 = addr.AddressLine1 ?? string.Empty,
+                                           Address2 = addr.AddressLine2 ?? string.Empty,
+                                           City = addr.City ?? string.Empty,
+                                           State = addr.State ?? string.Empty,
+                                           Country = addr.Country ?? string.Empty,
+                                           PostalCode = addr.PostalCode ?? string.Empty,
+                                           GeoLocation = new GeoPoint(addr.Latitude, addr.Longitude)
+                                       })
+                                      .ToList()!;
 
-            List<PhoneNumber> phoneNumbers = (await queries.ReadAsync<DTO.PhoneNumber>())
-                .Select(p => new PhoneNumber(p.Number ?? string.Empty, p.Type ?? string.Empty)).ToList();
+            var phoneNumbers = (await queries.ReadAsync<DTO.PhoneNumber>())
+                              .Select(p => new PhoneNumber(p.Number ?? string.Empty, p.Type ?? string.Empty))
+                              .ToList();
 
-            List<EmailAddress> emailAddresses = (await queries.ReadAsync<DTO.EmailAddress>())
-                .Select(addr => new EmailAddress
-                {
-                    Id = addr.EmailAddressId,
-                    Address = addr.Address ?? string.Empty,
-                }).ToList();
+            var emailAddresses = (await queries.ReadAsync<DTO.EmailAddress>())
+                                .Select(addr => new EmailAddress
+                                 {
+                                     Id = addr.EmailAddressId, Address = addr.Address ?? string.Empty,
+                                 })
+                                .ToList();
 
             PersonName name = new()
             {
@@ -97,10 +94,7 @@ namespace AdventureWorks.SqlRepository
                 Addresses = addresses
             };
 
-            return new QueryResult<PersonDetail>(personDetail)
-            {
-                Success = true
-            };
+            return new QueryResult<PersonDetail>(personDetail) { Success = true };
         }
 
         public async Task<SearchResult<Person>> SearchPersons(PersonSearch criteria, int maxResults)
@@ -117,14 +111,14 @@ namespace AdventureWorks.SqlRepository
                 PersonType = criteria.PersonType?.Trim()
             };
 
-            List<string> filters = new();
+            List<string> filters = [];
 
             if (!string.IsNullOrWhiteSpace(criteria.FirstName))
-                filters.Add("FirstName like @FirstName || '%' ");
+                filters.Add("FirstName like @FirstName + '%' ");
             if (!string.IsNullOrWhiteSpace(criteria.LastName))
-                filters.Add("LastName like @LastName || '%' ");
+                filters.Add("LastName like @LastName + '%' ");
             if (!string.IsNullOrWhiteSpace(criteria.MiddleName))
-                filters.Add("MiddleName like @MiddleName || '%' ");
+                filters.Add("MiddleName like @MiddleName + '%' ");
             if (!string.IsNullOrWhiteSpace(criteria.PersonType))
                 filters.Add("PersonType = @PersonType");
             if (!string.IsNullOrWhiteSpace(criteria.EmailAddress))
@@ -137,30 +131,24 @@ namespace AdventureWorks.SqlRepository
             if (filters.Count == 0)
                 throw new ArgumentException("at least one property must be specified");
 
-            string sql =
-                $"""
-                 SELECT  BusinessEntityID as Id, PersonType, NameStyle, Title, FirstName, MiddleName, LastName, Suffix
-                 INTO #PersonResults
-                 FROM Person.Person
-                 WHERE {string.Join(" AND ", filters)}
-                 
-                 SELECT TOP {maxResults} * FROM #PersonResults
-                 SELECT COUNT(*) FROM #PersonResults
-                 """;
+            string sql = $"""
+                SELECT  BusinessEntityID as Id, PersonType, NameStyle, Title, FirstName, MiddleName, LastName, Suffix
+                INTO #PersonResults
+                FROM Person.Person
+                WHERE {string.Join(" AND ", filters)}
+
+                SELECT TOP {maxResults} * FROM #PersonResults
+                SELECT COUNT(*) FROM #PersonResults
+                """;
 
             await using SqlMapper.GridReader queries = await Connection.QueryMultipleAsync(sql, parameters);
 
-            var persons = (await queries.ReadAsync<DTO.Person>())
-                .Select(p => p.ToEntity())
-                .ToList();
+            var persons = (await queries.ReadAsync<DTO.Person>()).Select(p => p.ToEntity())
+                                                                 .ToList();
 
             var totalCount = await queries.ReadSingleAsync<int>();
 
-            var result = new SearchResult<Person>
-            {
-                Results = persons,
-                Total = totalCount
-            };
+            var result = new SearchResult<Person> { Results = persons, Total = totalCount };
 
             return result;
         }
@@ -181,31 +169,27 @@ namespace AdventureWorks.SqlRepository
             };
 
             var sql = """
-                  DECLARE @BusinessEntityTable table (BusinessEntityID int);
-                  DECLARE @BusinessEntityId int;
-                  
-                  INSERT INTO Person.BusinessEntity
-                  OUTPUT Inserted.BusinessEntityID INTO @BusinessEntityTable
-                  DEFAULT VALUES;
-                  
-                  
-                  SELECT TOP 1 @BusinessEntityId = BusinessEntityID FROM @BusinessEntityTable ;
-                  
-                  INSERT INTO Person.Person
-                  (BusinessEntityID, PersonType, Title, FirstName, MiddleName, LastName, Suffix)
-                  VALUES
-                  (@BusinessEntityID, @PersonType, @Title, @FirstName, @MiddleName, @LastName, @Suffix);
-                  
-                  SELECT @BusinessEntityId;
-                  """;
+                DECLARE @BusinessEntityTable table (BusinessEntityID int);
+                DECLARE @BusinessEntityId int;
+
+                INSERT INTO Person.BusinessEntity
+                OUTPUT Inserted.BusinessEntityID INTO @BusinessEntityTable
+                DEFAULT VALUES;
+
+
+                SELECT TOP 1 @BusinessEntityId = BusinessEntityID FROM @BusinessEntityTable ;
+
+                INSERT INTO Person.Person
+                (BusinessEntityID, PersonType, Title, FirstName, MiddleName, LastName, Suffix)
+                VALUES
+                (@BusinessEntityID, @PersonType, @Title, @FirstName, @MiddleName, @LastName, @Suffix);
+
+                SELECT @BusinessEntityId;
+                """;
 
             int id = await Connection.ExecuteScalarAsync<int>(sql, parameters);
 
-            return new AddResult
-            {
-                Success = true,
-                Id = id
-            };
+            return new AddResult { Success = true, Id = id };
         }
 
         public async Task<int> UpdatePerson(Person person)
@@ -225,11 +209,11 @@ namespace AdventureWorks.SqlRepository
             };
 
             var sql = """
-                    UPDATE Person.Person
-                    SET PersonType = @PersonType, Title = @Title, FirstName = @FirstName, 
-                    MiddleName = @MiddleName, LastName = @LastName, Suffix = @Suffix
-                    WHERE BusinessEntityID = @BusinessEntityID
-                  """;
+                  UPDATE Person.Person
+                  SET PersonType = @PersonType, Title = @Title, FirstName = @FirstName,
+                  MiddleName = @MiddleName, LastName = @LastName, Suffix = @Suffix
+                  WHERE BusinessEntityID = @BusinessEntityID
+                """;
 
             return await Connection.ExecuteAsync(sql, parameters);
         }

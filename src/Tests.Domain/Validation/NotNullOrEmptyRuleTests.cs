@@ -16,15 +16,15 @@ namespace Tests.Domain.Validation
     [TestClass]
     public class NotNullOrEmptyRuleTests
     {
+        private const string PropName = "name";
 
         [TestMethod]
         [TestCategory(Constants.Unit)]
         public void NotNullOrEmptyRule_WhenNull_IsNotValid()
         {
             object? inputValue = null;
-            string propName = "name";
 
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsFalse(isValid);
         }
@@ -34,9 +34,8 @@ namespace Tests.Domain.Validation
         public void NotNullOrEmptyRule_WhenStringIsEmpty_IsNotValid()
         {
             object? inputValue = string.Empty;
-            string propName = "name";
 
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsFalse(isValid);
         }
@@ -46,9 +45,8 @@ namespace Tests.Domain.Validation
         public void NotNullOrEmptyRule_WhenStringHasValue_IsValid()
         {
             object? inputValue = "b";
-            string propName = "name";
 
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsTrue(isValid);
         }
@@ -58,10 +56,8 @@ namespace Tests.Domain.Validation
         public void NotNullOrEmptyRule_WhenEnumerableIsEmpty_IsNotValid()
         {
             object? inputValue = new List<string>();
-            
-            string propName = "name";
 
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsFalse(isValid);
         }
@@ -72,9 +68,7 @@ namespace Tests.Domain.Validation
         {
             object? inputValue = new List<string> { "b" };
 
-            string propName = "name";
-
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsTrue(isValid);
         }
@@ -86,9 +80,7 @@ namespace Tests.Domain.Validation
         {
             object? inputValue = 1;
 
-            string propName = "name";
-
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.Fail();
         }
@@ -99,9 +91,7 @@ namespace Tests.Domain.Validation
         {
             object? inputValue = new ValuesClass();
 
-            string propName = "name";
-
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsFalse(isValid);
         }
@@ -115,9 +105,7 @@ namespace Tests.Domain.Validation
                 RefType = "test"
             };
 
-            string propName = "name";
-
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsTrue(isValid);
         }
@@ -131,9 +119,7 @@ namespace Tests.Domain.Validation
                 NullRefType = "test"
             };
 
-            string propName = "name";
-
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsTrue(isValid);
         }
@@ -147,9 +133,7 @@ namespace Tests.Domain.Validation
                 ValueType = 1
             };
 
-            string propName = "name";
-
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsTrue(isValid);
         }
@@ -163,9 +147,7 @@ namespace Tests.Domain.Validation
                 NullValueType = 0
             };
 
-            string propName = "name";
-
-            var isValid = new NotNullOrEmptyRule().IsValid(propName, inputValue, out ValidationError? result);
+            var isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
             Assert.IsTrue(isValid);
         }
@@ -189,16 +171,15 @@ namespace Tests.Domain.Validation
         public void NotNullOrEmptyRule_WhenIsNotValid_ValidationErrorIsCorrect()
         {
             string inputValue = string.Empty;
-            string propertyName = "Name";
 
             var sut = new NotNullOrEmptyRule();
 
-            bool isValid = sut.IsValid(propertyName, inputValue, out ValidationError? result);
+            bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
 
             Assert.IsFalse(isValid);
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Field, propertyName);
+            Assert.AreEqual(result.Field, PropName);
             Assert.AreEqual(result.Value, inputValue);
             Assert.AreEqual(result.ValidationType, ValidationType.IsNotEmpty);
             Assert.AreEqual(result.Requirements, string.Empty);

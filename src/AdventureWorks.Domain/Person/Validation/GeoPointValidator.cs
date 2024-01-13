@@ -14,8 +14,8 @@ public class GeoPointValidator : IValidator<GeoPoint>
             result.Errors.Add(result1);
 
         if (new RangeRule(-180, 180).IsInvalid(nameof(entity.Longitude),
-                                               entity.Longitude,
-                                               out ValidationError? result2))
+                entity.Longitude,
+                out ValidationError? result2))
             result.Errors.Add(result2);
 
         return result;

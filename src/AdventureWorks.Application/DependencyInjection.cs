@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AdventureWorks.Application;
+using AdventureWorks.Domain.Person.DTOs;
+using AdventureWorks.Domain.Person.Entities;
+using AdventureWorks.Domain.Person.Repositories;
+using AdventureWorks.Domain.Person.Validation;
+using AdventureWorks.Domain.Validation;
+using AdventureWorks.SqlRepository;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AdventureWorks.Domain
+namespace AdventureWorks.Application
 {
     public static class DependencyInjection
     {
-        public static void AddDomainServices(this IServiceCollection services)
+        public static void AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IValidator<PersonDetail>, PersonDetailValidator>();
+            services.AddScoped<IValidator<PersonSearch>, PersonSearchValidator>();
         }
     }
 }

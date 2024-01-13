@@ -6,7 +6,7 @@ namespace AdventureWorks.Domain.Validation;
 
 public class DiscreetValueRule<T>(params T[] values) : ValidationRule
 {
-    public HashSet<T> Values { get; } = values.ToHashSet();
+    public HashSet<T> Values { get; } = [.. values];
 
     public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
     {

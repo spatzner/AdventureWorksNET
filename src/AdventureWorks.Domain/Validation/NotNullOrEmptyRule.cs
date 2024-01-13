@@ -26,23 +26,23 @@ public class NotNullOrEmptyRule : ValidationRule
                     throw new ArgumentException("Reference types not supported");
 
                 isValid = value.GetType()
-                               .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                               .Any(prop =>
-                                {
-                                    object? val = prop.GetValue(value);
-                                    object? def = prop.PropertyType.IsValueType
-                                        ? Activator.CreateInstance(prop.PropertyType)
-                                        : null;
+                   .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                   .Any(prop =>
+                    {
+                        object? val = prop.GetValue(value);
+                        object? def = prop.PropertyType.IsValueType
+                            ? Activator.CreateInstance(prop.PropertyType)
+                            : null;
 
-                                    if (val == null && def == null)
-                                        return false;
+                        if (val == null && def == null)
+                            return false;
 
-                                    if (val == null)
-                                        return true;
+                        if (val == null)
+                            return true;
 
-                                    bool isMatch = val.Equals(def);
-                                    return !isMatch;
-                                });
+                        bool isMatch = val.Equals(def);
+                        return !isMatch;
+                    });
 
                 break;
         }

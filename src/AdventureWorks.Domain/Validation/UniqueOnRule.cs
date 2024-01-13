@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using AdventureWorks.Domain.Person;
 using AdventureWorks.Domain.Person.DTOs;
-using AdventureWorks.Domain.Person.Entities;
 
 namespace AdventureWorks.Domain.Validation;
 
@@ -58,8 +57,8 @@ public class UniqueOnRule<T> : ValidationRule
         {
             listLength++;
 
-            var hashCode = new HashCode();
-            
+            HashCode hashCode = new();
+
             foreach (PropertyInfo keyProperty in _keyProperties)
                 hashCode.Add(keyProperty.GetValue(item));
 

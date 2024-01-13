@@ -1,4 +1,5 @@
-﻿using AdventureWorks.Domain;
+﻿using AdventureWorks.Application;
+using AdventureWorks.Domain;
 using AdventureWorks.SqlRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,7 @@ namespace Tests.SqlRepository
             var services = new ServiceCollection();
 
             services.AddRepositoryServices(connectionStrings);
-            services.AddDomainServices();
+            services.AddApplicationServices();
 
             _instance = services.BuildServiceProvider();
         }
