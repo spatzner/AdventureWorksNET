@@ -4,16 +4,16 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Domain.Person.Validation;
 
-public class AddressValidator : IValidator<Address>
+public class AddressValidator(IRuleProvider ruleProvider) : Validator<Address>(ruleProvider)
 {
-    public virtual ValidationResult Validate(Address? entity)
+    public override ValidationResult Validate(Address? entity)
     {
         ValidationResult result = new();
 
         if (entity == null)
             return result;
 
-        RequiredRule requiredRule = new();
+        var requiredRule = RuleProvider.RequiredRule();
 
         if (!requiredRule.IsValid(nameof(entity.Type), entity.Type, out ValidationError? result1))
             result.Errors.Add(result1);

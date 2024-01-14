@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
+using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.SqlRepository.Validators
 {
-    public class PersonValidator : Domain.Person.Validation.PersonValidator
+    public class PersonValidator(IRuleProvider ruleProvider) : Domain.Person.Validation.PersonValidator(ruleProvider)
     {
         public override ValidationResult Validate(Person entity)
         {

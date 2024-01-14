@@ -3,13 +3,13 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Domain.Person.Validation;
 
-public class PersonSearchValidator : IValidator<PersonSearch>
+public class PersonSearchValidator(IRuleProvider ruleProvider) : Validator<PersonSearch>(ruleProvider)
 {
-    public ValidationResult Validate(PersonSearch entity)
+    public override ValidationResult Validate(PersonSearch entity)
     {
         ValidationResult result = new();
 
-        if (new NotNullOrEmptyRule().IsInvalid(nameof(PersonSearch), entity, out ValidationError? result1))
+        if (RuleProvider.NotNullOrEmptyRule().IsInvalid(nameof(PersonSearch), entity, out ValidationError? result1))
             result.Errors.Add(result1);
 
         return result;

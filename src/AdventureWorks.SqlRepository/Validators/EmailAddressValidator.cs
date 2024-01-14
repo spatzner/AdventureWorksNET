@@ -10,13 +10,13 @@ using ValidationResult = AdventureWorks.Domain.Person.DTOs.ValidationResult;
 
 namespace AdventureWorks.SqlRepository.Validators
 {
-    public class EmailAddressValidator : Domain.Person.Validation.EmailAddressValidator
+    public class EmailAddressValidator(IRuleProvider ruleProvider) : Domain.Person.Validation.EmailAddressValidator(ruleProvider)
     {
         public override ValidationResult Validate(EmailAddress entity)
         {
             ValidationResult result =  base.Validate(entity);
 
-            if(new MaxLengthRule(50).IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
+            if(RuleProvider.MaxLengthRule(50).IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
                 result.Errors.Add(result1);
 
             return result;

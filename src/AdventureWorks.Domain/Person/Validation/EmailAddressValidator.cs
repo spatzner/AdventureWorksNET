@@ -4,13 +4,15 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Domain.Person.Validation;
 
-public class EmailAddressValidator : IValidator<EmailAddress>
+public class EmailAddressValidator(IRuleProvider ruleProvider) : Validator<EmailAddress>(ruleProvider)
 {
-    public virtual ValidationResult Validate(EmailAddress entity)
+    public override ValidationResult Validate(EmailAddress entity)
     {
         ValidationResult result = new();
 
-        if (new RequiredRule().IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
+        IValidationRule requiredRule = RuleProvider.RequiredRule();
+
+        if (requiredRule.IsInvalid(nameof(entity.Address), entity.Address, out ValidationError? result1))
             result.Errors.Add(result1);
 
         return result;
