@@ -9,37 +9,23 @@ using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.SqlRepository.Validators;
 
-public class AddressValidator(IRuleProvider ruleProvider) : Domain.Person.Validation.AddressValidator(ruleProvider)
+public class AddressValidator(IValidationBuilder validationBuilder)
+    : Domain.Person.Validation.AddressValidator(validationBuilder)
 {
     public override ValidationResult Validate(Address? entity)
     {
-        var result = base.Validate(entity);
-
         if (entity == null)
-            return result;
+            return ValidationBuilder.GetResult();
 
-        if (RuleProvider.MaxLengthRule(60)
-           .IsInvalid(nameof(entity.Address1), entity.Address1, out ValidationError? result1))
-            result.Errors.Add(result1);
+        base.Validate(entity);
 
-        if (RuleProvider.MaxLengthRule(60)
-           .IsInvalid(nameof(entity.Address2), entity.Address2, out ValidationError? result2))
-            result.Errors.Add(result2);
+        ValidationBuilder.MaxLengthRule(60).Validate(nameof(entity.Address1), entity.Address1);
+        ValidationBuilder.MaxLengthRule(60).Validate(nameof(entity.Address2), entity.Address2);
+        ValidationBuilder.MaxLengthRule(30).Validate(nameof(entity.City), entity.City);
+        ValidationBuilder.MaxLengthRule(50).Validate(nameof(entity.State), entity.State);
+        ValidationBuilder.MaxLengthRule(50).Validate(nameof(entity.Country), entity.Country);
+        ValidationBuilder.MaxLengthRule(15).Validate(nameof(entity.PostalCode), entity.PostalCode);
 
-        if (RuleProvider.MaxLengthRule(30).IsInvalid(nameof(entity.City), entity.City, out ValidationError? result3))
-            result.Errors.Add(result3);
-
-        if (RuleProvider.MaxLengthRule(50).IsInvalid(nameof(entity.State), entity.State, out ValidationError? result4))
-            result.Errors.Add(result4);
-
-        if (RuleProvider.MaxLengthRule(50)
-           .IsInvalid(nameof(entity.Country), entity.Country, out ValidationError? result5))
-            result.Errors.Add(result5);
-
-        if (RuleProvider.MaxLengthRule(15)
-           .IsInvalid(nameof(entity.PostalCode), entity.PostalCode, out ValidationError? result6))
-            result.Errors.Add(result6);
-
-        return result;
+        return ValidationBuilder.GetResult();
     }
 }

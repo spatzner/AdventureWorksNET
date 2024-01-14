@@ -2,19 +2,21 @@
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
-using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Application
 {
-    public class PersonAggregateService(IPersonRepository personRepository,
-            IAddressRepository addressRepository,
-            IPhoneRepository phoneRepository,
-            IEmailRepository emailRepository,
-            IValidationService validationService)
+    public class PersonAggregateService(
+        IPersonRepository personRepository,
+        IAddressRepository addressRepository,
+        IPhoneRepository phoneRepository,
+        IEmailRepository emailRepository,
+        IValidationService validationService)
     {
-        public async Task<SearchResult<Domain.Person.Entities.Person>> Search(PersonSearch criteria)
+        public async Task<SearchResult<Person>> Search(PersonSearch criteria)
         {
-            //TODO: validate input
+            var validationResult = validationService.Validate(criteria);
+            if (!validationResult.IsValidRequest)
+                return new SearchResult<Person>(validationResult);
 
             return await personRepository.SearchPersons(criteria, 100);
         }
@@ -39,13 +41,12 @@ namespace AdventureWorks.Application
 
             foreach (var address in person.Addresses)
                 await addressRepository.Add(id, address);
-            
+
             foreach (var phoneNumber in person.PhoneNumbers)
                 await phoneRepository.Add(id, phoneNumber);
 
             foreach (var email in person.EmailAddresses)
                 await emailRepository.Add(id, email);
-            
 
             scope.Complete();
 

@@ -5,5 +5,5 @@ namespace AdventureWorks.Domain.Validation;
 
 public interface IValidator<in T> where T : IValidatable
 {
-    ValidationResult Validate(T entity);
+    public ValidationResult Validate(T entity);
 }
