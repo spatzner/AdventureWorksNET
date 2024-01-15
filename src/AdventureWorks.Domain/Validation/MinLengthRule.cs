@@ -5,10 +5,8 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class MinLengthRule(int minLength) : ValidationRule
+internal class MinLengthRule(int minLength) : ValidationRule
 {
-    public int MinLength { get; } = minLength;
-
     public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
     {
         bool isValid;
@@ -19,11 +17,11 @@ public class MinLengthRule(int minLength) : ValidationRule
                 isValid = true; //even though it doesn't meet min length, RequiredRule is meant to catch nulls
                 break;
             case string s:
-                isValid = s.Length >= MinLength;
+                isValid = s.Length >= minLength;
                 break;
             case IEnumerable e:
                 int count = e.Cast<object?>().Count();
-                isValid = count >= MinLength;
+                isValid = count >= minLength;
                 break;
             default:
                 throw new ArgumentException($"Type {value.GetType()} is not supported.");
@@ -40,7 +38,7 @@ public class MinLengthRule(int minLength) : ValidationRule
             Field = propertyName,
             Value = value,
             ValidationType = ValidationType.MinLength,
-            Requirements = $"Min Length: {MinLength}"
+            Requirements = $"Min Length: {minLength}"
         };
     }
 }

@@ -7,8 +7,6 @@ public class PersonSearchValidator(IValidationBuilder validationBuilder) : Valid
 {
     public override ValidationResult Validate(PersonSearch entity)
     {
-        ValidationBuilder.NotNullOrEmptyRule().Validate(nameof(PersonSearch), entity);
-        
-        return ValidationBuilder.GetResult();
+        return ValidationBuilder.NotNullOrEmptyRule().Validate(entity, nameof(PersonSearch)).GetResult();
     }
 }

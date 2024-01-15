@@ -5,7 +5,7 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class NotNullOrEmptyRule : ValidationRule
+internal class NotNullOrEmptyRule : ValidationRule
 {
     public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
     {
@@ -25,7 +25,8 @@ public class NotNullOrEmptyRule : ValidationRule
                 if (value.GetType().IsValueType)
                     throw new ArgumentException("Reference types not supported");
 
-                isValid = value.GetType()
+                isValid = value
+                   .GetType()
                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                    .Any(prop =>
                     {

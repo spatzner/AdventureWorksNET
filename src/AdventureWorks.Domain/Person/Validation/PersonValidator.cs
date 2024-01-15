@@ -7,9 +7,10 @@ public class PersonValidator(IValidationBuilder validationBuilder) : Validator<E
 {
     public override ValidationResult Validate(Entities.Person entity)
     {
-        ValidationBuilder.RequiredRule().Validate(nameof(entity.Name), entity.Name);
-        ValidationBuilder.RequiredRule().Validate(nameof(entity.PersonType), entity.PersonType);
-        
-        return ValidationBuilder.GetResult();
+        return ValidationBuilder
+           .RequiredRule()
+           .Validate(entity.Name, nameof(entity.Name))
+           .Validate(entity.PersonType, nameof(entity.PersonType))
+           .GetResult();
     }
 }

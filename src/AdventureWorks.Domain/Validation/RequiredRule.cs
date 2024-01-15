@@ -4,7 +4,7 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class RequiredRule : ValidationRule
+internal class RequiredRule : ValidationRule
 {
     public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
     {

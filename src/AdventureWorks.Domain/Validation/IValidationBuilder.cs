@@ -10,14 +10,13 @@ namespace AdventureWorks.Domain.Validation;
 
 public interface IValidationBuilder
 {
-
-    ValidationBuilder DiscreetValueRule<T>(params T[] values);
-    ValidationBuilder MaxLengthRule(int maxLength);
-    ValidationBuilder MinLengthRule(int minLength);
-    ValidationBuilder NotNullOrEmptyRule();
-    ValidationBuilder RangeRule(int min, int max, bool minInclusive = true, bool maxInclusive = true);
-    ValidationBuilder RequiredRule();
-    ValidationBuilder UniqueOnRule<T>(Expression<Func<T, object?>> keys);
-    void Validate(string propertyName, object? value);
+    IValidationBuilder DiscreetValueRule<T>(params T[] values);
+    IValidationBuilder MaxLengthRule(int maxLength);
+    IValidationBuilder MinLengthRule(int minLength);
+    IValidationBuilder NotNullOrEmptyRule();
+    IValidationBuilder RangeRule(int min, int max, bool minInclusive = true, bool maxInclusive = true);
+    IValidationBuilder RequiredRule();
+    IValidationBuilder UniqueOnRule<T>(Expression<Func<T, object?>> keys);
+    IValidationBuilder Validate(object? value, string propertyName);
     ValidationResult GetResult();
 }

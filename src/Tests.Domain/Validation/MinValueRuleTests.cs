@@ -3,10 +3,12 @@ using AdventureWorks.Domain.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person;
 using System.Text.RegularExpressions;
+
 // ReSharper disable UnusedVariable
 #pragma warning disable IDE0059
 
@@ -19,7 +21,6 @@ namespace Tests.Domain.Validation
         [TestCategory(Constants.Unit)]
         public void MinValueRule_WhenNull_IsValid()
         {
-
             object? inputValue = null;
             var sut = new MinValueRule<int>(2);
 
@@ -58,10 +59,7 @@ namespace Tests.Domain.Validation
         public void MinValueRule_WhenIntegerIsEqualToMinNotIncluded_IsNotValid()
         {
             int inputValue = 2;
-            var sut = new MinValueRule<int>(2)
-            {
-                MinIncluded = false
-            };
+            var sut = new MinValueRule<int>(2, minIncluded: false);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -73,10 +71,7 @@ namespace Tests.Domain.Validation
         public void MinValueRule_WhenIntegerIsEqualToMinIncluded_IsValid()
         {
             int inputValue = 2;
-            var sut = new MinValueRule<int>(2)
-            {
-                MinIncluded = true
-            };
+            var sut = new MinValueRule<int>(2, minIncluded: true);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -112,10 +107,7 @@ namespace Tests.Domain.Validation
         public void MinValueRule_WhenDecimalIsEqualToMinNotIncluded_IsNotValid()
         {
             decimal inputValue = 2;
-            var sut = new MinValueRule<decimal>(2)
-            {
-                MinIncluded = false
-            };
+            var sut = new MinValueRule<decimal>(2, minIncluded: false);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -127,10 +119,7 @@ namespace Tests.Domain.Validation
         public void MinValueRule_WhenDecimalIsEqualToMinIncluded_IsValid()
         {
             decimal inputValue = 2;
-            var sut = new MinValueRule<decimal>(2)
-            {
-                MinIncluded = true
-            };
+            var sut = new MinValueRule<decimal>(2, minIncluded: true);
 
             bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
 
@@ -153,7 +142,6 @@ namespace Tests.Domain.Validation
         [TestCategory(Constants.Unit)]
         public void MinValueRule_WhenIsValid_ValidationErrorIsNull()
         {
-
             int inputValue = 3;
             var sut = new MinValueRule<int>(2);
 
@@ -180,6 +168,5 @@ namespace Tests.Domain.Validation
             Assert.AreEqual(result.ValidationType, ValidationType.MinValue);
             Assert.IsTrue(Regex.IsMatch(result.Requirements, $@"(?<!\d){minValue}(?!=\d)"));
         }
-
     }
 }

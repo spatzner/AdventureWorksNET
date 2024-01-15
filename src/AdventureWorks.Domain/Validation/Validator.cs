@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
-using AdventureWorks.Domain.Validation;
 
-namespace AdventureWorks.Domain.Person.Validation;
+namespace AdventureWorks.Domain.Validation;
 
 public abstract class Validator<T>(IValidationBuilder validationBuilder) : IValidator<T> where T : IValidatable
 {

@@ -4,9 +4,9 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class DiscreetValueRule<T>(params T[] values) : ValidationRule
+internal class DiscreetValueRule<T>(params T[] values) : ValidationRule
 {
-    public HashSet<T> Values { get; } = [.. values];
+    private readonly HashSet<T> _values = [.. values];
 
     public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
     {
@@ -16,7 +16,7 @@ public class DiscreetValueRule<T>(params T[] values) : ValidationRule
                 result = null; //even though it doesn't meet requirement, RequiredRule is meant to catch nulls
                 return true;
             case T val:
-                bool isValid = Values.Contains(val);
+                bool isValid = _values.Contains(val);
                 result = isValid ? null : GetErrorMessage(propertyName, value);
                 return isValid;
             default:
@@ -32,7 +32,7 @@ public class DiscreetValueRule<T>(params T[] values) : ValidationRule
             Field = propertyName,
             Value = value,
             ValidationType = ValidationType.DiscreetValue,
-            Requirements = $"Accepted values: {string.Join(", ", Values.Select(x => $"'{x}'"))}"
+            Requirements = $"Accepted values: {string.Join(", ", _values.Select(x => $"'{x}'"))}"
         };
     }
 }

@@ -8,8 +8,6 @@ public class EmailAddressValidator(IValidationBuilder validationBuilder) : Valid
 {
     public override ValidationResult Validate(EmailAddress entity)
     {
-       ValidationBuilder.RequiredRule().Validate(nameof(entity.Address), entity.Address);
-
-        return ValidationBuilder.GetResult();
+        return ValidationBuilder.RequiredRule().Validate(entity.Address, nameof(entity.Address)).GetResult();
     }
 }

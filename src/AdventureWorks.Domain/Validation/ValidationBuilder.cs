@@ -12,58 +12,51 @@ public class ValidationBuilder : IValidationBuilder
 {
     private readonly ValidationResult _result = new();
 
-    private IValidationRule? _currentValidator = null;
+    private IValidationRule? _currentValidator;
 
-    public ValidationBuilder DiscreetValueRule<T>(params T[] values)
+    public IValidationBuilder DiscreetValueRule<T>(params T[] values)
     {
-        AssertValidatorNullState();
         _currentValidator = new DiscreetValueRule<T>(values);
         return this;
     }
 
-    public ValidationBuilder MaxLengthRule(int maxLength)
+    public IValidationBuilder MaxLengthRule(int maxLength)
     {
-        AssertValidatorNullState();
         _currentValidator = new MaxLengthRule(maxLength);
         return this;
     }
 
-    public ValidationBuilder MinLengthRule(int minLength)
+    public IValidationBuilder MinLengthRule(int minLength)
     {
-        AssertValidatorNullState();
         _currentValidator = new MinLengthRule(minLength);
         return this;
     }
 
-    public ValidationBuilder NotNullOrEmptyRule()
+    public IValidationBuilder NotNullOrEmptyRule()
     {
-        AssertValidatorNullState();
         _currentValidator = new NotNullOrEmptyRule();
         return this;
     }
 
-    public ValidationBuilder RangeRule(int min, int max, bool minInclusive = true, bool maxInclusive = true)
+    public IValidationBuilder RangeRule(int min, int max, bool minInclusive = true, bool maxInclusive = true)
     {
-        AssertValidatorNullState();
         _currentValidator = new RangeRule(min, max, minInclusive, maxInclusive);
         return this;
     }
 
-    public ValidationBuilder RequiredRule()
+    public IValidationBuilder RequiredRule()
     {
-        AssertValidatorNullState();
         _currentValidator = new RequiredRule();
         return this;
     }
 
-    public ValidationBuilder UniqueOnRule<T>(Expression<Func<T, object?>> keys)
+    public IValidationBuilder UniqueOnRule<T>(Expression<Func<T, object?>> keys)
     {
-        AssertValidatorNullState();
         _currentValidator = new UniqueOnRule<T>(keys);
         return this;
     }
 
-    public void Validate(string propertyName, object? value)
+    public IValidationBuilder Validate(object? value, string propertyName)
     {
         if (_currentValidator == null)
             throw new InvalidOperationException($"Validator needs to be set before calling {nameof(Validate)}");
@@ -71,19 +64,12 @@ public class ValidationBuilder : IValidationBuilder
         if (_currentValidator.IsInvalid(propertyName, value, out ValidationError? error))
             _result.Errors.Add(error);
 
-        _currentValidator = null;
+        return this;
     }
 
     public ValidationResult GetResult()
     {
+        _currentValidator = null;
         return _result;
     }
-
-    private void AssertValidatorNullState()
-    {
-        if (_currentValidator != null)
-            throw new InvalidOperationException($"current validator is already set. Call {nameof(Validate)} to finish current validation");
-
-    }
-
 }

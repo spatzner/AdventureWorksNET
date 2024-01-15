@@ -5,10 +5,8 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class MaxLengthRule(int maxLength) : ValidationRule
+internal class MaxLengthRule(int maxLength) : ValidationRule
 {
-    public int MaxLength { get; } = maxLength;
-
     public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
     {
         bool isValid;
@@ -19,11 +17,11 @@ public class MaxLengthRule(int maxLength) : ValidationRule
                 isValid = true;
                 break;
             case string s:
-                isValid = s.Length <= MaxLength;
+                isValid = s.Length <= maxLength;
                 break;
             case IEnumerable e:
                 int count = e.Cast<object?>().Count();
-                isValid = count <= MaxLength;
+                isValid = count <= maxLength;
                 break;
             default:
                 throw new ArgumentException($"Type {value.GetType()} is not supported.");
@@ -40,7 +38,7 @@ public class MaxLengthRule(int maxLength) : ValidationRule
             Field = propertyName,
             Value = value,
             ValidationType = ValidationType.MaxLength,
-            Requirements = $"Max Length: {MaxLength}"
+            Requirements = $"Max Length: {maxLength}"
         };
     }
 }

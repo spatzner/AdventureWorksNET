@@ -7,11 +7,11 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class UniqueOnRule<T> : ValidationRule
+internal class UniqueOnRule<T> : ValidationRule
 {
     private readonly IEnumerable<PropertyInfo> _keyProperties;
 
-    public UniqueOnRule(Expression<Func<T, object?>> keys)
+    internal UniqueOnRule(Expression<Func<T, object?>> keys)
     {
         if (keys.Body.Type == typeof(MemberExpression) || keys.Body.Type == typeof(NewExpression))
             throw new ArgumentException("Must provide a member expression", nameof(keys));

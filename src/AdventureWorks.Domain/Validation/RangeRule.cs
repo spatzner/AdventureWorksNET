@@ -5,27 +5,19 @@ using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Validation;
 
-public class RangeRule : ValidationRule
+internal class RangeRule : ValidationRule
 {
-    public decimal Min { get; }
-    public decimal Max { get; }
-    public bool MinInclusive { get; }
-    public bool MaxInclusive { get; }
+    private readonly decimal _min;
+    private readonly decimal _max;
+    private readonly bool _minInclusive;
+    private readonly bool _maxInclusive;
 
-    public RangeRule(int min, int max, bool minInclusive = true, bool maxInclusive = true)
+    internal RangeRule(decimal min, decimal max, bool minInclusive = true, bool maxInclusive = true)
     {
-        Min = min;
-        Max = max;
-        MinInclusive = minInclusive;
-        MaxInclusive = maxInclusive;
-    }
-
-    public RangeRule(decimal min, decimal max, bool minInclusive = true, bool maxInclusive = true)
-    {
-        Min = min;
-        Max = max;
-        MinInclusive = minInclusive;
-        MaxInclusive = maxInclusive;
+        _min = min;
+        _max = max;
+        _minInclusive = minInclusive;
+        _maxInclusive = maxInclusive;
     }
 
     public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
@@ -41,18 +33,18 @@ public class RangeRule : ValidationRule
 
         decimal decValue = Convert.ToDecimal(value);
 
-        switch (MinInclusive)
+        switch (_minInclusive)
         {
-            case true when decValue < Min:
-            case false when decValue <= Min:
+            case true when decValue < _min:
+            case false when decValue <= _min:
                 result = GetErrorMessage(propertyName, value);
                 return false;
         }
 
-        switch (MaxInclusive)
+        switch (_maxInclusive)
         {
-            case true when decValue > Max:
-            case false when decValue >= Max:
+            case true when decValue > _max:
+            case false when decValue >= _max:
                 result = GetErrorMessage(propertyName, value);
                 return false;
         }
@@ -68,7 +60,7 @@ public class RangeRule : ValidationRule
             Field = propertyName,
             Value = value,
             ValidationType = ValidationType.Range,
-            Requirements = $"{Min} {(MinInclusive ? "<=" : "<")} value {(MaxInclusive ? "<=" : "<")} {Max}"
+            Requirements = $"{_min} {(_minInclusive ? "<=" : "<")} value {(_maxInclusive ? "<=" : "<")} {_max}"
         };
     }
 }

@@ -8,14 +8,16 @@ public class PersonDetailValidator(IValidationBuilder validationBuilder) : Perso
 {
     public ValidationResult Validate(PersonDetail entity)
     {
-        ValidationBuilder.RequiredRule().Validate(nameof(entity.Name), entity.Name);
-        ValidationBuilder.RequiredRule().Validate(nameof(entity.PersonType), entity.PersonType);
-        ValidationBuilder.UniqueOnRule<Address>(addr => addr.Type).Validate(nameof(entity.Addresses), entity.Addresses);
-        ValidationBuilder.UniqueOnRule<PhoneNumber>(phone => phone.Type)
-           .Validate(nameof(entity.PhoneNumbers), entity.Addresses);
-        ValidationBuilder.UniqueOnRule<EmailAddress>(email => email.Address)
-           .Validate(nameof(entity.EmailAddresses), entity.Addresses);
-
-        return ValidationBuilder.GetResult();
+        return ValidationBuilder
+           .RequiredRule()
+           .Validate(entity.Name, nameof(entity.Name))
+           .Validate(entity.PersonType, nameof(entity.PersonType))
+           .UniqueOnRule<Address>(addr => addr.Type)
+           .Validate(entity.Addresses, nameof(entity.Addresses))
+           .UniqueOnRule<PhoneNumber>(phone => phone.Type)
+           .Validate(entity.Addresses, nameof(entity.PhoneNumbers))
+           .UniqueOnRule<EmailAddress>(email => email.Address)
+           .Validate(entity.Addresses, nameof(entity.EmailAddresses))
+           .GetResult();
     }
 }

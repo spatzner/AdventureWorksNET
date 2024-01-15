@@ -14,9 +14,7 @@ namespace AdventureWorks.SqlRepository.Validators
     {
         public override ValidationResult Validate(EmailAddress entity)
         {
-            ValidationBuilder.MaxLengthRule(50).Validate(nameof(entity.Address), entity.Address);
-
-            return ValidationBuilder.GetResult();
+            return ValidationBuilder.MaxLengthRule(50).Validate(entity.Address, nameof(entity.Address)).GetResult();
         }
     }
 }

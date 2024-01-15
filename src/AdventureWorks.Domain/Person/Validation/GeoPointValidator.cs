@@ -8,9 +8,11 @@ public class GeoPointValidator(IValidationBuilder validationBuilder) : Validator
 {
     public override ValidationResult Validate(GeoPoint entity)
     {
-        ValidationBuilder.RangeRule(-90, 90).Validate(nameof(entity.Latitude), entity.Latitude);
-        ValidationBuilder.RangeRule(-180, 180).Validate(nameof(entity.Longitude), entity.Longitude);
-
-        return ValidationBuilder.GetResult();
+        return ValidationBuilder
+           .RangeRule(-90, 90)
+           .Validate(entity.Latitude, nameof(entity.Latitude))
+           .RangeRule(-180, 180)
+           .Validate(entity.Longitude, nameof(entity.Longitude))
+           .GetResult();
     }
 }
