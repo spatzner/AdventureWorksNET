@@ -1,25 +1,24 @@
-﻿namespace AdventureWorks.Common
+﻿namespace AdventureWorks.Common;
+
+public static class TypeExtensions
 {
-    public static class TypeExtensions
+    public static bool IsIntegralValueType(this object value)
     {
-        public static bool IsIntegralValueType(this object value)
+        switch (value)
         {
-            switch (value)
-            {
-                case sbyte:
-                case byte:
-                case short:
-                case ushort:
-                case int:
-                case uint:
-                case long:
-                case ulong:
-                case nint:
-                case nuint:
-                    return true;
-                default:
-                    return false;
-            }
+            case sbyte:
+            case byte:
+            case short:
+            case ushort:
+            case int:
+            case uint:
+            case long:
+            case ulong:
+            case nint:
+            case nuint:
+                return true;
+            default:
+                return false;
         }
     }
 }

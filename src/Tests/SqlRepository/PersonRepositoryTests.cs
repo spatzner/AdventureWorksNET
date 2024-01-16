@@ -6,11 +6,9 @@ namespace Tests.SqlRepository.SqlRepository;
 
 public class PersonRepositoryTests
 {
-
     [TestClass]
     public class GetPersonTests
     {
-
         private static IPersonRepository? _sut;
         private static PersonDetail? _testPerson;
         private static Exception? _exception;
@@ -132,7 +130,7 @@ public class PersonRepositoryTests
         [ExpectedException(typeof(ArgumentException))]
         public async Task SearchPerson_WhenNoCriteria_Throws()
         {
-            if(_sut == null)
+            if (_sut == null)
                 Assert.Inconclusive();
 
             _ = await _sut.SearchPersons(new PersonSearch(), 1);
@@ -147,12 +145,9 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            var criteria = new PersonSearch
-            {
-                EmailAddress = "stephen0@adventure-works.com"
-            };
+            PersonSearch criteria = new() { EmailAddress = "stephen0@adventure-works.com" };
 
-            var results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -165,12 +160,9 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            var criteria = new PersonSearch
-            {
-                FirstName = "Stephen"
-            };
+            PersonSearch criteria = new() { FirstName = "Stephen" };
 
-            var results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -183,12 +175,9 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            var criteria = new PersonSearch
-            {
-                MiddleName = "E"
-            };
+            PersonSearch criteria = new() { MiddleName = "E" };
 
-            var results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -201,12 +190,9 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            var criteria = new PersonSearch
-            {
-                LastName = "Carson"
-            };
+            PersonSearch criteria = new() { LastName = "Carson" };
 
-            var results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -219,12 +205,9 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            var criteria = new PersonSearch
-            { 
-                PersonType = "SP"
-            };
+            PersonSearch criteria = new() { PersonType = "SP" };
 
-            var results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -237,12 +220,9 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            var criteria = new PersonSearch
-            { 
-                PhoneNumber = "2385550197"
-            };
+            PersonSearch criteria = new() { PhoneNumber = "2385550197" };
 
-            var results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -255,19 +235,14 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            var criteria = new PersonSearch
-            {
-                FirstName = "Stephen"
-            };
+            PersonSearch criteria = new() { FirstName = "Stephen" };
 
-            var results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
 
-            if(results.Results == null || results.Results.Count == 0)
+            if (results.Results == null || results.Results.Count == 0)
                 Assert.Inconclusive();
 
             Assert.IsTrue(results.Total > 0);
         }
     }
 }
-
-

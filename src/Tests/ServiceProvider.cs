@@ -1,42 +1,37 @@
 ﻿using AdventureWorks.Application;
-using AdventureWorks.Domain;
 using AdventureWorks.SqlRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Tests.SqlRepository
+namespace Tests.SqlRepository;
+
+internal class ServiceProvider
 {
-    internal class ServiceProvider
+    private static IServiceProvider? _instance;
+
+    public static T GetService<T>()
     {
-        private static IServiceProvider? _instance;
+        return _instance!.GetService<T>() ?? throw new ArgumentException($"{typeof(T)} is not configured");
+    }
 
-        public static T GetService<T>()
-        {
-            return _instance!.GetService<T>() ?? throw new ArgumentException($"{typeof(T)} is not configured");
-        }
+    public static void InitializeProvider()
+    {
+        if (_instance != null)
+            throw new InvalidOperationException("Provider already initialized");
 
+        IConfigurationRoot config = new ConfigurationBuilder()
+           .AddJsonFile("appsettings.json")
+           .AddEnvironmentVariables()
+           .Build();
+        ConnectionStrings connectionStrings = new();
 
-        public static void InitializeProvider()
-        {
-            if (_instance != null)
-            {
-                throw new InvalidOperationException("Provider already initialized");
-            }
+        config.GetSection("ConnectionStrings").Bind(connectionStrings);
 
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddEnvironmentVariables()
-                .Build();
-            ConnectionStrings connectionStrings = new();
+        ServiceCollection services = new();
 
-            config.GetSection("ConnectionStrings").Bind(connectionStrings);
+        services.AddRepositoryServices(connectionStrings);
+        services.AddApplicationServices();
 
-            var services = new ServiceCollection();
-
-            services.AddRepositoryServices(connectionStrings);
-            services.AddApplicationServices();
-
-            _instance = services.BuildServiceProvider();
-        }
+        _instance = services.BuildServiceProvider();
     }
 }

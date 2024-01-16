@@ -1,11 +1,8 @@
 ﻿using AdventureWorks.Common.Validation;
-using AdventureWorks.Domain.Person.DTOs;
-using AdventureWorks.Domain.Person.Entities;
 
-namespace AdventureWorks.Application
+namespace AdventureWorks.Application;
+
+public interface IValidationService
 {
-    public interface IValidationService
-    {
-        ValidationResult Validate<T>(T obj) where T : IValidatable;
-    }
+    ValidationResult Validate<T>(T obj) where T : IValidatable;
 }

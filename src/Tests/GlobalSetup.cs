@@ -1,16 +1,11 @@
-﻿namespace Tests.SqlRepository
+﻿namespace Tests.SqlRepository;
+
+[TestClass]
+public class GlobalSetup
 {
-    [TestClass]
-    public class GlobalSetup
+    [AssemblyInitialize]
+    public static void Initialize(TestContext testContext)
     {
-        [AssemblyInitialize]
-        public static void Initialize(TestContext testContext)
-        {
-            ServiceProvider.InitializeProvider();
-
-
-
-
-        }
+        ServiceProvider.InitializeProvider();
     }
 }

@@ -1,5 +1,3 @@
-global using Microsoft.VisualStudio.TestTools.UnitTesting;
-// Global using directives
 global using System;
 global using System.Collections.Generic;
 global using System.Linq;

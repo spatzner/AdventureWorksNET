@@ -2,38 +2,35 @@
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
-using AdventureWorks.Domain.Person.Validation;
 
-namespace AdventureWorks.Application
+namespace AdventureWorks.Application;
+
+public class PersonService(
+    IPersonRepository repository,
+    IValidator<PersonDetail> personDetailValidator,
+    IValidator<PersonSearch> personSearchValidator) : IPersonService
 {
-    public class PersonService(
-            IPersonRepository repository,
-            IValidator<PersonDetail> personDetailValidator,
-            IValidator<PersonSearch> personSearchValidator)
-        : IPersonService
+    public async Task<SearchResult<Person>> Search(PersonSearch criteria)
     {
-        public async Task<SearchResult<Person>> Search(PersonSearch criteria)
-        {
-            var validationResult = personSearchValidator.Validate(criteria);
+        ValidationResult validationResult = personSearchValidator.Validate(criteria);
 
-            if (!validationResult.IsValidRequest)
-                return new SearchResult<Person>(validationResult);
+        if (!validationResult.IsValidRequest)
+            return new SearchResult<Person>(validationResult);
 
-            return await repository.SearchPersons(criteria, 100);
-        }
+        return await repository.SearchPersons(criteria, 100);
+    }
 
-        public async Task<QueryResult<PersonDetail>> Get(int id)
-        {
-            return await repository.GetPerson(id);
-        }
+    public async Task<QueryResult<PersonDetail>> Get(int id)
+    {
+        return await repository.GetPerson(id);
+    }
 
-        public async Task<OperationResult> Add(PersonDetail person)
-        {
-            var validationResult = personDetailValidator.Validate(person);
-            if (!validationResult.IsValidRequest)
-                return new OperationResult(validationResult);
+    public async Task<OperationResult> Add(PersonDetail person)
+    {
+        ValidationResult validationResult = personDetailValidator.Validate(person);
+        if (!validationResult.IsValidRequest)
+            return new OperationResult(validationResult);
 
-            return await repository.AddPerson(person);
-        }
+        return await repository.AddPerson(person);
     }
 }

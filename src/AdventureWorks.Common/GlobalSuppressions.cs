@@ -5,4 +5,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "Easier to read", Scope = "member", Target = "~M:AdventureWorks.Common.TypeExtensions.IsIntegralValueType(System.Object)~System.Boolean")]
+[assembly:
+    SuppressMessage("Style",
+        "IDE0066:Convert switch statement to expression",
+        Justification = "Easier to read",
+        Scope = "member",
+        Target = "~M:AdventureWorks.Common.TypeExtensions.IsIntegralValueType(System.Object)~System.Boolean")]

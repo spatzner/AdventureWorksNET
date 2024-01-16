@@ -1,9 +1,8 @@
 ﻿using System.Data.SqlClient;
 
-namespace AdventureWorks.SqlRepository
+namespace AdventureWorks.SqlRepository;
+
+public interface IConnectionProvider
 {
-    public interface IConnectionProvider
-    {
-        SqlConnection CreateAdventureWorksConnection();
-    }
+    SqlConnection CreateAdventureWorksConnection();
 }

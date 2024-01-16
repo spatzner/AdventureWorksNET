@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Common.Validation;
-using AdventureWorks.Domain.Person.DTOs;
+﻿using AdventureWorks.Common.Validation;
 using AdventureWorks.Domain.Person.Entities;
 using ValidationResult = AdventureWorks.Common.Validation.ValidationResult;
 
-namespace AdventureWorks.SqlRepository.Validators
+namespace AdventureWorks.SqlRepository.Validators;
+
+public class EmailAddressValidator(IValidationBuilder validationBuilder)
+    : Domain.Person.Validation.EmailAddressValidator(validationBuilder)
 {
-    public class EmailAddressValidator(IValidationBuilder validationBuilder) : Domain.Person.Validation.EmailAddressValidator(validationBuilder)
+    public override ValidationResult Validate(EmailAddress entity)
     {
-        public override ValidationResult Validate(EmailAddress entity)
-        {
-            return ValidationBuilder.MaxLengthRule(50).Validate(entity.Address, nameof(entity.Address)).GetResult();
-        }
+        return ValidationBuilder.MaxLengthRule(50).Validate(entity.Address, nameof(entity.Address)).GetResult();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AdventureWorks.Common.Validation;
 using Tests.Shared;
 
-namespace Tests.Domain.Validation;
+namespace Tests.Common.Validation;
 
 [TestClass]
 public class UniqueOnRuleTests
@@ -13,7 +13,7 @@ public class UniqueOnRuleTests
     [ExpectedException(typeof(ArgumentException))]
     public void UniqueRuleCtor_WhenBodyTypeNotMemberOrNewExpression_Throws()
     {
-        var sut = new UniqueOnRule<string>(s => s + s);
+        UniqueOnRule<string> sut = new(s => s + s);
     }
 
     [TestMethod]
@@ -21,7 +21,7 @@ public class UniqueOnRuleTests
     [ExpectedException(typeof(ArgumentException))]
     public void UniqueRuleCtor_WhenNoMembersProvided_Throws()
     {
-        var sut = new UniqueOnRule<string>(s => new { });
+        UniqueOnRule<string> sut = new(s => new { });
     }
 
     [TestMethod]
@@ -30,9 +30,9 @@ public class UniqueOnRuleTests
     {
         object? inputValue = null;
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsTrue(isValid);
     }
@@ -44,9 +44,9 @@ public class UniqueOnRuleTests
     {
         object? inputValue = 3;
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsFalse(isValid);
     }
@@ -58,9 +58,9 @@ public class UniqueOnRuleTests
     {
         object? inputValue = new List<int>();
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
     }
 
     [TestMethod]
@@ -69,9 +69,9 @@ public class UniqueOnRuleTests
     {
         object? inputValue = new List<TestClass> { new() { Value1 = "A" }, new() { Value1 = "A" } };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsFalse(isValid);
     }
@@ -85,9 +85,9 @@ public class UniqueOnRuleTests
             new() { Value1 = "A", Value2 = "B" }, new() { Value1 = "A", Value2 = "B" }
         };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1, tc.Value2 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1, tc.Value2 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsFalse(isValid);
     }
@@ -101,9 +101,9 @@ public class UniqueOnRuleTests
             new() { Value1 = "A", Value2 = "B", Value3 = "1" }, new() { Value1 = "A", Value2 = "B", Value3 = "2" }
         };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1, tc.Value2 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1, tc.Value2 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsFalse(isValid);
     }
@@ -119,9 +119,9 @@ public class UniqueOnRuleTests
             new() { Value1 = "A", Value2 = "B" }
         };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1, tc.Value2 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1, tc.Value2 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsFalse(isValid);
     }
@@ -137,9 +137,9 @@ public class UniqueOnRuleTests
             new() { Value1 = "Y", Value2 = "Z" }
         };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1, tc.Value2 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1, tc.Value2 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsTrue(isValid);
     }
@@ -150,9 +150,9 @@ public class UniqueOnRuleTests
     {
         object? inputValue = new List<TestClass> { new() { Value1 = "A" }, new() { Value1 = "1" } };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsTrue(isValid);
         Assert.IsNull(result);
@@ -164,9 +164,9 @@ public class UniqueOnRuleTests
     {
         object? inputValue = new List<TestClass> { new() { Value1 = "A" }, new() { Value1 = "1" } };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsTrue(isValid);
         Assert.IsNull(result);
@@ -181,9 +181,9 @@ public class UniqueOnRuleTests
             new() { Value1 = "A", Value2 = "B" }, new() { Value1 = "A", Value2 = "B" }
         };
 
-        var sut = new UniqueOnRule<TestClass>(tc => new { tc.Value1, tc.Value2 });
+        UniqueOnRule<TestClass> sut = new(tc => new { tc.Value1, tc.Value2 });
 
-        var isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
+        bool isValid = sut.IsValid(PropName, inputValue, out ValidationError? result);
 
         Assert.IsFalse(isValid);
         Assert.IsNotNull(result);

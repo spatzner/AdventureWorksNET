@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Tests.Shared;
 
-namespace Tests.Shared
+public static class Constants
 {
-    public static class Constants
-    {
-        public const string Integration = "Integration";
-        public const string Unit = "Unit";
-    }
+    public const string Integration = "Integration";
+    public const string Unit = "Unit";
 }

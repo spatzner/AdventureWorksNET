@@ -1,31 +1,20 @@
-﻿using AdventureWorks.Domain.Person.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Domain.Person.Entities;
+﻿using AdventureWorks.Domain.Person.Entities;
+using AdventureWorks.Domain.Person.Repositories;
 using Dapper;
 
-namespace AdventureWorks.SqlRepository
+namespace AdventureWorks.SqlRepository;
+
+public class EmailRepository(IConnectionProvider connectionProvider) : Repository(connectionProvider), IEmailRepository
 {
-    public class EmailRepository(IConnectionProvider connectionProvider)
-        : Repository(connectionProvider), IEmailRepository
+    public async Task Add(int personId, EmailAddress emailAddress)
     {
-        public async Task Add(int personId, EmailAddress emailAddress)
-        {
-            string sql = """
-                         INSERT INTO Person.EmailAddress (BusinessEntityId, EmailAddress)
-                         VALUES (@PersonId, @EmailAddress)
-                         """;
+        string sql = """
+            INSERT INTO Person.EmailAddress (BusinessEntityId, EmailAddress)
+            VALUES (@PersonId, @EmailAddress)
+            """;
 
-            var parameters = new
-            {
-                PersonId = personId,
-                EmailAddress = emailAddress.Address
-            };
+        var parameters = new { PersonId = personId, EmailAddress = emailAddress.Address };
 
-            await Connection.ExecuteAsync(sql, parameters);
-        }
+        await Connection.ExecuteAsync(sql, parameters);
     }
 }

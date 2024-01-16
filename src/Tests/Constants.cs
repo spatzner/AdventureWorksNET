@@ -1,8 +1,7 @@
-﻿namespace Tests.SqlRepository
+﻿namespace Tests.SqlRepository;
+
+internal static class Constants
 {
-    internal static class Constants
-    {
-        public const string Integration = "Integration";
-        public const string Unit = "Unit";
-    }
+    public const string Integration = "Integration";
+    public const string Unit = "Unit";
 }

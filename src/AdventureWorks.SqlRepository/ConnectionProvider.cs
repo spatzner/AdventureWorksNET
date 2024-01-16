@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Domain;
+﻿using System.Data.SqlClient;
 
-namespace AdventureWorks.SqlRepository
+namespace AdventureWorks.SqlRepository;
+
+internal class ConnectionProvider(ConnectionStrings connectionStrings) : IConnectionProvider
 {
-    internal class ConnectionProvider(ConnectionStrings connectionStrings) : IConnectionProvider
+    public SqlConnection CreateAdventureWorksConnection()
     {
-        public SqlConnection CreateAdventureWorksConnection()
-        {
-            return new SqlConnection(connectionStrings.AdventureWorks);
-        }
+        return new SqlConnection(connectionStrings.AdventureWorks);
     }
 }

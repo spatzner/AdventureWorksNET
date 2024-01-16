@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace AdventureWorks.Common.Validation;
 
 internal class RangeRule : ValidationRule
 {
-    private readonly decimal _min;
     private readonly decimal _max;
-    private readonly bool _minInclusive;
     private readonly bool _maxInclusive;
+    private readonly decimal _min;
+    private readonly bool _minInclusive;
 
     internal RangeRule(decimal min, decimal max, bool minInclusive = true, bool maxInclusive = true)
     {

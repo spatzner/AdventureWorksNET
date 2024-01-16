@@ -5,5 +5,16 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.GlobalSetup.Initialize(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)")]
-[assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.PersonRepositoryTests.GetPersonTests.ClassInit(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)~System.Threading.Tasks.Task")]
+[assembly:
+    SuppressMessage("Style",
+        "IDE0060:Remove unused parameter",
+        Justification = "<Pending>",
+        Scope = "member",
+        Target = "~M:Tests.GlobalSetup.Initialize(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)")]
+[assembly:
+    SuppressMessage("Style",
+        "IDE0060:Remove unused parameter",
+        Justification = "<Pending>",
+        Scope = "member",
+        Target =
+            "~M:Tests.PersonRepositoryTests.GetPersonTests.ClassInit(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)~System.Threading.Tasks.Task")]
