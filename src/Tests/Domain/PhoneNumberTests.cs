@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using AdventureWorks.Domain.Person.Entities;
-using AdventureWorks.Domain.Validation;
 
 namespace Tests.SqlRepository.Domain
 {

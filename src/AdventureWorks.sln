@@ -18,6 +18,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Application", "Tests.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureWorks.Common", "AdventureWorks.Common\AdventureWorks.Common.csproj", "{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "Tests.Common\Tests.Common.csproj", "{40ACBA53-2122-458D-9098-303942CA2706}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Shared", "Tests.Shared\Tests.Shared.csproj", "{48394A4B-B803-44FB-BF82-FAF83143D878}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,14 @@ Global
 		{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DBCC82D-7145-4439-ABFD-BDF13DD8F837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40ACBA53-2122-458D-9098-303942CA2706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40ACBA53-2122-458D-9098-303942CA2706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40ACBA53-2122-458D-9098-303942CA2706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40ACBA53-2122-458D-9098-303942CA2706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48394A4B-B803-44FB-BF82-FAF83143D878}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48394A4B-B803-44FB-BF82-FAF83143D878}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48394A4B-B803-44FB-BF82-FAF83143D878}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48394A4B-B803-44FB-BF82-FAF83143D878}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

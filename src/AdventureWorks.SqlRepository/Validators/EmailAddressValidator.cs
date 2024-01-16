@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AdventureWorks.Common.Validation;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
-using AdventureWorks.Domain.Validation;
-using ValidationResult = AdventureWorks.Domain.Person.DTOs.ValidationResult;
+using ValidationResult = AdventureWorks.Common.Validation.ValidationResult;
 
 namespace AdventureWorks.SqlRepository.Validators
 {

@@ -1,4 +1,6 @@
-﻿namespace AdventureWorks.Domain.Person.DTOs;
+﻿using AdventureWorks.Common.Validation;
+
+namespace AdventureWorks.Domain.Person.DTOs;
 
 public class SearchResult<T> : OperationResult
 {

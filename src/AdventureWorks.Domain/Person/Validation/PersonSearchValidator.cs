@@ -1,5 +1,5 @@
-﻿using AdventureWorks.Domain.Person.DTOs;
-using AdventureWorks.Domain.Validation;
+﻿using AdventureWorks.Common.Validation;
+using AdventureWorks.Domain.Person.DTOs;
 
 namespace AdventureWorks.Domain.Person.Validation;
 

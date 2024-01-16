@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AdventureWorks.Common.Validation;
 using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
 using AdventureWorks.Domain.Person.Validation;
-using AdventureWorks.Domain.Validation;
 using AdventureWorks.SqlRepository;
 using Microsoft.Extensions.DependencyInjection;
 

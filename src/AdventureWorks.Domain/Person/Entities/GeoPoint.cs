@@ -1,4 +1,6 @@
-﻿namespace AdventureWorks.Domain.Person.Entities;
+﻿using AdventureWorks.Common.Validation;
+
+namespace AdventureWorks.Domain.Person.Entities;
 
 public class GeoPoint(double latitude, double longitude) : IEquatable<GeoPoint>, IValidatable
 {

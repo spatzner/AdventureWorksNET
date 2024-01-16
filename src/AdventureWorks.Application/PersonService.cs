@@ -1,8 +1,8 @@
-﻿using AdventureWorks.Domain.Person.DTOs;
+﻿using AdventureWorks.Common.Validation;
+using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
 using AdventureWorks.Domain.Person.Validation;
-using AdventureWorks.Domain.Validation;
 
 namespace AdventureWorks.Application
 {
