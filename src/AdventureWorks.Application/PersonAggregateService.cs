@@ -1,39 +1,41 @@
-﻿using System.Transactions;
-using AdventureWorks.Common.Validation;
-using AdventureWorks.Domain.Person.DTOs;
+﻿using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
-using AdventureWorks.Domain.Person.Repositories;
+using AdventureWorks.SqlRepository;
+using ValidationResult = AdventureWorks.Common.Validation.ValidationResult;
 
 namespace AdventureWorks.Application;
 
-public class PersonAggregateService(
-    IPersonRepository personRepository,
-    IAddressRepository addressRepository,
-    IPhoneRepository phoneRepository,
-    IEmailRepository emailRepository,
-    IValidationService validationService)
+public class PersonAggregateService(IUnitOfWorkProvider unitOfWorkProvider, IValidationService validationService)
 {
-    public async Task<SearchResult<Person>> Search(PersonSearch criteria)
+    public async Task<SearchResult<Person>> SearchAsync(PersonSearch criteria)
     {
         ValidationResult validationResult = validationService.Validate(criteria);
         if (!validationResult.IsValidRequest)
             return new SearchResult<Person>(validationResult);
 
-        return await personRepository.SearchPersons(criteria, 100);
+        await using IUnitOfWork unitOfWork = unitOfWorkProvider.Create();
+
+        return await unitOfWork.PersonRepository.SearchPersonsAsync(criteria, 100);
     }
 
-    public async Task<QueryResult<PersonDetail>> Get(int id)
+    public async Task<QueryResult<PersonDetail>> GetAsync(int id)
     {
-        return await personRepository.GetPerson(id);
+        await using IUnitOfWork unitOfWork = unitOfWorkProvider.Create();
+
+        return await unitOfWork.PersonRepository.GetPersonAsync(id);
     }
 
-    public async Task<AddResult> Add(PersonDetail person)
+    public async Task<AddResult> AddAsync(PersonDetail person)
     {
-        validationService.Validate(person);
+        ValidationResult validationResult = validationService.Validate(person);
+        if (!validationResult.IsValidRequest)
+            return new AddResult(validationResult);
 
-        using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
+        await using IUnitOfWork unitOfWork = unitOfWorkProvider.Create();
 
-        AddResult personResult = await personRepository.AddPerson(person);
+        await unitOfWork.BeginTransactionAsync();
+
+        AddResult personResult = await unitOfWork.PersonRepository.AddAsync(person);
 
         if (!personResult.Success)
             return personResult;
@@ -41,15 +43,15 @@ public class PersonAggregateService(
         int id = personResult.Id;
 
         foreach (Address address in person.Addresses)
-            await addressRepository.Add(id, address);
+            await unitOfWork.AddressRepository.AddAsync(id, address);
 
         foreach (PhoneNumber phoneNumber in person.PhoneNumbers)
-            await phoneRepository.Add(id, phoneNumber);
+            await unitOfWork.PhoneRepository.AddAsync(id, phoneNumber);
 
         foreach (EmailAddress email in person.EmailAddresses)
-            await emailRepository.Add(id, email);
+            await unitOfWork.EmailRepository.AddAsync(id, email);
 
-        scope.Complete();
+        await unitOfWork.SaveAsync();
 
         return personResult;
     }

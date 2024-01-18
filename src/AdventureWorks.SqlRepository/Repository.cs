@@ -1,20 +1,18 @@
-﻿using System.Data.SqlClient;
+﻿namespace AdventureWorks.SqlRepository;
 
-namespace AdventureWorks.SqlRepository;
-
-public abstract class Repository(IConnectionProvider connectionProvider) : IDisposable, IAsyncDisposable
+internal abstract class Repository(IDatabaseContext context) : IDisposable, IAsyncDisposable
 {
-    protected readonly SqlConnection Connection = connectionProvider.CreateAdventureWorksConnection();
+    protected readonly IDatabaseContext Context = context;
 
     public async ValueTask DisposeAsync()
     {
-        await Connection.DisposeAsync();
+        await Context.DisposeAsync();
         GC.SuppressFinalize(this);
     }
 
     public void Dispose()
     {
-        Connection.Dispose();
+        Context.Dispose();
         GC.SuppressFinalize(this);
     }
 }

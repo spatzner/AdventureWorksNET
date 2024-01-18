@@ -4,5 +4,5 @@ namespace AdventureWorks.Domain.Person.Repositories;
 
 public interface IEmailRepository
 {
-    Task Add(int personId, EmailAddress emailAddress);
+    Task AddAsync(int personId, EmailAddress emailAddress);
 }

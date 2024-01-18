@@ -20,7 +20,7 @@ public class PersonRepositoryTests
 
             try
             {
-                _testPerson = (await _sut.GetPerson(285)).Result;
+                _testPerson = (await _sut.GetPersonAsync(285)).Result;
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ public class PersonRepositoryTests
             if (_sut == null)
                 Assert.Inconclusive();
 
-            _ = await _sut.SearchPersons(new PersonSearch(), 1);
+            _ = await _sut.SearchPersonsAsync(new PersonSearch(), 1);
 
             Assert.Fail();
         }
@@ -147,7 +147,7 @@ public class PersonRepositoryTests
 
             PersonSearch criteria = new() { EmailAddress = "stephen0@adventure-works.com" };
 
-            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersonsAsync(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -162,7 +162,7 @@ public class PersonRepositoryTests
 
             PersonSearch criteria = new() { FirstName = "Stephen" };
 
-            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersonsAsync(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -177,7 +177,7 @@ public class PersonRepositoryTests
 
             PersonSearch criteria = new() { MiddleName = "E" };
 
-            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersonsAsync(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -192,7 +192,7 @@ public class PersonRepositoryTests
 
             PersonSearch criteria = new() { LastName = "Carson" };
 
-            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersonsAsync(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -207,7 +207,7 @@ public class PersonRepositoryTests
 
             PersonSearch criteria = new() { PersonType = "SP" };
 
-            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersonsAsync(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -222,7 +222,7 @@ public class PersonRepositoryTests
 
             PersonSearch criteria = new() { PhoneNumber = "2385550197" };
 
-            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersonsAsync(criteria, 1);
 
             Assert.IsNotNull(results.Results);
             Assert.IsTrue(results.Results.Count != 0);
@@ -237,7 +237,7 @@ public class PersonRepositoryTests
 
             PersonSearch criteria = new() { FirstName = "Stephen" };
 
-            SearchResult<Person> results = await _sut.SearchPersons(criteria, 1);
+            SearchResult<Person> results = await _sut.SearchPersonsAsync(criteria, 1);
 
             if (results.Results == null || results.Results.Count == 0)
                 Assert.Inconclusive();

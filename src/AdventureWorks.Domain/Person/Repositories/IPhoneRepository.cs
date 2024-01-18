@@ -4,5 +4,5 @@ namespace AdventureWorks.Domain.Person.Repositories;
 
 public interface IPhoneRepository
 {
-    Task Add(int personId, PhoneNumber phoneNumber);
+    Task AddAsync(int personId, PhoneNumber phoneNumber);
 }

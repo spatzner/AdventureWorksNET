@@ -13,4 +13,6 @@ public class OperationResult : ValidationResult
 public class AddResult : OperationResult
 {
     public int Id { get; set; }
+    public AddResult() { }
+    public AddResult(ValidationResult validationResult) : base(validationResult) { }
 }

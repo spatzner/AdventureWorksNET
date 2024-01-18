@@ -1,12 +1,11 @@
 ﻿using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
-using Dapper;
 
 namespace AdventureWorks.SqlRepository;
 
-public class PhoneRepository(IConnectionProvider connectionProvider) : Repository(connectionProvider), IPhoneRepository
+internal class PhoneRepository(IDatabaseContext context) : Repository(context), IPhoneRepository
 {
-    public async Task Add(int personId, PhoneNumber phoneNumber)
+    public async Task AddAsync(int personId, PhoneNumber phoneNumber)
     {
         string sql = """
             INSERT INTO Person.PersonPhone (BusinessEntityId, PhoneNumber, PhoneNumberTypeId)
@@ -17,6 +16,6 @@ public class PhoneRepository(IConnectionProvider connectionProvider) : Repositor
 
         var parameters = new { PersonId = personId, PhoneNumber = phoneNumber.Number, phoneNumber.Type };
 
-        await Connection.ExecuteAsync(sql, parameters);
+        await Context.ExecuteAsync(sql, parameters);
     }
 }

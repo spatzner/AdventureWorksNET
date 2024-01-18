@@ -10,27 +10,27 @@ public class PersonService(
     IValidator<PersonDetail> personDetailValidator,
     IValidator<PersonSearch> personSearchValidator) : IPersonService
 {
-    public async Task<SearchResult<Person>> Search(PersonSearch criteria)
+    public async Task<SearchResult<Person>> SearchAsync(PersonSearch criteria)
     {
         ValidationResult validationResult = personSearchValidator.Validate(criteria);
 
         if (!validationResult.IsValidRequest)
             return new SearchResult<Person>(validationResult);
 
-        return await repository.SearchPersons(criteria, 100);
+        return await repository.SearchPersonsAsync(criteria, 100);
     }
 
-    public async Task<QueryResult<PersonDetail>> Get(int id)
+    public async Task<QueryResult<PersonDetail>> GetAsync(int id)
     {
-        return await repository.GetPerson(id);
+        return await repository.GetPersonAsync(id);
     }
 
-    public async Task<OperationResult> Add(PersonDetail person)
+    public async Task<OperationResult> AddAsync(PersonDetail person)
     {
         ValidationResult validationResult = personDetailValidator.Validate(person);
         if (!validationResult.IsValidRequest)
             return new OperationResult(validationResult);
 
-        return await repository.AddPerson(person);
+        return await repository.AddAsync(person);
     }
 }

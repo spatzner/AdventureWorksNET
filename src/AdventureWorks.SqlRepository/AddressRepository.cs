@@ -1,13 +1,11 @@
 ﻿using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
-using Dapper;
 
 namespace AdventureWorks.SqlRepository;
 
-public class AddressRepository(IConnectionProvider connectionProvider)
-    : Repository(connectionProvider), IAddressRepository
+internal class AddressRepository(IDatabaseContext context) : Repository(context), IAddressRepository
 {
-    public async Task Add(int personId, Address address)
+    public async Task AddAsync(int personId, Address address)
     {
         string sql = """
             DECLARE @AddressIdTable table(AddressId int);
@@ -40,6 +38,6 @@ public class AddressRepository(IConnectionProvider connectionProvider)
             address.Type
         };
 
-        await Connection.ExecuteAsync(sql, parameters);
+        await Context.ExecuteAsync(sql, parameters);
     }
 }

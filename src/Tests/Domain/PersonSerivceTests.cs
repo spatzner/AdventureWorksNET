@@ -48,7 +48,7 @@ public class PersonServiceTests
 
         using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
 
-        OperationResult result = await sut.AddPerson(person);
+        OperationResult result = await sut.AddAsync(person);
 
         Assert.IsTrue(result.Success);
     }

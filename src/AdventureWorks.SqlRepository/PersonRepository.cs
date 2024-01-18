@@ -8,10 +8,9 @@ using PhoneNumber = AdventureWorks.Domain.Person.Entities.PhoneNumber;
 
 namespace AdventureWorks.SqlRepository;
 
-public class PersonRepository(IConnectionProvider connectionProvider)
-    : Repository(connectionProvider), IPersonRepository
+internal class PersonRepository(IDatabaseContext context) : Repository(context), IPersonRepository
 {
-    public async Task<QueryResult<PersonDetail>> GetPerson(int id)
+    public async Task<QueryResult<PersonDetail>> GetPersonAsync(int id)
     {
         string sql = """
               SELECT BusinessEntityId, PersonType, NameStyle, Title, FirstName, MiddleName, LastName, Suffix,
@@ -38,7 +37,7 @@ public class PersonRepository(IConnectionProvider connectionProvider)
                 WHERE BusinessEntityID = @Id
             """;
 
-        await using SqlMapper.GridReader queries = await Connection.QueryMultipleAsync(sql, new { Id = id });
+        await using SqlMapper.GridReader queries = await Context.QueryMultipleAsync(sql, new { Id = id });
 
         DTO.Person? sqlPerson = await queries.ReadFirstOrDefaultAsync<DTO.Person>();
 
@@ -90,7 +89,7 @@ public class PersonRepository(IConnectionProvider connectionProvider)
         return new QueryResult<PersonDetail>(personDetail) { Success = true };
     }
 
-    public async Task<SearchResult<Person>> SearchPersons(PersonSearch criteria, int maxResults)
+    public async Task<SearchResult<Person>> SearchPersonsAsync(PersonSearch criteria, int maxResults)
     {
         _ = PhoneNumber.TryParse(criteria.PhoneNumber, out string phoneNumber);
 
@@ -139,7 +138,7 @@ public class PersonRepository(IConnectionProvider connectionProvider)
             SELECT COUNT(*) FROM #PersonResults
             """;
 
-        await using SqlMapper.GridReader queries = await Connection.QueryMultipleAsync(sql, parameters);
+        await using SqlMapper.GridReader queries = await Context.QueryMultipleAsync(sql, parameters);
 
         List<Person> persons = (await queries.ReadAsync<DTO.Person>()).Select(p => p.ToEntity()).ToList();
 
@@ -150,7 +149,7 @@ public class PersonRepository(IConnectionProvider connectionProvider)
         return result;
     }
 
-    public async Task<AddResult> AddPerson(Person person)
+    public async Task<AddResult> AddAsync(Person person)
     {
         if (person.Id != null)
             throw new ArgumentException("Cannot insert person with existing Id");
@@ -184,12 +183,12 @@ public class PersonRepository(IConnectionProvider connectionProvider)
             SELECT @BusinessEntityId;
             """;
 
-        int id = await Connection.ExecuteScalarAsync<int>(sql, parameters);
+        int id = await Context.ExecuteScalarAsync<int>(sql, parameters);
 
         return new AddResult { Success = true, Id = id };
     }
 
-    public async Task<int> UpdatePerson(Person person)
+    public async Task<int> UpdateAsync(Person person)
     {
         if (person.Id != null)
             throw new ArgumentException("Cannot update person without existing Id");
@@ -212,6 +211,6 @@ public class PersonRepository(IConnectionProvider connectionProvider)
               WHERE BusinessEntityID = @BusinessEntityID
             """;
 
-        return await Connection.ExecuteAsync(sql, parameters);
+        return await Context.ExecuteAsync(sql, parameters);
     }
 }
