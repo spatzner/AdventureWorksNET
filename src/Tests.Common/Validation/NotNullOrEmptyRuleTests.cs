@@ -82,7 +82,7 @@ public class NotNullOrEmptyRuleTests
     [TestCategory(Constants.Unit)]
     public void NotNullOrEmptyRule_WhenClassHasNoPropertiesSet_IsNotValid()
     {
-        object? inputValue = new ValuesClass();
+        object? inputValue = new ReferenceClass();
 
         bool isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
@@ -93,7 +93,7 @@ public class NotNullOrEmptyRuleTests
     [TestCategory(Constants.Unit)]
     public void NotNullOrEmptyRule_WhenClassRefTypeSet_IsValid()
     {
-        object? inputValue = new ValuesClass { RefType = "test" };
+        object? inputValue = new ValidationClass { RefType = new ReferenceClass() };
 
         bool isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
@@ -104,7 +104,7 @@ public class NotNullOrEmptyRuleTests
     [TestCategory(Constants.Unit)]
     public void NotNullOrEmptyRule_WhenClassNullRefTypeSet_IsValid()
     {
-        object? inputValue = new ValuesClass { NullRefType = "test" };
+        object? inputValue = new ValidationClass { NullableRefType = new() };
 
         bool isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
@@ -113,9 +113,10 @@ public class NotNullOrEmptyRuleTests
 
     [TestMethod]
     [TestCategory(Constants.Unit)]
-    public void NotNullOrEmptyRule_WhenClassValueTypeSet_IsValid()
+    [ExpectedException(typeof(ArgumentException))]
+    public void NotNullOrEmptyRule_WhenClassHasValueType_Throws()
     {
-        object? inputValue = new ValuesClass { ValueType = 1 };
+        object? inputValue = new IllegalValidationClass { ValueType = 1 };
 
         bool isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
@@ -126,7 +127,7 @@ public class NotNullOrEmptyRuleTests
     [TestCategory(Constants.Unit)]
     public void NotNullOrEmptyRule_WhenClassNullValueTypeSet_IsValid()
     {
-        object? inputValue = new ValuesClass { NullValueType = 0 };
+        object? inputValue = new ValidationClass { NullValueType = 0 };
 
         bool isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 
@@ -164,11 +165,21 @@ public class NotNullOrEmptyRuleTests
         Assert.AreEqual(result.Requirements, string.Empty);
     }
 
-    private class ValuesClass
+    private class ValidationClass
     {
-        public string RefType { get; set; } = null!;
-        public string? NullRefType { get; set; }
-        public int ValueType { get; set; }
+        public ReferenceClass RefType { get; set; } = null!;
+        public ReferenceClass? NullableRefType { get; set; }
         public int? NullValueType { get; set; }
+    }
+
+    private class IllegalValidationClass
+    {
+        public int? NullValueType { get; set; }
+        public int ValueType { get; set; }
+    }
+
+    private class ReferenceClass
+    {
+        public string? SomeProperty { get; set; }
     }
 }

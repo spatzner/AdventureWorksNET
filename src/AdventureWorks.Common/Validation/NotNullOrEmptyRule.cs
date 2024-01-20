@@ -20,29 +20,14 @@ internal class NotNullOrEmptyRule : ValidationRule
                 isValid = ie.Any();
                 break;
             default:
-                if (value.GetType().IsValueType)
-                    throw new ArgumentException("Reference types not supported");
+                //there is no way to tell if a default value type was a validly provided value or the initialized value
+                //require nullable wrappers for value types to differentiate.
+                CheckValueNotValueType(value.GetType(), "Value types not supported. Use nullable type");
 
                 isValid = value
                    .GetType()
                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                   .Any(prop =>
-                    {
-                        object? val = prop.GetValue(value);
-                        object? def = prop.PropertyType.IsValueType
-                            ? Activator.CreateInstance(prop.PropertyType)
-                            : null;
-
-                        if (val == null && def == null)
-                            return false;
-
-                        if (val == null)
-                            return true;
-
-                        bool isMatch = val.Equals(def);
-                        return !isMatch;
-                    });
-
+                   .Any(prop => ReferenceTypeIsNotNull(value, prop));
                 break;
         }
 
@@ -59,5 +44,23 @@ internal class NotNullOrEmptyRule : ValidationRule
             ValidationType = ValidationType.IsNotEmpty,
             Requirements = string.Empty
         };
+    }
+
+    private static void CheckValueNotValueType(Type valueType, string message)
+    {
+        if (valueType.IsValueType && typeof(Nullable<>).Name != valueType.Name) 
+            throw new ArgumentException(message);
+    }
+
+    private static bool ReferenceTypeIsNotNull(object? value, PropertyInfo prop)
+    {
+        object? propValue = prop.GetValue(value);
+
+        //there is no way to tell if a default value type was a validly provided value or the initialized value
+        //require nullable wrappers for value types to differentiate.
+        CheckValueNotValueType(prop.PropertyType,
+            "Value types not supported for properties of class. Use nullable type for value type properties");
+
+        return propValue != null;
     }
 }
