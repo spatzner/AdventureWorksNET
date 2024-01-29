@@ -22,7 +22,7 @@ internal class NotNullOrEmptyRule : ValidationRule
             default:
                 //there is no way to tell if a default value type was a validly provided value or the initialized value
                 //require nullable wrappers for value types to differentiate.
-                CheckValueNotValueType(value.GetType(), "Value types not supported. Use nullable type");
+                CheckNotNullDefaultValue(value.GetType(), "Value types not supported. Use nullable type");
 
                 isValid = value
                    .GetType()
@@ -46,7 +46,7 @@ internal class NotNullOrEmptyRule : ValidationRule
         };
     }
 
-    private static void CheckValueNotValueType(Type valueType, string message)
+    private static void CheckNotNullDefaultValue(Type valueType, string message)
     {
         if (valueType.IsValueType && typeof(Nullable<>).Name != valueType.Name) 
             throw new ArgumentException(message);
@@ -58,7 +58,7 @@ internal class NotNullOrEmptyRule : ValidationRule
 
         //there is no way to tell if a default value type was a validly provided value or the initialized value
         //require nullable wrappers for value types to differentiate.
-        CheckValueNotValueType(prop.PropertyType,
+        CheckNotNullDefaultValue(prop.PropertyType,
             "Value types not supported for properties of class. Use nullable type for value type properties");
 
         return propValue != null;

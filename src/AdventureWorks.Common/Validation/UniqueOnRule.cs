@@ -10,23 +10,25 @@ internal class UniqueOnRule<T> : ValidationRule
 
     internal UniqueOnRule(Expression<Func<T, object?>> keys)
     {
-        if (keys.Body.Type == typeof(MemberExpression) || keys.Body.Type == typeof(NewExpression))
+        if (keys.Body is not MemberExpression
+         && keys.Body is not NewExpression
+         && keys.Body is not UnaryExpression { Operand: MemberExpression })
             throw new ArgumentException("Must provide a member expression", nameof(keys));
 
         List<string> members = [];
 
         switch (keys.Body)
         {
+            case UnaryExpression unary:
+                if (unary.Operand is MemberExpression expression)
+                    members.Add(expression.Member.Name);
+                break;
             case MemberExpression member:
-
                 members.Add(member.Member.Name);
                 break;
-
             case NewExpression newExpression:
-
                 if (newExpression.Members != null)
                     members.AddRange(newExpression.Members.Select(memberInfo => memberInfo.Name));
-
                 break;
         }
 

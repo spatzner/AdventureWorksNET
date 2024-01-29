@@ -37,6 +37,34 @@ public class MinValueRuleTests
 
     [TestMethod]
     [TestCategory(Constants.Unit)]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void MinValueRuleCtor_WhenValueIsNull_Throws()
+    {
+        var rule = new MinValueRule<int?>(null);
+    }
+    
+    [TestMethod]
+    [TestCategory(Constants.Unit)]
+    [ExpectedException(typeof(ArgumentException))]
+    public void MinValueRuleCtor_WhenValueIsNotDecimalOrInt_Throws()
+    {
+        var rule = new MinValueRule<string>("test");
+    }
+    
+    [TestMethod]
+    [TestCategory(Constants.Unit)]
+    [ExpectedException(typeof(ArgumentException))]
+    public void MinValueRule_IsValid_WhenValueIsNotDecimalOrInt_Throws()
+    {
+        // Arrange
+        var rule = new MinValueRule<int>(1);
+        string value = "test";
+        // Act
+        var isValid = rule.IsValid(string.Empty, value, out var result);
+    }
+
+    [TestMethod]
+    [TestCategory(Constants.Unit)]
     public void MinValueRule_WhenIntegerIsLessThanMin_IsNotValid()
     {
         int inputValue = 1;

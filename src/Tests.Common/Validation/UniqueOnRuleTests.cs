@@ -26,6 +26,13 @@ public class UniqueOnRuleTests
 
     [TestMethod]
     [TestCategory(Constants.Unit)]
+    public void UniqueOnRuleCtor_WhenValueTypeMemberExpression_IsValid()
+    {
+        UniqueOnRule<TestClass> sut = new(x => x.Value1);
+    }
+
+    [TestMethod]
+    [TestCategory(Constants.Unit)]
     public void UniqueRule_WhenNull_IsValid()
     {
         object? inputValue = null;
