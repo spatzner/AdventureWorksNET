@@ -3,19 +3,11 @@ using AdventureWorks.Domain.Person.Entities;
 
 namespace AdventureWorks.Domain.Person.Validation;
 
-public interface IAddressValidator
-{
-    ValidationResult Validate(Address? entity);
-}
-
 public class AddressValidator(IValidationBuilder validationBuilder)
     : Validator<Address>(validationBuilder), IAddressValidator
 {
-    public override ValidationResult Validate(Address? entity)
+    public override ValidationResult Validate(Address entity)
     {
-        if (entity == null)
-            return ValidationBuilder.GetResult();
-
         return ValidationBuilder
            .RequiredRule()
            .Validate(entity.Type, nameof(entity.Type))

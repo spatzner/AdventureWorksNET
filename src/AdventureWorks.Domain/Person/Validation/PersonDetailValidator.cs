@@ -7,6 +7,8 @@ public class PersonDetailValidator(IValidationBuilder validationBuilder) : Perso
 {
     public ValidationResult Validate(PersonDetail entity)
     {
+        base.Validate(entity);
+        
         return ValidationBuilder
            .RequiredRule()
            .Validate(entity.Name, nameof(entity.Name))
