@@ -2,10 +2,10 @@
 
 namespace AdventureWorks.Domain.Person.Entities;
 
-public class GeoPoint(double latitude, double longitude) : IEquatable<GeoPoint>, IValidatable
+public class GeoPoint(decimal latitude, decimal longitude) : IEquatable<GeoPoint>, IValidatable
 {
-    public double Latitude { get; } = latitude;
-    public double Longitude { get; } = longitude;
+    public decimal Latitude { get; } = latitude;
+    public decimal Longitude { get; } = longitude;
 
     public bool Equals(GeoPoint? other)
     {

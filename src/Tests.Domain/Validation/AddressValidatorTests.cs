@@ -12,7 +12,7 @@ public class AddressValidatorTests
     public void Validate_WhenCalled_ExecutesCorrectValidations()
     {
         //Arrange
-        List<string> currentRuleList = new();
+        List<string> currentRuleList = [];
         Dictionary<string, List<string>> callDictionary = new() { { "null", currentRuleList } };
 
         Address address = new();
@@ -23,7 +23,7 @@ public class AddressValidatorTests
            .Setup(x => x.RequiredRule())
            .Callback(() =>
             {
-                List<string> newList = new();
+                List<string> newList = [];
                 currentRuleList = callDictionary.TryAdd("RequiredRule()", newList)
                     ? newList
                     : callDictionary["RequiredRule()"];
@@ -72,21 +72,21 @@ public class AddressValidatorTests
         ValidationResult result = sut.Validate(address);
 
         //Assert
-        Assert.AreEqual(callDictionary.Count, 2, "Additional ValidationRules were called that should not have been");
+        Assert.AreEqual(callDictionary.Count(x => x.Key != "null"), 1, "Additional ValidationRules were called that should not have been");
 
         if (callDictionary.TryGetValue("null", out List<string>? nullList))
-            Assert.IsFalse(nullList.Any());
+            Assert.IsTrue(nullList.Count == 0, "Validate call(s) made without a validator");
 
         if (!callDictionary.TryGetValue("RequiredRule()", out List<string>? requiredList))
             Assert.Fail("RequiredRule() not called");
 
         Assert.AreEqual(requiredList.Count, 6);
-        Assert.IsTrue(requiredList.Contains("Validate(Type)"));
-        Assert.IsTrue(requiredList.Contains("Validate(Address1)"));
-        Assert.IsTrue(requiredList.Contains("Validate(City)"));
-        Assert.IsTrue(requiredList.Contains("Validate(State)"));
-        Assert.IsTrue(requiredList.Contains("Validate(Country)"));
-        Assert.IsTrue(requiredList.Contains("Validate(PostalCode)"));
+        Assert.IsTrue(requiredList.Contains("Validate(Type)"), "Type not validated on RequiredRule");
+        Assert.IsTrue(requiredList.Contains("Validate(Address1)"), "Address1 not validated for RequiredRule");
+        Assert.IsTrue(requiredList.Contains("Validate(City)"), "City not validated on RequiredRule");
+        Assert.IsTrue(requiredList.Contains("Validate(State)"), "State not validated on RequiredRule");
+        Assert.IsTrue(requiredList.Contains("Validate(Country)"), "Country not validated on RequiredRule");
+        Assert.IsTrue(requiredList.Contains("Validate(PostalCode)"), "PostalCode not validated on RequiredRule");
 
         mockValidationBuilder.Verify(x => x.GetResult(), Times.Once);
     }

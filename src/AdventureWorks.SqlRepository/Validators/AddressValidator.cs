@@ -9,7 +9,7 @@ public class AddressValidator(IValidationBuilder validationBuilder)
     public override ValidationResult Validate(Address? entity)
     {
         if (entity == null)
-            return ValidationBuilder.GetResult();
+            return ValidationBuilder.RequiredRule().Validate(entity, nameof(entity)).GetResult();
 
         base.Validate(entity);
 

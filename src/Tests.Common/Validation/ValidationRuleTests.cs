@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using AdventureWorks.Common.Validation;
 using Tests.Shared;
 
@@ -16,17 +12,17 @@ public class ValidationRuleTests
     public void ValidationRule_WhenExecuted_IsInvalidIsInverseOfIsValid()
     {
         object? inputValue = true;
-        var sut = new TestValidationRule();
+        TestValidationRule sut = new();
 
-        var isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? result);
-        var isNotValid = sut.IsInvalid(string.Empty, inputValue, out ValidationError? result2);
+        bool isValid = sut.IsValid(string.Empty, inputValue, out ValidationError? _);
+        bool isNotValid = sut.IsInvalid(string.Empty, inputValue, out ValidationError? _);
 
         Assert.AreEqual(isValid, !isNotValid);
     }
 
     private class TestValidationRule : ValidationRule
     {
-        public override bool IsValid(string propertyName, object? value, out ValidationError? result)
+        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
         {
             if (value == null)
             {
@@ -41,7 +37,7 @@ public class ValidationRuleTests
 
         protected override ValidationError GetErrorMessage(string propertyName, object? value)
         {
-            return new ValidationError()
+            return new ValidationError
             {
                 ValidationType = ValidationType.Required,
                 Field = propertyName,

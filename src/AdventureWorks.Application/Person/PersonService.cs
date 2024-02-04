@@ -3,19 +3,19 @@ using AdventureWorks.Domain.Person.DTOs;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Repositories;
 
-namespace AdventureWorks.Application;
+namespace AdventureWorks.Application.Person;
 
 public class PersonService(
     IPersonRepository repository,
     IValidator<PersonDetail> personDetailValidator,
     IValidator<PersonSearch> personSearchValidator) : IPersonService
 {
-    public async Task<SearchResult<Person>> SearchAsync(PersonSearch criteria)
+    public async Task<SearchResult<Domain.Person.Entities.Person>> SearchAsync(PersonSearch criteria)
     {
         ValidationResult validationResult = personSearchValidator.Validate(criteria);
 
         if (!validationResult.IsValidRequest)
-            return new SearchResult<Person>(validationResult);
+            return new SearchResult<Domain.Person.Entities.Person>(validationResult);
 
         return await repository.SearchPersonsAsync(criteria, 100);
     }

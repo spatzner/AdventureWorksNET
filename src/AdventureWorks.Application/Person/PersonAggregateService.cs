@@ -3,15 +3,15 @@ using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.SqlRepository;
 using ValidationResult = AdventureWorks.Common.Validation.ValidationResult;
 
-namespace AdventureWorks.Application;
+namespace AdventureWorks.Application.Person;
 
 public class PersonAggregateService(IUnitOfWorkProvider unitOfWorkProvider, IValidationService validationService)
 {
-    public async Task<SearchResult<Person>> SearchAsync(PersonSearch criteria)
+    public async Task<SearchResult<Domain.Person.Entities.Person>> SearchAsync(PersonSearch criteria)
     {
         ValidationResult validationResult = validationService.Validate(criteria);
         if (!validationResult.IsValidRequest)
-            return new SearchResult<Person>(validationResult);
+            return new SearchResult<Domain.Person.Entities.Person>(validationResult);
 
         await using IUnitOfWork unitOfWork = unitOfWorkProvider.Create();
 

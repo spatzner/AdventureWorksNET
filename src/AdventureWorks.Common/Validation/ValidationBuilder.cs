@@ -53,7 +53,7 @@ public class ValidationBuilder : IValidationBuilder
     public IValidationBuilder Validate(object? value, string propertyName)
     {
         if (_currentValidator == null)
-            throw new InvalidOperationException($"Validator needs to be set before calling {nameof(Validate)}");
+            throw new InvalidOperationException($"Rule needs to be set before calling {nameof(Validate)}");
 
         if (_currentValidator.IsInvalid(propertyName, value, out ValidationError? error))
             _result.Errors.Add(error);
