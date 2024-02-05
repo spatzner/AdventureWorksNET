@@ -1,6 +1,8 @@
 ﻿using AdventureWorks.Common.Validation;
 using Tests.Shared;
 
+// ReSharper disable VariableCanBeNotNullable
+
 // ReSharper disable UnusedVariable
 #pragma warning disable IDE0059
 
@@ -104,7 +106,7 @@ public class NotNullOrEmptyRuleTests
     [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenClassNullRefTypeSet_IsValid()
     {
-        object? inputValue = new ValidationClass { NullableRefType = new() };
+        object? inputValue = new ValidationClass { NullableRefType = new ReferenceClass() };
 
         bool isValid = new NotNullOrEmptyRule().IsValid(PropName, inputValue, out ValidationError? result);
 

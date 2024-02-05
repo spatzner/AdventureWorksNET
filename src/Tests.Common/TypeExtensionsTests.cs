@@ -1,4 +1,5 @@
 using AdventureWorks.Common;
+// ReSharper disable RedundantCast
 
 namespace Tests.Common;
 

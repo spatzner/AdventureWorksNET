@@ -22,7 +22,9 @@ public class ValidationRuleTests
 
     private class TestValidationRule : ValidationRule
     {
-        public override bool IsValid(string propertyName, object? value, [NotNullWhen(false)] out ValidationError? result)
+        public override bool IsValid(string propertyName,
+            object? value,
+            [NotNullWhen(false)] out ValidationError? result)
         {
             if (value == null)
             {

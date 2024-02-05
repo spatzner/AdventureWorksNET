@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using AdventureWorks.Common.Validation;
+﻿using AdventureWorks.Common.Validation;
 using Tests.Shared;
 
 namespace Tests.Common.Validation;
@@ -55,5 +54,5 @@ public class ValidationResultTests
         Assert.AreEqual(1, sut.Errors.Count);
     }
 
-    class TestValidationResult(ValidationResult validationResult) : ValidationResult(validationResult);
+    private class TestValidationResult(ValidationResult validationResult) : ValidationResult(validationResult);
 }

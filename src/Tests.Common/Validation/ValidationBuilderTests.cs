@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using AdventureWorks.Common.Validation;
+﻿using AdventureWorks.Common.Validation;
 
 namespace Tests.Common.Validation;
 
@@ -15,9 +9,9 @@ public class ValidationBuilderTests
     [TestMethod]
     public void DiscreetValueRule_WithValidValue_ReturnsTrue()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var result = sut.DiscreetValueRule(1, 2, 3).Validate(1, "test").GetResult();
+        ValidationResult result = sut.DiscreetValueRule(1, 2, 3).Validate(1, "test").GetResult();
 
         Assert.IsTrue(result.IsValidRequest);
     }
@@ -25,9 +19,9 @@ public class ValidationBuilderTests
     [TestMethod]
     public void DiscreetValueRule_WithInvalidValue_ReturnsFalse()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var result = sut.DiscreetValueRule(1, 2, 3).Validate(4, "test").GetResult();
+        ValidationResult result = sut.DiscreetValueRule(1, 2, 3).Validate(4, "test").GetResult();
 
         Assert.IsFalse(result.IsValidRequest);
     }
@@ -35,9 +29,9 @@ public class ValidationBuilderTests
     [TestMethod]
     public void MaxLengthRule_WithValidValue_ReturnsTrue()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var result = sut.MaxLengthRule(5).Validate("test", "test").GetResult();
+        ValidationResult result = sut.MaxLengthRule(5).Validate("test", "test").GetResult();
 
         Assert.IsTrue(result.IsValidRequest);
     }
@@ -46,9 +40,9 @@ public class ValidationBuilderTests
     public void MaxLengthRule_WithInvalidValue_ReturnsFalse()
     {
         //Arrange
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var result = sut.MaxLengthRule(5).Validate("test123", "test").GetResult();
+        ValidationResult result = sut.MaxLengthRule(5).Validate("test123", "test").GetResult();
 
         Assert.IsFalse(result.IsValidRequest);
     }
@@ -56,9 +50,9 @@ public class ValidationBuilderTests
     [TestMethod]
     public void MinLengthRule_WithValidValue_ReturnsTrue()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var result = sut.MinLengthRule(5).Validate("test123", "test").GetResult();
+        ValidationResult result = sut.MinLengthRule(5).Validate("test123", "test").GetResult();
 
         Assert.IsTrue(result.IsValidRequest);
     }
@@ -66,9 +60,9 @@ public class ValidationBuilderTests
     [TestMethod]
     public void MinLengthRule_WithInvalidValue_ReturnsFalse()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var result = sut.MinLengthRule(5).Validate("test", "test").GetResult();
+        ValidationResult result = sut.MinLengthRule(5).Validate("test", "test").GetResult();
 
         Assert.IsFalse(result.IsValidRequest);
     }
@@ -76,9 +70,9 @@ public class ValidationBuilderTests
     [TestMethod]
     public void NotNullOrEmptyRule_WithValidValue_ReturnsTrue()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var result = sut.NotNullOrEmptyRule().Validate("test", "test").GetResult();
+        ValidationResult result = sut.NotNullOrEmptyRule().Validate("test", "test").GetResult();
 
         Assert.IsTrue(result.IsValidRequest);
     }
@@ -87,51 +81,52 @@ public class ValidationBuilderTests
     [TestMethod]
     public void NotNullOrEmptyRule_WithInvalidValue_ReturnsFalse()
     {
-        var sut = new ValidationBuilder();
-        var result = sut.NotNullOrEmptyRule().Validate("", "test").GetResult();
+        ValidationBuilder sut = new();
+        ValidationResult result = sut.NotNullOrEmptyRule().Validate("", "test").GetResult();
         Assert.IsFalse(result.IsValidRequest);
     }
 
     [TestMethod]
     public void RangeRule_WithValidValue_ReturnsTrue()
     {
-        var sut = new ValidationBuilder();
-        var result = sut.RangeRule(1, 10).Validate(5, "test").GetResult();
+        ValidationBuilder sut = new();
+        ValidationResult result = sut.RangeRule(1, 10).Validate(5, "test").GetResult();
         Assert.IsTrue(result.IsValidRequest);
     }
 
     [TestMethod]
     public void RangeRule_WithInvalidValue_ReturnsFalse()
     {
-        var sut = new ValidationBuilder();
-        var result = sut.RangeRule(1, 10).Validate(11, "test").GetResult();
+        ValidationBuilder sut = new();
+        ValidationResult result = sut.RangeRule(1, 10).Validate(11, "test").GetResult();
         Assert.IsFalse(result.IsValidRequest);
     }
 
     [TestMethod]
     public void RequiredRule_WithValidValue_ReturnsTrue()
     {
-        var sut = new ValidationBuilder();
-        var result = sut.RequiredRule().Validate("test", "test").GetResult();
+        ValidationBuilder sut = new();
+        ValidationResult result = sut.RequiredRule().Validate("test", "test").GetResult();
         Assert.IsTrue(result.IsValidRequest);
     }
 
     [TestMethod]
     public void RequiredRule_WithInvalidValue_ReturnsFalse()
     {
-        var sut = new ValidationBuilder();
-        var result = sut.RequiredRule().Validate(null, "test").GetResult();
+        ValidationBuilder sut = new();
+        ValidationResult result = sut.RequiredRule().Validate(null, "test").GetResult();
         Assert.IsFalse(result.IsValidRequest);
     }
 
     [TestMethod]
     public void UniqueOnRule_WithValidValue_ReturnsTrue()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var data = new List<UniqueOnRuleTest>
+        List<UniqueOnRuleTest> data = new()
         {
-            new() { Id = 1, Name = string.Empty }, new() { Id = 2, Name = string.Empty }
+            new UniqueOnRuleTest { Id = 1, Name = string.Empty },
+            new UniqueOnRuleTest { Id = 2, Name = string.Empty }
         };
 
         new UniqueOnRule<UniqueOnRuleTest>(x => x.Id).IsValid("string", data, out ValidationError? r);
@@ -144,14 +139,16 @@ public class ValidationBuilderTests
     [TestMethod]
     public void UniqueOnRule_WithInvalidValue_ReturnsFalse()
     {
-        var sut = new ValidationBuilder();
+        ValidationBuilder sut = new();
 
-        var data = new List<UniqueOnRuleTest>
+        List<UniqueOnRuleTest> data = new()
         {
-            new() { Id = 1, Name = string.Empty }, new() { Id = 1, Name = string.Empty }
+            new UniqueOnRuleTest { Id = 1, Name = string.Empty },
+            new UniqueOnRuleTest { Id = 1, Name = string.Empty }
         };
 
-        var result = sut.UniqueOnRule<UniqueOnRuleTest>(x => new { x.Id }).Validate(data, "test").GetResult();
+        ValidationResult result =
+            sut.UniqueOnRule<UniqueOnRuleTest>(x => new { x.Id }).Validate(data, "test").GetResult();
         Assert.IsFalse(result.IsValidRequest);
     }
 

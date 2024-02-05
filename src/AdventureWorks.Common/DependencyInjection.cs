@@ -11,7 +11,6 @@ public static class DependencyInjection
 {
     public static void AddCommonServices(this IServiceCollection services)
     {
-
         services.AddScoped<IValidationBuilder, ValidationBuilder>();
     }
 }

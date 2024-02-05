@@ -15,7 +15,7 @@ public class ValidationErrorTests
         {
             Field = "Field", ValidationType = ValidationType.Required, Requirements = string.Empty
         };
-        
+
         string result = sut.PropertyHierarchy;
 
         Assert.AreEqual(string.Empty, result);
@@ -29,7 +29,7 @@ public class ValidationErrorTests
         {
             Field = "Field", ValidationType = ValidationType.Required, Requirements = string.Empty
         };
-        
+
         sut.AddToPropertyHierarchy("Property1");
 
         string result = sut.PropertyHierarchy;
@@ -45,7 +45,7 @@ public class ValidationErrorTests
         {
             Field = "Field", ValidationType = ValidationType.Required, Requirements = string.Empty
         };
-        
+
         sut.AddToPropertyHierarchy("Property1");
         sut.AddToPropertyHierarchy("Property2");
 
