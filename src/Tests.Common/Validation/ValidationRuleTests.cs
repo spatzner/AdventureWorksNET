@@ -8,7 +8,7 @@ namespace Tests.Common.Validation;
 public class ValidationRuleTests
 {
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void ValidationRule_WhenExecuted_IsInvalidIsInverseOfIsValid()
     {
         object? inputValue = true;

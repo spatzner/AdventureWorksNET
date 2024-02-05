@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using AdventureWorks.Common.Validation;
-using Constants = Tests.Shared.Constants;
+using Tests.Shared;
 
 // ReSharper disable UnusedVariable
 #pragma warning disable IDE0059
@@ -11,7 +11,7 @@ namespace Tests.Common.Validation;
 public class DiscreetValueRuleTests
 {
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void DiscreetValueRule_WhenNull_IsValid()
     {
         object? inputValue = null;
@@ -23,7 +23,7 @@ public class DiscreetValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void DiscreetValueRule_WhenValueIsWrongType_IsNotValid()
     {
         object? inputValue = "1";
@@ -35,7 +35,7 @@ public class DiscreetValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void DiscreetValueRule_WhenValueIsNotInList_IsNotValid()
     {
         object? inputValue = 3;
@@ -47,7 +47,7 @@ public class DiscreetValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void DiscreetValueRule_WhenValueIsInList_IsValid()
     {
         object? inputValue = 1;
@@ -59,7 +59,7 @@ public class DiscreetValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void DiscreetValueRule_WhenIsValid_ValidationErrorIsNull()
     {
         object? inputValue = 1;
@@ -71,7 +71,7 @@ public class DiscreetValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void DiscreetValueRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         object? inputValue = 3;

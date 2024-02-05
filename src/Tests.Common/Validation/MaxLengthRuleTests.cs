@@ -11,7 +11,7 @@ namespace Tests.Common.Validation;
 public class MaxLengthRuleTests
 {
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenNull_IsValid()
     {
         object? inputValue = null;
@@ -23,7 +23,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenStringIsLessThanMax_IsValid()
     {
         object? inputValue = "a";
@@ -35,7 +35,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenStringIsEqualToMax_IsValid()
     {
         object? inputValue = "ab";
@@ -47,7 +47,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenStringIsGreaterThanMax_IsNotValid()
     {
         object? inputValue = "abc";
@@ -59,7 +59,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenEnumerableIsLessThanMax_IsValid()
     {
         object? inputValue = new List<string> { "a" };
@@ -71,7 +71,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenEnumerableIsEqualToMax_IsValid()
     {
         object? inputValue = new List<string> { "a", "b" };
@@ -83,7 +83,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenEnumerableIGreaterThanMax_IsNotValid()
     {
         object? inputValue = new List<string> { "a", "b", "c" };
@@ -95,7 +95,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void MaxLengthRule_WhenInvalidType_Throws()
     {
@@ -108,7 +108,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenIsValid_ValidationErrorIsNull()
     {
         object? inputValue = "a";
@@ -120,7 +120,7 @@ public class MaxLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MaxLengthRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         string propertyName = "Name";

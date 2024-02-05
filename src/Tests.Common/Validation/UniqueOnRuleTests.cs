@@ -9,7 +9,7 @@ public class UniqueOnRuleTests
     public const string PropName = "name";
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void UniqueRuleCtor_WhenBodyTypeNotMemberOrNewExpression_Throws()
     {
@@ -17,7 +17,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void UniqueRuleCtor_WhenNoMembersProvided_Throws()
     {
@@ -25,14 +25,14 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueOnRuleCtor_WhenValueTypeMemberExpression_IsValid()
     {
         UniqueOnRule<TestClass> sut = new(x => x.Value1);
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenNull_IsValid()
     {
         object? inputValue = null;
@@ -45,7 +45,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void UniqueRule_WhenNotEnumerable_Throws()
     {
@@ -59,7 +59,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void UniqueRule_WhenListTypeMismatchWithClassType_Throws()
     {
@@ -71,7 +71,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenSingleKeyPropertyWithMatch_IsNotValid()
     {
         object? inputValue = new List<TestClass> { new() { Value1 = "A" }, new() { Value1 = "A" } };
@@ -84,7 +84,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenMultipleKeyPropertiesWithMatch_IsNotValid()
     {
         object? inputValue = new List<TestClass>
@@ -100,7 +100,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenMatchOnKeysDifferentOnNonKey_IsNotValid()
     {
         object? inputValue = new List<TestClass>
@@ -116,7 +116,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenSomeMatchOnKeys_IsNotValid()
     {
         object? inputValue = new List<TestClass>
@@ -134,7 +134,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenAllUniqueOnKeys_IsValid()
     {
         object? inputValue = new List<TestClass>
@@ -152,7 +152,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenIsValid_ValidationErrorIsNull()
     {
         object? inputValue = new List<TestClass> { new() { Value1 = "A" }, new() { Value1 = "1" } };
@@ -166,7 +166,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenIsNotValid_ValidationErrorIsNull()
     {
         object? inputValue = new List<TestClass> { new() { Value1 = "A" }, new() { Value1 = "1" } };
@@ -180,7 +180,7 @@ public class UniqueOnRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void UniqueRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         object? inputValue = new List<TestClass>

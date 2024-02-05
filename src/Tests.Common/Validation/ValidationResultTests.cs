@@ -8,7 +8,7 @@ namespace Tests.Common.Validation;
 public class ValidationResultTests
 {
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void Errors_WhenNoErrorsAreAdded_IsInitializedWithEmptyCollection()
     {
         ValidationResult sut = new();
@@ -17,7 +17,7 @@ public class ValidationResultTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void IsValidRequest_WhenNoErrorsAreAdded_IsTrue()
     {
         ValidationResult sut = new();
@@ -26,7 +26,7 @@ public class ValidationResultTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void IsValidRequest_WhenErrorsAreAdded_IsFalse()
     {
         ValidationResult sut = new();
@@ -39,7 +39,7 @@ public class ValidationResultTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void Constructor_WhenErrorsArePassed_SetsErrors()
     {
         ValidationError error = new()

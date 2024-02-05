@@ -12,7 +12,7 @@ public class NotNullOrEmptyRuleTests
     private const string PropName = "name";
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenNull_IsNotValid()
     {
         object? inputValue = null;
@@ -23,7 +23,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenStringIsEmpty_IsNotValid()
     {
         object? inputValue = string.Empty;
@@ -34,7 +34,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenStringHasValue_IsValid()
     {
         object? inputValue = "b";
@@ -45,7 +45,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenEnumerableIsEmpty_IsNotValid()
     {
         object? inputValue = new List<string>();
@@ -56,7 +56,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenEnumerableHasElements_IsValid()
     {
         object? inputValue = new List<string> { "b" };
@@ -67,7 +67,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void NotNullOrEmptyRule_WhenValueIsReferenceType_Throws()
     {
@@ -79,7 +79,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenClassHasNoPropertiesSet_IsNotValid()
     {
         object? inputValue = new ReferenceClass();
@@ -90,7 +90,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenClassRefTypeSet_IsValid()
     {
         object? inputValue = new ValidationClass { RefType = new ReferenceClass() };
@@ -101,7 +101,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenClassNullRefTypeSet_IsValid()
     {
         object? inputValue = new ValidationClass { NullableRefType = new() };
@@ -112,7 +112,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void NotNullOrEmptyRule_WhenClassHasValueType_Throws()
     {
@@ -124,7 +124,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenClassNullValueTypeSet_IsValid()
     {
         object? inputValue = new ValidationClass { NullValueType = 0 };
@@ -135,7 +135,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenIsValid_ValidationErrorIsNull()
     {
         string inputValue = "valid";
@@ -148,7 +148,7 @@ public class NotNullOrEmptyRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void NotNullOrEmptyRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         string inputValue = string.Empty;

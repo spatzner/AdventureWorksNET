@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.15" />
     <PackageReference Include="Microsoft.SqlServer.Types" Version="160.1000.6" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventureWorks.Domain\AdventureWorks.Domain.csproj" />

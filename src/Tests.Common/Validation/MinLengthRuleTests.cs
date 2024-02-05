@@ -11,7 +11,7 @@ namespace Tests.Common.Validation;
 public class MinLengthRuleTests
 {
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_WhenNull_IsValid()
     {
         object? inputValue = null;
@@ -23,7 +23,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_StringLessThanMin_IsNotValid()
     {
         object? inputValue = "a";
@@ -35,7 +35,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_StringEqualToMin_IsValid()
     {
         object? inputValue = "ab";
@@ -47,7 +47,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_StringGreaterThanMin_IsValid()
     {
         object? inputValue = "abc";
@@ -59,7 +59,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_EnumerableLessThanMin_IsNotValid()
     {
         object? inputValue = new List<string> { "a" };
@@ -71,7 +71,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_EnumerableEqualToMin_IsValid()
     {
         object? inputValue = new List<string> { "a", "b" };
@@ -83,7 +83,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_EnumerableGreaterThanMin_IsValid()
     {
         object? inputValue = new List<string> { "a", "b", "c" };
@@ -95,7 +95,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void MinLengthRule_WhenInvalidType_Throws()
     {
@@ -108,7 +108,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_WhenIsValid_ValidationErrorIsNull()
     {
         object? inputValue = "abc";
@@ -120,7 +120,7 @@ public class MinLengthRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         string propertyName = "Name";

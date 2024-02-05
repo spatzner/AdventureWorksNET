@@ -8,7 +8,7 @@ namespace Tests.Common.Validation;
 public class ValidationErrorTests
 {
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void PropertyHierarchy_WhenNoPropertiesAreAdded_IsBuiltCorrectly()
     {
         ValidationError sut = new()
@@ -22,7 +22,7 @@ public class ValidationErrorTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void PropertyHierarchy_WhenOnePropertyIsAdded_IsBuiltCorrectly()
     {
         ValidationError sut = new()
@@ -38,7 +38,7 @@ public class ValidationErrorTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void PropertyHierarchy_WhenTwoPropertiesAreAdded_IsBuiltCorrectly()
     {
         ValidationError sut = new()

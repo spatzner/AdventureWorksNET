@@ -11,7 +11,7 @@ namespace Tests.Common.Validation;
 public class MinValueRuleTests
 {
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenNull_IsValid()
     {
         object? inputValue = null;
@@ -23,7 +23,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void MinValueRule_WhenTypeMismatch_Throws()
     {
@@ -36,7 +36,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentNullException))]
     public void MinValueRuleCtor_WhenValueIsNull_Throws()
     {
@@ -44,7 +44,7 @@ public class MinValueRuleTests
     }
     
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void MinValueRuleCtor_WhenValueIsNotDecimalOrInt_Throws()
     {
@@ -52,7 +52,7 @@ public class MinValueRuleTests
     }
     
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void MinValueRule_IsValid_WhenValueIsNotDecimalOrInt_Throws()
     {
@@ -64,7 +64,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenIntegerIsLessThanMin_IsNotValid()
     {
         int inputValue = 1;
@@ -76,7 +76,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenIntegerIsEqualToMinNotIncluded_IsNotValid()
     {
         int inputValue = 2;
@@ -88,7 +88,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenIntegerIsEqualToMinIncluded_IsValid()
     {
         int inputValue = 2;
@@ -100,7 +100,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenIntegerIsGreaterThanMin_IsValid()
     {
         int inputValue = 3;
@@ -112,7 +112,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenDecimalIsLessThanMin_IsNotValid()
     {
         decimal inputValue = 1;
@@ -124,7 +124,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenDecimalIsEqualToMinNotIncluded_IsNotValid()
     {
         decimal inputValue = 2;
@@ -136,7 +136,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenDecimalIsEqualToMinIncluded_IsValid()
     {
         decimal inputValue = 2;
@@ -148,7 +148,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenDecimalIsGreaterThanMin_IsValid()
     {
         decimal inputValue = 3;
@@ -160,7 +160,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinValueRule_WhenIsValid_ValidationErrorIsNull()
     {
         int inputValue = 3;
@@ -173,7 +173,7 @@ public class MinValueRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void MinLengthRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         string propertyName = "Name";

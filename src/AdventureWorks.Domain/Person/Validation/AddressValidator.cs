@@ -4,12 +4,12 @@ using AdventureWorks.Domain.Person.Entities;
 namespace AdventureWorks.Domain.Person.Validation;
 
 public class AddressValidator(IValidationBuilder validationBuilder)
-    : Validator<Address>(validationBuilder), IAddressValidator
+    : Validator<Address>(validationBuilder)
 {
     public override ValidationResult Validate(Address entity)
     {
         return ValidationBuilder
-           .RequiredRule()
+           .NotNullOrEmptyRule()
            .Validate(entity.Type, nameof(entity.Type))
            .Validate(entity.Address1, nameof(entity.Address1))
            .Validate(entity.City, nameof(entity.City))

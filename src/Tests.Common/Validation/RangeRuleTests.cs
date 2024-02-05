@@ -13,7 +13,7 @@ public class RangeRuleTests
     private readonly string _propertyName = "name";
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenNull_IsValid()
     {
         object? inputValue = null;
@@ -24,7 +24,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     [ExpectedException(typeof(ArgumentException))]
     public void RangeRule_WhenIsNotIntegralOrDecimal_Throws()
     {
@@ -36,7 +36,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenLessThanMin_IsNotValid()
     {
         object? inputValue = 1;
@@ -47,7 +47,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenMinAndMinInclusive_IsValid()
     {
         object? inputValue = 2;
@@ -58,7 +58,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenMinInclusiveNotProvided_IsInclusive()
     {
         object? inputValue = 2;
@@ -69,7 +69,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenMinAndNotMinInclusive_IsNotValid()
     {
         object? inputValue = 2;
@@ -80,7 +80,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenBetweenMinAndMax_IsValid()
     {
         object? inputValue = 3;
@@ -91,7 +91,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenMaxAndMaxInclusive_IsValid()
     {
         object? inputValue = 4;
@@ -103,7 +103,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenMaxAndNotMaxInclusive_IsNotValid()
     {
         object? inputValue = 4;
@@ -115,7 +115,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenNotMaxInclusiveNotProvided_IsMaxInclusive()
     {
         object? inputValue = 4;
@@ -126,7 +126,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenGreaterThanMax_IsNotValid()
     {
         object? inputValue = 5;
@@ -137,7 +137,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenIsValid_ValidationErrorIsNull()
     {
         object? inputValue = 3;
@@ -149,7 +149,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         object? inputValue = 5;
@@ -169,7 +169,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenMinInclusiveAndIsNotValid_ValidationErrorRequirementCorrect()
     {
         object? inputValue = 5;
@@ -188,7 +188,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenMaxInclusiveAndIsNotValid_ValidationErrorRequirementCorrect()
     {
         object? inputValue = 5;
@@ -209,7 +209,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenNotMinInclusiveAndIsNotValid_ValidationErrorRequirementCorrect()
     {
         object? inputValue = 5;
@@ -224,7 +224,7 @@ public class RangeRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RangeRule_WhenNotMaxInclusiveAndIsNotValid_ValidationErrorRequirementCorrect()
     {
         object? inputValue = 5;

@@ -12,7 +12,7 @@ public class RequiredRuleTests
     private readonly string _propertyName = "name";
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RequiredRule_WhenIsNull_IsNotValid()
     {
         object? inputValue = null;
@@ -22,7 +22,7 @@ public class RequiredRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RequiredRule_WhenIsNotNull_IsValid()
     {
         object? inputValue = "value";
@@ -32,7 +32,7 @@ public class RequiredRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RequiredRule_WhenIsValid_ValidationErrorIsNull()
     {
         object? inputValue = "value";
@@ -44,7 +44,7 @@ public class RequiredRuleTests
     }
 
     [TestMethod]
-    [TestCategory(Constants.Unit)]
+    [TestCategory(TestType.Unit)]
     public void RequiredRule_WhenIsNotValid_ValidationErrorIsCorrect()
     {
         object? inputValue = null;

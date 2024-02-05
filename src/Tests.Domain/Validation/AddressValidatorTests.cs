@@ -20,13 +20,13 @@ public class AddressValidatorTests
         Mock<IValidationBuilder> mockValidationBuilder = new();
 
         mockValidationBuilder
-           .Setup(x => x.RequiredRule())
+           .Setup(x => x.NotNullOrEmptyRule())
            .Callback(() =>
             {
                 List<string> newList = [];
-                currentRuleList = callDictionary.TryAdd("RequiredRule()", newList)
+                currentRuleList = callDictionary.TryAdd("NotNullOrEmptyRule()", newList)
                     ? newList
-                    : callDictionary["RequiredRule()"];
+                    : callDictionary["NotNullOrEmptyRule()"];
             })
            .Returns(mockValidationBuilder.Object);
 
@@ -77,17 +77,19 @@ public class AddressValidatorTests
         if (callDictionary.TryGetValue("null", out List<string>? nullList))
             Assert.IsTrue(nullList.Count == 0, "Validate call(s) made without a validator");
 
-        if (!callDictionary.TryGetValue("RequiredRule()", out List<string>? requiredList))
-            Assert.Fail("RequiredRule() not called");
+        if (!callDictionary.TryGetValue("NotNullOrEmptyRule()", out List<string>? requiredList))
+            Assert.Fail("NotNullOrEmptyRule() not called");
 
         Assert.AreEqual(requiredList.Count, 6);
-        Assert.IsTrue(requiredList.Contains("Validate(Type)"), "Type not validated on RequiredRule");
-        Assert.IsTrue(requiredList.Contains("Validate(Address1)"), "Address1 not validated for RequiredRule");
-        Assert.IsTrue(requiredList.Contains("Validate(City)"), "City not validated on RequiredRule");
-        Assert.IsTrue(requiredList.Contains("Validate(State)"), "State not validated on RequiredRule");
-        Assert.IsTrue(requiredList.Contains("Validate(Country)"), "Country not validated on RequiredRule");
-        Assert.IsTrue(requiredList.Contains("Validate(PostalCode)"), "PostalCode not validated on RequiredRule");
+        Assert.IsTrue(requiredList.Contains("Validate(Type)"), "Type not validated on NotNullOrEmptyRule");
+        Assert.IsTrue(requiredList.Contains("Validate(Address1)"), "Address1 not validated for NotNullOrEmptyRule");
+        Assert.IsTrue(requiredList.Contains("Validate(City)"), "City not validated on NotNullOrEmptyRule");
+        Assert.IsTrue(requiredList.Contains("Validate(State)"), "State not validated on NotNullOrEmptyRule");
+        Assert.IsTrue(requiredList.Contains("Validate(Country)"), "Country not validated on NotNullOrEmptyRule");
+        Assert.IsTrue(requiredList.Contains("Validate(PostalCode)"), "PostalCode not validated on NotNullOrEmptyRule");
 
         mockValidationBuilder.Verify(x => x.GetResult(), Times.Once);
     }
+    
+    
 }
