@@ -2,6 +2,7 @@
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Validation;
 using Moq;
+using Tests.Shared;
 
 namespace Tests.Domain.Validation;
 
@@ -9,87 +10,112 @@ namespace Tests.Domain.Validation;
 public class AddressValidatorTests
 {
     [TestMethod]
-    public void Validate_WhenCalled_ExecutesCorrectValidations()
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenAllValidationsMet_IsValid()
     {
-        //Arrange
-        List<string> currentRuleList = [];
-        Dictionary<string, List<string>> callDictionary = new() { { "null", currentRuleList } };
+        Address address = GetValidAddress();
 
-        Address address = new();
+        var sut = new AddressValidator(new ValidationBuilder());
 
-        Mock<IValidationBuilder> mockValidationBuilder = new();
+        var result = sut.Validate(address);
 
-        mockValidationBuilder
-           .Setup(x => x.NotNullOrEmptyRule())
-           .Callback(() =>
-            {
-                List<string> newList = [];
-                currentRuleList = callDictionary.TryAdd("NotNullOrEmptyRule()", newList)
-                    ? newList
-                    : callDictionary["NotNullOrEmptyRule()"];
-            })
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => ReferenceEquals(obj, address.Type)),
-                It.Is<string>(s => s == nameof(Address.Type))))
-           .Callback(() => currentRuleList.Add("Validate(Type)"))
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => ReferenceEquals(obj, address.Address1)),
-                It.Is<string>(s => s == nameof(Address.Address1))))
-           .Callback(() => currentRuleList.Add("Validate(Address1)"))
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => ReferenceEquals(obj, address.City)),
-                It.Is<string>(s => s == nameof(Address.City))))
-           .Callback(() => currentRuleList.Add("Validate(City)"))
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => ReferenceEquals(obj, address.State)),
-                It.Is<string>(s => s == nameof(Address.State))))
-           .Callback(() => currentRuleList.Add("Validate(State)"))
-           .Returns(mockValidationBuilder.Object);
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => ReferenceEquals(obj, address.Country)),
-                It.Is<string>(s => s == nameof(Address.Country))))
-           .Callback(() => currentRuleList.Add("Validate(Country)"))
-           .Returns(mockValidationBuilder.Object);
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => ReferenceEquals(obj, address.PostalCode)),
-                It.Is<string>(s => s == nameof(Address.PostalCode))))
-           .Callback(() => currentRuleList.Add("Validate(PostalCode)"))
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder.Setup(x => x.GetResult()).Returns(new ValidationResult());
-
-        AddressValidator sut = new(mockValidationBuilder.Object);
-
-        //Act
-        ValidationResult result = sut.Validate(address);
-
-        //Assert
-        Assert.AreEqual(callDictionary.Count(x => x.Key != "null"), 1, "Additional ValidationRules were called that should not have been");
-
-        if (callDictionary.TryGetValue("null", out List<string>? nullList))
-            Assert.IsTrue(nullList.Count == 0, "Validate call(s) made without a validator");
-
-        if (!callDictionary.TryGetValue("NotNullOrEmptyRule()", out List<string>? requiredList))
-            Assert.Fail("NotNullOrEmptyRule() not called");
-
-        Assert.AreEqual(requiredList.Count, 6);
-        Assert.IsTrue(requiredList.Contains("Validate(Type)"), "Type not validated on NotNullOrEmptyRule");
-        Assert.IsTrue(requiredList.Contains("Validate(Address1)"), "Address1 not validated for NotNullOrEmptyRule");
-        Assert.IsTrue(requiredList.Contains("Validate(City)"), "City not validated on NotNullOrEmptyRule");
-        Assert.IsTrue(requiredList.Contains("Validate(State)"), "State not validated on NotNullOrEmptyRule");
-        Assert.IsTrue(requiredList.Contains("Validate(Country)"), "Country not validated on NotNullOrEmptyRule");
-        Assert.IsTrue(requiredList.Contains("Validate(PostalCode)"), "PostalCode not validated on NotNullOrEmptyRule");
-
-        mockValidationBuilder.Verify(x => x.GetResult(), Times.Once);
+        Assert.IsTrue(result.IsValidRequest);
     }
-    
-    
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenTypeIsEmpty_IsInValid()
+    {
+        Address address = GetValidAddress();
+        address.Type = string.Empty;
+
+        var sut = new AddressValidator(new ValidationBuilder());
+
+        var result = sut.Validate(address);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenAddress1IsEmpty_IsInValid()
+    {
+        Address address = GetValidAddress();
+        address.Address1 = string.Empty;
+
+        var sut = new AddressValidator(new ValidationBuilder());
+
+        var result = sut.Validate(address);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenCityIsEmpty_IsInValid()
+    {
+        Address address = GetValidAddress();
+        address.City = string.Empty;
+
+        var sut = new AddressValidator(new ValidationBuilder());
+
+        var result = sut.Validate(address);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenStateIsEmpty_IsInValid()
+    {
+        Address address = GetValidAddress();
+        address.State = string.Empty;
+
+        var sut = new AddressValidator(new ValidationBuilder());
+
+        var result = sut.Validate(address);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenCountryIsEmpty_IsInValid()
+    {
+        Address address = GetValidAddress();
+        address.Country = string.Empty;
+
+        var sut = new AddressValidator(new ValidationBuilder());
+
+        var result = sut.Validate(address);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenPostalCodeIsEmpty_IsInValid()
+    {
+        Address address = GetValidAddress();
+        address.PostalCode = string.Empty;
+
+        var sut = new AddressValidator(new ValidationBuilder());
+
+        var result = sut.Validate(address);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    private Address GetValidAddress()
+    {
+        return new Address
+        {
+            Type = "Home",
+            Address1 = "123 Main St",
+            City = "Anytown",
+            State = "WA",
+            Country = "USA",
+            PostalCode = "12345"
+        };
+    }
 }
