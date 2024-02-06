@@ -1,122 +1,129 @@
 ﻿using AdventureWorks.Common.Validation;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Validation;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Tests.Shared;
 
 namespace Tests.Domain.Validation;
 
 [TestClass]
 public class GeoPointValidatorTests
 {
-    private static Dictionary<string, List<string>> _callDictionary = [];
-    private static readonly Stack<string> CallStack = [];
-
-    [ClassInitialize]
-    public static void ClassInitialize(TestContext context)
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenOriginPoint_IsValid()
     {
-        //Arrange
-        List<string> currentRuleList = [];
-        _callDictionary = new Dictionary<string, List<string>> { { "null", currentRuleList } };
+        var getPoint = new GeoPoint(0, 0);
 
-        GeoPoint geoPoint = new(0, 0);
+        var sut = new GeoPointValidator(new ValidationBuilder());
 
-        Mock<IValidationBuilder> mockValidationBuilder = new();
+        var result = sut.Validate(getPoint);
 
-        mockValidationBuilder
-           .Setup(x => x.RangeRule(-90, 90, true, true))
-           .Callback(() =>
-            {
-                CallStack.Push("RangeRule(-90, 90)");
-                List<string> newList = [];
-                currentRuleList = _callDictionary.TryAdd("RangeRule(-90, 90)", newList)
-                    ? newList
-                    : _callDictionary["RangeRule(-90, 90)"];
-            })
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.RangeRule(-180, 180, true, true))
-           .Callback(() =>
-            {
-                CallStack.Push("RangeRule(-180, 180)");
-                List<string> newList = [];
-                currentRuleList = _callDictionary.TryAdd("RangeRule(-180, 180)", newList)
-                    ? newList
-                    : _callDictionary["RangeRule(-180, 180)"];
-            })
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => obj is decimal && (decimal)obj == geoPoint.Latitude),
-                It.Is<string>(s => s == nameof(GeoPoint.Latitude))))
-           .Callback(() =>
-            {
-                CallStack.Push("Validate(Latitude)");
-                currentRuleList.Add("Validate(Latitude)");
-            })
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => obj is decimal && (decimal)obj == geoPoint.Longitude),
-                It.Is<string>(s => s == nameof(GeoPoint.Longitude))))
-           .Callback(() =>
-            {
-                CallStack.Push("Validate(Longitude)");
-                currentRuleList.Add("Validate(Longitude)");
-            })
-           .Returns(mockValidationBuilder.Object);
-
-        mockValidationBuilder
-           .Setup(x => x.GetResult())
-           .Callback(() => CallStack.Push("GetResult()"))
-           .Returns(new ValidationResult());
-
-        GeoPointValidator sut = new(mockValidationBuilder.Object);
-
-        //Act
-        ValidationResult result = sut.Validate(geoPoint);
+        Assert.IsTrue(result.IsValidRequest);
     }
 
     [TestMethod]
-    public void Validate_WhenCalled_DoesNotCallAdditionalValidationRules()
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLatitudeLessThanNeg90_IsNotValid()
     {
-        Assert.AreEqual(_callDictionary.Count(x => x.Key != "null"), 2);
+        var getPoint = new GeoPoint(-91, 0);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsFalse(result.IsValidRequest);
     }
 
     [TestMethod]
-    public void Validate_WhenCalled_DoesNotValidatorWithoutARuleSet()
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLatitudeIsNeg90_IsValid()
     {
-        if (_callDictionary.TryGetValue("null", out List<string>? nullList))
-            Assert.IsTrue(nullList.Count == 0);
+        var getPoint = new GeoPoint(-90, 0);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsTrue(result.IsValidRequest);
     }
 
     [TestMethod]
-    public void Validate_WhenCalled_ValidatesCorrectFieldsForRangRule_N180_180()
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLatitudeMoreThan90_IsNotValid()
     {
-        if (!_callDictionary.TryGetValue("RangeRule(-180, 180)", out List<string>? rangeRuleN180180List))
-            Assert.Fail("RangeRule(-180, 180) not called");
-        else
-        {
-            Assert.IsTrue(rangeRuleN180180List.Contains("Validate(Longitude)"));
-            Assert.AreEqual(1, rangeRuleN180180List.Count);
-        }
+        var getPoint = new GeoPoint(91, 0);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsFalse(result.IsValidRequest);
     }
 
     [TestMethod]
-    public void Validate_WhenCalled_ValidatesCorrectFieldsForRangRule_N190_90()
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLatitudeIs90_IsValid()
     {
-        if (!_callDictionary.TryGetValue("RangeRule(-90, 90)", out List<string>? rangeRuleN9090))
-            Assert.Fail("RangeRule(-90, 90) not called");
-        else
-        {
-            Assert.IsTrue(rangeRuleN9090.Contains("Validate(Latitude)"));
-            Assert.AreEqual(1, rangeRuleN9090.Count);
-        }
+        var getPoint = new GeoPoint(90, 0);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsTrue(result.IsValidRequest);
     }
 
     [TestMethod]
-    public void Validate_WhenCalled_GetResultIsLastAction()
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLongitudeLessThanNeg180_IsNotValid()
     {
-        Assert.AreEqual("GetResult()", CallStack.Pop());
+        var getPoint = new GeoPoint(0, -181);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLongitudeIsNeg180_IsValid()
+    {
+        var getPoint = new GeoPoint(0, -180);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsTrue(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLongitudeMoreThan180_IsNotValid()
+    {
+        var getPoint = new GeoPoint(0, 181);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsFalse(result.IsValidRequest);
+    }
+
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenLongitudeIs180_IsValid()
+    {
+        var getPoint = new GeoPoint(0, 180);
+
+        var sut = new GeoPointValidator(new ValidationBuilder());
+
+        var result = sut.Validate(getPoint);
+
+        Assert.IsTrue(result.IsValidRequest);
     }
 }

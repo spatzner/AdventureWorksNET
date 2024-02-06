@@ -2,14 +2,14 @@
 
 namespace AdventureWorks.Domain.Person.Entities;
 
-public class GeoPoint(decimal latitude, decimal longitude) : IEquatable<GeoPoint>, IValidatable
+public readonly struct GeoPoint(decimal latitude, decimal longitude): IEquatable<GeoPoint>, IValidatable
 {
     public decimal Latitude { get; } = latitude;
     public decimal Longitude { get; } = longitude;
 
-    public bool Equals(GeoPoint? other)
+    public bool Equals(GeoPoint other)
     {
-        return other is not null && Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
+        return Latitude == other.Latitude && Longitude == other.Longitude;
     }
 
     public override bool Equals(object? obj)
@@ -22,12 +22,12 @@ public class GeoPoint(decimal latitude, decimal longitude) : IEquatable<GeoPoint
         return HashCode.Combine(Latitude, Longitude);
     }
 
-    public static bool operator ==(GeoPoint left, GeoPoint? right)
+    public static bool operator ==(GeoPoint left, GeoPoint right)
     {
         return left.Equals(right);
     }
 
-    public static bool operator !=(GeoPoint left, GeoPoint? right)
+    public static bool operator !=(GeoPoint left, GeoPoint right)
     {
         return !(left == right);
     }

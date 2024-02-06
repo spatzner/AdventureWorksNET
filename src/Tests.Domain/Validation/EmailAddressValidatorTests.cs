@@ -7,58 +7,49 @@ using AdventureWorks.Common.Validation;
 using AdventureWorks.Domain.Person.Entities;
 using AdventureWorks.Domain.Person.Validation;
 using Moq;
+using Tests.Shared;
 
 namespace Tests.Domain.Validation;
+
 [TestClass]
 public class EmailAddressValidatorTests
 {
     [TestMethod]
-    public void Validate_WhenCalled_ExecutesCorrectValidations()
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenAddressIsSupplied_IsValid()
     {
-        //Arrange
-        List<string> currentRuleList = [];
-        Dictionary<string, List<string>> callDictionary = new() { { "null", currentRuleList } };
+        var address = new EmailAddress { Address = "example@abc.com" };
 
-        EmailAddress emailAddress = new();
+        var sut = new EmailAddressValidator(new ValidationBuilder());
 
-        Mock<IValidationBuilder> mockValidationBuilder = new();
+        var result = sut.Validate(address);
 
-        mockValidationBuilder
-           .Setup(x => x.RequiredRule())
-           .Callback(() =>
-            {
-                List<string> newList = [];
-                currentRuleList = callDictionary.TryAdd("RequiredRule()", newList)
-                    ? newList
-                    : callDictionary["RequiredRule()"];
-            })
-           .Returns(mockValidationBuilder.Object);
+        Assert.IsTrue(result.IsValidRequest);
+    }
+    
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenAddressIsEmpty_IsNotValid()
+    {
+        var address = new EmailAddress { Address = string.Empty };
 
-        mockValidationBuilder
-           .Setup(x => x.Validate(It.Is<object?>(obj => ReferenceEquals(obj, emailAddress.Address)),
-                               It.Is<string>(s => s == nameof(EmailAddress.Address))))
-           .Callback(() => currentRuleList.Add("Validate(Address)"))
-           .Returns(mockValidationBuilder.Object);
+        var sut = new EmailAddressValidator(new ValidationBuilder());
 
-        mockValidationBuilder.Setup(x => x.GetResult()).Returns(new ValidationResult());
+        var result = sut.Validate(address);
 
-        EmailAddressValidator sut = new(mockValidationBuilder.Object);
+        Assert.IsFalse(result.IsValidRequest);
+    }
 
-        //Act
-        ValidationResult result = sut.Validate(emailAddress);
+    [TestMethod]
+    [TestCategory(TestType.Component)]
+    public void Validate_WhenAddressIsNull_IsNotValid()
+    {
+        var address = new EmailAddress { Address = null };
 
-        //Assert
-        Assert.AreEqual(callDictionary.Count(x => x.Key != "null"), 1, "Additional ValidationRules were called that should not have been");
+        var sut = new EmailAddressValidator(new ValidationBuilder());
 
-        if (callDictionary.TryGetValue("null", out List<string>? nullList))
-            Assert.IsTrue(nullList.Count == 0, "Validate call(s) made without a validator");
+        var result = sut.Validate(address);
 
-        if (!callDictionary.TryGetValue("RequiredRule()", out List<string>? requiredList))
-            Assert.Fail("RequiredRule() not called");
-
-        Assert.AreEqual(requiredList.Count, 1);
-        Assert.IsTrue(requiredList.Contains("Validate(Address)"), "Address not validated on RequiredRule");
-
-        mockValidationBuilder.Verify(x => x.GetResult(), Times.Once);
+        Assert.IsFalse(result.IsValidRequest);
     }
 }
