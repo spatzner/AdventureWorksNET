@@ -10,15 +10,12 @@ public class PersonDetailValidator(IValidationBuilder validationBuilder) : Perso
         base.Validate(entity);
         
         return ValidationBuilder
-           .RequiredRule()
-           .Validate(entity.Name, nameof(entity.Name))
-           .Validate(entity.PersonType, nameof(entity.PersonType))
            .UniqueOnRule<Address>(addr => addr.Type)
            .Validate(entity.Addresses, nameof(entity.Addresses))
            .UniqueOnRule<PhoneNumber>(phone => phone.Type)
-           .Validate(entity.Addresses, nameof(entity.PhoneNumbers))
+           .Validate(entity.PhoneNumbers, nameof(entity.PhoneNumbers))
            .UniqueOnRule<EmailAddress>(email => email.Address)
-           .Validate(entity.Addresses, nameof(entity.EmailAddresses))
+           .Validate(entity.EmailAddresses, nameof(entity.EmailAddresses))
            .GetResult();
     }
 }

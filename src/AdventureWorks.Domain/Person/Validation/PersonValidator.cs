@@ -9,6 +9,7 @@ public class PersonValidator(IValidationBuilder validationBuilder) : Validator<E
         return ValidationBuilder
            .RequiredRule()
            .Validate(entity.Name, nameof(entity.Name))
+           .NotNullOrEmptyRule()
            .Validate(entity.PersonType, nameof(entity.PersonType))
            .GetResult();
     }
